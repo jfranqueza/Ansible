@@ -1,0 +1,23 @@
+---
+- hosts: bds-dc01-acc-a
+  connection: network_cli
+  gather_facts: no
+  roles:
+    - ansible-pyats
+
+  tasks:
+
+  - name: PARSE COMMAND DC02 N5K
+    pyats_parse_command:
+      command: show interface {{port_uplink}}
+    register: command_5k
+
+  - name: CREATE THE ANSIBLE FACT FOR THE VARIABLE
+    set_fact:
+      if_set: "{{ command_5k.structured }}"
+
+  - name: SHOW THE STUFF 2
+    debug:
+      var: "{{ ansible_facts[if_set[0]] }}"
+
+    

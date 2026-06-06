@@ -1,0 +1,49 @@
+---
+- name: ADD STATIC VPC BINDING TO EPG
+  hosts: bds
+  connection: local
+  gather_facts: no
+
+  ## MODIFY  vars WITH YOUR REQUIRED VALUES ##
+  ## Bindings ONLY NEED TO BE MODIFIED IF YOU USE A DIFFERENT VPC OTHER THAT L2 TO LEGACY. IN THIS CASE ADD IN port THE VPC INTERFACE POLICY GROUP NAME ONLY NOT THE INTERFACES ##
+  ## AND IN Switch_ID THE LEAFS ASSOCIATED WITH THE VPC IN THE SWITCH PROFILE ##
+  
+  vars:
+    EPGS:
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 12, mode: trunk, EPG_name: DC_PRO_v12_10_130_202_0_24_EPG, static_binding: "{{ Bindings }}"   }
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 180, mode: trunk, EPG_name: DC_PRO_v180_10_130_208_0_27_EPG, static_binding: "{{ Bindings }}" }
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 181, mode: trunk, EPG_name: DC_PRO_v181_10_129_0_0_24_EPG, static_binding: "{{ Bindings }}" }  
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 189, mode: trunk, EPG_name: DC_PRO_v189_10_129_124_0_23_EPG, static_binding: "{{ Bindings }}" }
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 23, mode: trunk, EPG_name: DC_PRO_v23_10_130_213_0_24_EPG, static_binding: "{{ Bindings }}"   }
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 133, mode: trunk, EPG_name: DC_PRO_v133_10_130_133_0_24_EPG, static_binding: "{{ Bindings }}" } 
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 17, mode: trunk, EPG_name: DC_PRO_v17_10_130_207_0_24_EPG, static_binding: "{{ Bindings }}"   }              
+    Bindings:
+      - { Switch_ID: 101-102, interface_type: vpc, port: Link_to_LegacyDC_vPC }
+      - { Switch_ID: 105-106, interface_type: vpc, port: PowerScale141_vPC    }
+      - { Switch_ID: 105-106, interface_type: vpc, port: PowerScale142_vPC    }
+      - { Switch_ID: 105-106, interface_type: vpc, port: PowerScale143_vPC    }      
+      - { Switch_ID: 105-106, interface_type: vpc, port: PowerScale144_vPC    } 
+
+
+  tasks:
+
+    - name: Add Static VPC Path binding for given EPG
+      aci_static_binding_to_epg:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: "{{ item.0.Tenant_name }}"
+        ap: "{{ item.0.AppProfile_name }}"
+        epg: "{{ item.0.EPG_name }}"
+        interface_type: "{{ item.1.interface_type }}"
+        encap_id: "{{ item.0.vlanID }}"
+        pod: 1
+        leafs: "{{ item.1.Switch_ID }}"
+        interface: '{{ item.1.port}}'
+        state: present
+      loop: "{{ EPGS|subelements('static_binding') }}"  
+      loop_control:
+        pause: "{{ loop_control_pause | default(0) }}"      
+      delegate_to: localhost
+

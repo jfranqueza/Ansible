@@ -1,0 +1,23 @@
+ansible_network_os: nxos
+
+# if_uplinks:
+# - Ethernet3/19
+# - Ethernet3/20
+
+port_uplink: port-channel1
+
+# if_uplink_B:
+# - Ethernet3/20
+
+# port_uplink:
+# - port-channel1
+
+# nameif_uplinks:
+# - interface Ethernet3/19
+# - interface Ethernet3/20
+
+
+# fex:
+# - 195
+# - 116
+# - 104

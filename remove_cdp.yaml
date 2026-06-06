@@ -1,0 +1,17 @@
+---
+- name: REMOVE CDP NEIGHBORS
+  hosts: N5KDC01_VLC_CONS1,N5KDC02_VLC
+  gather_facts: no
+
+  tasks:
+
+  - name: SEND THE COMMAND
+    nxos_config:
+      lines: 
+          - no cdp enable
+          - wr
+    
+     
+    
+
+

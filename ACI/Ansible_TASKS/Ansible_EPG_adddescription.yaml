@@ -1,0 +1,64 @@
+---
+- name: Create EPG
+  hosts: bds
+  connection: local
+  gather_facts: no
+
+  vars:
+    EPGs:
+      # - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v6_10_130_196_0_24_EPG, epg_description: WEB_VIP_196 }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v42_10_130_208_128_26_EPG, epg_description: IN-MISSION-CP-MGMNT-208-128-26 }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v61_10_129_81_0_24_EPG, epg_description: VSPHERE_REP_SRVC  }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v63_10_129_73_128_0_25_EPG, epg_description:  OICT-ACC-SRV }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v64_10_130_254_0_24_EPG, epg_description: WEB_VIP_254 }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v68_10_130_244_0_24_EPG, epg_description: PRD_EXC-EVT_V68 }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v69_10_130_247_0_24_EPG, epg_description: PRD_EXC-EVT_REP_V69 }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v94_10_129_68_32_27_EPG, epg_description: HUB_VC_CUCM }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v116_10_130_235_128_27_EPG, epg_description:  msg-exchange-235-128 }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v117_10_130_235_192_27_EPG, epg_description: msg-exchange-235-192 }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v131_10_130_131_0_24_EPG, epg_description: I2_Internal_Applications  }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v132_10_130_132_0_24_EPG, epg_description: I3_Internal_Backends }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v133_10_130_133_0_24_EPG, epg_description: IN-OICT-DIRECTORY }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v137_10_130_137_0_24_EPG, epg_description: IN-OICT-SRV-MGMT }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v139_10_130_139_0_24_EPG, epg_description: IN-OICT-MON }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v142_10_130_142_0_24_EPG, epg_description: OICT_EXCHANGE }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v166_10_130_143_224_28_EPG, epg_description: IN-OICT-SAN-MGMT }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v971_nonrouted_EPG, epg_description: internal-heartbeat }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v1421_10_130_142_128_27_EPG, epg_description: OICT_ADFS_FARM }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v1422_10_130_142_160_27, epg_description: OICT_ADFS_PROXY_v1422 }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v3466_10_130_221_200_29_EPG, epg_description: WINMAG }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v480_10_130_238_0_24_EPG, epg_description: VDI-238-inside }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v189_10_129_124_0_23_EPG, epg_description:  NSX_VDI }
+      - { Tenant_name: UNGSC_BDS_DC, ap_name: DC_BDS_PRO_AP, epg_name: DC_PRO_v7_10_130_197_0_24_EPG, epg_description: 7-DFS-Entprs-Public-Www }
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+  tasks:
+    - name: Add EPG
+      cisco.aci.aci_epg:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: "{{ item.Tenant_name }}"
+        ap: "{{ item.ap_name }}"
+        epg: "{{ item.epg_name }}"
+        description: "{{ item.epg_description }}"
+        # bd: "{{ item.bd_name }}"
+        state: present
+      loop: "{{ EPGs }}"  
+      loop_control:
+        pause: "{{ loop_control_pause | default(0) }}"      
+      delegate_to: localhost
+

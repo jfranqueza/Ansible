@@ -1,0 +1,13 @@
+---
+- name: BACKUP SWITCHES V2.8
+  hosts: N7KDC02_VLC,N5KDC02_VLC,N7KDC02_VLC_new
+  gather_facts: no
+
+  tasks:
+
+    - name: BACKUP CONSOLIDATION DEVICES
+      nxos_config:
+        backup: yes
+        backup_options:
+          filename: "{{ inventory_hostname }}.cfg"
+          dir_path: "./ansible/master_config"

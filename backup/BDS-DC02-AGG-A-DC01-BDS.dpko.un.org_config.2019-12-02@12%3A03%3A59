@@ -1,0 +1,1506 @@
+!Command: show running-config
+!Time: Mon Dec  2 12:04:19 2019
+
+version 6.1(2)
+feature-set fex
+hostname DC01-BDS
+
+feature telnet
+feature tacacs+
+cfs eth distribute
+feature ospf
+feature ospfv3
+feature private-vlan
+feature interface-vlan
+feature hsrp
+feature lacp
+feature vpc
+feature lldp
+
+logging level private-vlan 3
+username admin password 5 $1$IDA9aTQY$tYohHmUzlBQK0JoP2jQN.1  role vdc-admin
+no password strength-check
+ip domain-lookup
+tacacs-server key 7 "GY_G261_l1m1so"
+ip tacacs source-interface mgmt0
+tacacs-server deadtime 5
+tacacs-server host 10.130.94.191 
+tacacs-server host 10.130.222.52 
+aaa group server tacacs+ GSC-TACACS 
+    server 10.130.222.52 
+    server 10.130.94.191 
+    use-vrf management
+    source-interface mgmt0
+ip access-list 20
+  10 permit ip 10.130.94.20/32 any 
+  20 permit ip 10.130.94.60/32 any 
+  30 permit ip 10.130.94.22/32 any 
+  40 permit ip 10.130.94.40/32 any 
+  50 permit ip 10.130.222.7/32 any 
+  60 permit ip 10.130.239.133/32 any 
+  70 permit ip 10.130.222.130/32 any 
+ip access-list 22
+  10 permit ip 10.130.222.17/32 any 
+ip access-list 23
+  10 permit ip 10.130.239.138/32 any 
+ip access-list TEST-SWIFT
+  1 permit ip any 149.134.1.1/32 log 
+  2 permit ip any any 
+fex 102
+  pinning max-links 1
+  description "DC01-C05-DataDomain"
+fex 104
+  pinning max-links 1
+  description "DC01-D06-2-UMOJA"
+fex 106
+  pinning max-links 1
+  description "DC01-D06-8-UMOJA"
+fex 108
+  pinning max-links 1
+  description "DC01-D06-6-UMOJA"
+snmp-server location  HUB|BR|DC02|C06|AGG
+snmp-server source-interface trap mgmt0
+snmp-server source-interface inform mgmt0
+snmp-server user admin vdc-admin auth md5 0x4b3ec726ad99ce2327ee7d4d2adcd122 priv 0x4b3ec726ad99ce2327ee7d4d2adcd122 localizedkey
+snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.40 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.20 traps version 2c C1D3C03xt 
+snmp-server host 10.130.222.130 traps version 2c Df5-b0rd3rR! 
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server enable traps stpx inconsistency
+snmp-server enable traps stpx root-inconsistency
+snmp-server enable traps stpx loop-inconsistency
+snmp-server community C1D3C03xt group vdc-operator
+snmp-server community O10S4uDiT group vdc-operator
+snmp-server community Df5-b0rd3rR! group vdc-operator
+snmp-server community C1D3C03xt use-acl 22
+snmp-server community O10S4uDiT use-acl 23
+snmp-server community Df5-b0rd3rR! use-acl 20
+aaa authentication login default group GSC-TACACS 
+aaa accounting default group GSC-TACACS 
+aaa authentication login error-enable 
+
+ip route 10.129.70.0/26 Vlan686 10.129.127.5 name to_ASA_PRE-UMOJA-HANA-APP
+ip route 10.129.70.64/27 Vlan686 10.129.127.5 name to_ASA_PRE-UMOJA-HANA-DB
+ip route 10.129.70.96/28 Vlan689 10.129.127.29 name to_ASA_PRD-UMOJA-HANA-DB
+ip route 10.129.70.112/28 Vlan688 10.129.127.21 name to_ASA_PRD-UMOJA-HANA-APP
+ip route 10.129.70.128/27 Vlan686 10.129.127.5 name to_ASA_PRE-UMOJA-HANA-MGMT
+ip route 10.129.70.160/28 Vlan617 10.130.155.229 name to_ASA_PRD-UMOJA-HANA-MGMT
+ip route 10.129.70.192/27 Vlan617 10.130.155.229 name to_ASA_PRD-UMOJA-EXT-MGMT
+ip route 10.129.70.224/27 Vlan689 10.129.127.29 name to_ASA_PRD-UMOJA-SAP-DB
+ip route 10.129.71.0/24 Vlan686 10.129.127.5 name to_ASA_PRE-UMOJA-SAP-MGMT
+ip route 10.129.72.128/25 Vlan688 10.129.127.21 name to_ASA_PRD-UMOJA-SAP-APP
+ip route 10.129.73.0/25 Vlan686 10.129.127.5 name to_ASA_PRE-UMOJA-SAP-DB
+ip route 10.129.73.128/26 Vlan687 10.129.127.13 name to_ASA_OICT-ACC-SRV
+ip route 10.129.74.0/24 Vlan686 10.129.127.5 name to_ASA_PRE-UMOJA-SAP-APP
+ip route 10.129.78.0/25 Vlan617 10.130.155.229 name to_ASA_PRD-UMOJA-SAP-MGMT
+ip route 10.129.83.0/24 Vlan687 10.129.127.13 name to_ASA_OICT-ACC-VIP-2
+ip route 10.130.129.0/24 Vlan11 10.130.128.1 name I1_Internal_Frontend_2
+ip route 10.130.130.0/24 Vlan11 10.130.128.1 name I1_Internal_Frontend
+ip route 10.130.131.0/24 Vlan11 10.130.128.1 name I2_Internal_Applications
+ip route 10.130.132.0/24 Vlan11 10.130.128.1 name I3_Internal_Backends
+ip route 10.130.133.0/24 Vlan11 10.130.128.1 name IS_Internal_Suppor_Services
+ip route 10.130.134.0/24 Vlan11 10.130.128.1 name AC_Application_Citrix
+ip route 10.130.135.0/28 Vlan618 10.130.155.237 name NAS-INEED
+ip route 10.130.137.0/24 Vlan21 10.130.128.17 name M2_Server_Management
+ip route 10.130.138.0/24 Vlan21 10.130.128.17 name M3_Storage_Management
+ip route 10.130.139.0/24 Vlan21 10.130.128.17 name MS_Network_Monitoring
+ip route 10.130.140.0/24 Vlan21 10.130.128.17 name M4_vMotion
+ip route 10.130.141.0/24 Vlan11 10.130.128.1 name OICT-INT-XenApp-141-0-24
+ip route 10.130.142.0/26 Vlan616 10.130.155.221 name to_ASA_OICT_EXCHANGE
+ip route 10.130.142.128/27 Vlan616 10.130.155.221 name to_ASA_OICT_ADFS_FARM
+ip route 10.130.142.160/27 Vlan616 10.130.155.221 name to_ASA_OICT_ADFS_PROXY
+ip route 10.130.143.224/28 Vlan616 10.130.155.221 name to_ASA_IN-OICT-SAN-MGMT
+ip route 10.130.144.0/28 Vlan618 10.130.155.237 name 144_RPA_Inside
+ip route 10.130.145.0/27 Vlan618 10.130.155.237 name to_ASA_Storage_CX4-v1045
+ip route 10.130.145.32/27 Vlan618 10.130.155.237 name to_ASA_Storage_CX4_OITC-v1145
+ip route 10.130.145.128/27 Vlan618 10.130.155.237 name to_ASA_RPA-MGMT-v145
+ip route 10.130.146.0/23 Vlan616 10.130.155.221 name to_ASA_OICT_INT_CITRIX
+ip route 10.130.148.192/26 Vlan617 10.130.155.229 name to_ASA_ESX-HOST-DFS-DC1_V222
+ip route 10.130.151.0/25 Vlan620 10.130.153.236 name DEV-02_1725
+ip route 10.130.152.0/24 Vlan619 10.130.153.228 name to_DC02-DEVELOPMENT_v744
+ip route 10.130.153.0/25 Vlan621 10.130.153.244 name DEV-03_v811
+ip route 10.130.153.128/27 Vlan621 10.130.153.244 name DEV-03_v812
+ip route 10.130.153.160/27 Vlan621 10.130.153.244 name DEV-03_v715
+ip route 10.130.153.192/28 Vlan621 10.130.153.244 name DEV-03_v813
+ip route 10.130.154.0/24 Vlan617 10.130.155.229 name B178_Devices_154-Inside
+ip route 10.130.155.0/25 Vlan617 10.130.155.229 name to_ASA_Infrastructure-v155
+ip route 10.130.158.0/24 Vlan617 10.130.155.229 name to_ASA_ESX-v158
+ip route 10.130.159.0/24 Vlan617 10.130.155.229 name to_ASA_ILO2-v159
+ip route 10.130.160.0/25 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.161.0/25 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.161.128/25 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.163.0/25 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.164.0/26 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.164.64/26 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.164.128/26 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.164.192/27 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.164.224/28 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.165.0/24 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.166.0/24 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.167.128/27 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.167.160/27 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.167.192/26 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.168.0/23 Vlan615 10.130.155.212 name to_ASA_UMOJA
+ip route 10.130.170.0/24 Vlan619 10.130.153.228 name DEV-01_v170
+ip route 10.130.171.0/26 Vlan620 10.130.153.236 name DEV-02_v1710
+ip route 10.130.171.64/26 Vlan620 10.130.153.236 name DEV-02_v1711
+ip route 10.130.171.128/26 Vlan620 10.130.153.236 name DEV-02_v1712
+ip route 10.130.171.192/27 Vlan620 10.130.153.236 name DEV-02_v1713
+ip route 10.130.175.0/25 Vlan621 10.130.153.244 name DEV-03_v831
+ip route 10.130.230.120/29 Vlan619 10.130.153.228 name to_DEV-BACKEND_v174
+ip route 10.130.251.128/25 Vlan619 10.130.153.228 name to_DEV-BACKEND_v172
+ip route 10.130.255.192/28 Vlan623 10.130.153.252 name DEV-04_v814
+ip route 10.130.255.208/28 Vlan623 10.130.153.252 name DEV-04_v821
+ip route 10.130.255.224/28 Vlan623 10.130.153.252 name DEV-04_v822
+vrf context management
+  ip route 0.0.0.0/0 10.130.194.1
+vlan 1,11,21,48,53-55,57,59,61-63,70-73,77-80,85-87,111,129-145,148-149,151-154,158-159,166,170,172,174,178,222,350,450,520,522,601,615-623,686-689,715,744-745,811-814,821-822,831,888,959,971,1045,1048,1101-1103,1145,1148,1201-1203,1248,1421-1422,1710-1713,1715-1720,1725,2000,2028,3005,3010-3011,3020-3026,3028-3029,3477,3666-3667
+vlan 11
+  name OICT_Internal_FW_Outside
+vlan 21
+  name OICT_Mngmnt_FW_Outside
+vlan 48
+  name PRE-UMOJA-HANA-MGMT
+vlan 53
+  name PRD-UMOJA-SAP-MGMT
+vlan 54
+  name PRD-UMOJA-HANA-MGMT
+vlan 55
+  name PRE-UMOJA-SAP-MGMT
+vlan 57
+  name PRD-UMOJA-EXT-MGMT
+vlan 59
+  name OICT-ACC-VIP-2
+vlan 61
+  name VSPHERE_REP_SRVC
+vlan 62
+  name VSPHERE_REP_NFC
+vlan 63
+  name OICT-ACC-SRV
+vlan 70
+  name PRE-UMOJA-HANA-DB
+vlan 71
+  name PRE-UMOJA-HANA-APP
+vlan 72
+  name PRD-UMOJA-HANA-DB
+vlan 73
+  name PRD-UMOJA-HANA-APP
+vlan 77
+  name PRE-UMOJA-SAP-DB
+vlan 78
+  name PRE-UMOJA-SAP-APP
+vlan 79
+  name PRD-UMOJA-SAP-DB
+vlan 80
+  name PRD-UMOJA-SAP-APP
+vlan 85
+  name OICT-INTERNET
+vlan 86
+  name OICT-Public-subnet
+vlan 87
+  name OICT-Public-subnet-2
+vlan 111
+  name OICT_INT-CITRIX
+vlan 129
+  name I1_Internal_Frontend_2
+vlan 130
+  name I1_Internal_Frontend
+vlan 131
+  name I2_Internal_Applications
+vlan 132
+  name I3_Internal_Backends
+vlan 133
+  name IS_Internal_Suppor_Services
+vlan 134
+  name AC_Application_Citrix
+vlan 135
+  name NAS-INEED
+vlan 136
+  name M1_Firewall_Management
+vlan 137
+  name M2_Server_Management
+vlan 138
+  name M3_Storage_Management
+vlan 139
+  name MS_Network_Monitoring
+vlan 140
+  name M4_vMotion
+vlan 141
+  name OICT-INT-XenApp-141-0-24
+vlan 142
+  name OICT_EXCHANGE
+vlan 143
+  name OICT_Non_routable
+vlan 144
+  name 144_RPA_Inside
+vlan 145
+  name 145_RPA-MGMT_Inside
+vlan 154
+  name B178_Devices_154
+vlan 158
+  name DC_178_ESX_ILO158
+vlan 159
+  name DC_178_ESX_ILO159
+vlan 166
+  name IN-OICT-SAN-MGMT
+vlan 170
+  name DEVELOPMENT
+vlan 172
+  name DEVELOPMENT-BACKEND
+vlan 174
+  name DEVELOPMENT-ACCESS
+vlan 178
+  name B178_devices_155
+vlan 222
+  name ESX-HOST-DFS-DC1
+vlan 350
+  name DC01-OICT-VRF
+vlan 450
+  name old
+vlan 520
+  name PSDMZ-LOCAL-PRIMARY
+  private-vlan primary
+  private-vlan association 522
+vlan 522
+  name PSDMZ-LOCAL-COMMUNITY
+  private-vlan community
+vlan 601
+  name ASA-FW-ADMIN-Context
+vlan 615
+  name OUT-OICT-UMOJA
+vlan 616
+  name OUT-OICT-SERVICES
+vlan 617
+  name OUT-INFRASTRUCTURE
+vlan 618
+  name OUT-SAN
+vlan 619
+  name OUT-DC01-DEV-01
+vlan 620
+  name OUT-DC01-DEV-02
+vlan 621
+  name OUT-DC01-DEV-03
+vlan 622
+  name L3_link_PtP
+vlan 623
+  name OUT-DC01-DEV-04
+vlan 686
+  name OUT-OICT-PREPRODUCTION
+vlan 687
+  name OUT-OICT-ACCESS
+vlan 688
+  name OUT-OICT-APP
+vlan 689
+  name OUT-OICT-BACKEND
+vlan 715
+  name STT-MGMT
+vlan 744
+  name DC02-DEVELOPMENT
+vlan 745
+  name DC02-DEV-HB
+vlan 811
+  name STT-Net_Hyperconvergence
+vlan 812
+  name STT-Net
+vlan 813
+  name STT-Net_LoadBenchmarking
+vlan 814
+  name DEV-SERVICE-TRANSITION-814
+vlan 821
+  name DEV-SERVICE-TRANSITION-821
+vlan 822
+  name STT-Net2
+vlan 888
+  name vpc_keepalive
+vlan 959
+  name OICT_Mail_Backend_E4
+vlan 971
+  name internal-heartbeat
+vlan 1045
+  name DC_178_Storage_CX4_145
+vlan 1048
+  name B178-Cust-Frontend-UN-Ineed-prep
+vlan 1101
+  name OICT_INT_FW_SYNC01
+vlan 1102
+  name OICT_INT_FW_SYNC02
+vlan 1103
+  name OICT_INT_FW_SYNC03
+vlan 1145
+  name DC_178_Storage_CX4_OICT_145
+vlan 1148
+  name B178-Cust-Frontend-UN-Ineed-prod
+vlan 1201
+  name OICT_MGT_FW_SYNC01
+vlan 1202
+  name OICT_MGT_FW_SYNC02
+vlan 1203
+  name OICT_MGT_FW_SYNC03
+vlan 1248
+  name B178-Cust-LBVIP-UN-Ineed
+vlan 1421
+  name OICT_ADFS_FARM
+vlan 1422
+  name OICT_ADFS_PROXY_v1422
+vlan 1710
+  name 10-Dev-Serv-171-0
+vlan 1711
+  name 11-Dev-Serv-171-64
+vlan 1712
+  name 12-Dev-Serv-171-128
+vlan 1713
+  name 13-Dev-Serv-171-192
+vlan 1715
+  name DEV-HYPERC-MGMT
+vlan 1716
+  name DEV-HYPERC-VM-NETWORK
+vlan 1717
+  name DEV-HYPERC-NETW-SERV
+vlan 1718
+  name DEV-HYPERC-WIRELESS-MGMT
+vlan 1719
+  name DEV-HYPERC-VDI-INF
+vlan 1725
+  name BDS-DEV_VIP-151-0-25
+vlan 2000
+  name CSM-Failover
+vlan 3010
+  name umoja-aggregation
+vlan 3011
+  name infra-service
+vlan 3020
+  name umoja-syst-mgmt
+vlan 3021
+  name umoja-heartbeat
+vlan 3022
+  name umoja-db
+vlan 3023
+  name umoja-centr-serv
+vlan 3024
+  name umoja-prod-dr-app
+vlan 3025
+  name umoja-presentation
+vlan 3026
+  name umoja-DR
+vlan 3028
+  name SAP-HANA
+vlan 3477
+  name SCOM
+vlan 3666
+  name umoja
+vlan 3667
+  name EXTENDED_IN-SAP-HANA-25-192-28
+
+spanning-tree vlan 1-3967 priority 4096
+ip prefix-list STATIC-TO-OSPF seq 5 permit 10.130.158.0/24 
+ip prefix-list STATIC-TO-OSPF seq 10 permit 10.130.159.0/24 
+ip prefix-list STATIC-TO-OSPF seq 15 permit 10.130.155.0/25 
+ip prefix-list STATIC-TO-OSPF seq 20 permit 10.130.154.0/24 
+ip prefix-list STATIC-TO-OSPF seq 25 permit 10.130.145.0/27 
+ip prefix-list STATIC-TO-OSPF seq 30 permit 10.130.145.32/27 
+ip prefix-list STATIC-TO-OSPF seq 35 permit 10.130.145.128/27 
+ip prefix-list STATIC-TO-OSPF seq 40 permit 10.130.144.0/28 
+ip prefix-list STATIC-TO-OSPF seq 45 permit 10.130.142.0/26 
+ip prefix-list STATIC-TO-OSPF seq 50 permit 10.130.142.128/27 
+ip prefix-list STATIC-TO-OSPF seq 55 permit 10.130.142.160/27 
+ip prefix-list STATIC-TO-OSPF seq 60 permit 10.130.135.0/28 
+ip prefix-list STATIC-TO-OSPF seq 65 permit 10.130.170.0/24 
+ip prefix-list STATIC-TO-OSPF seq 70 permit 10.130.171.0/26 
+ip prefix-list STATIC-TO-OSPF seq 75 permit 10.130.171.64/26 
+ip prefix-list STATIC-TO-OSPF seq 80 permit 10.130.171.128/26 
+ip prefix-list STATIC-TO-OSPF seq 85 permit 10.130.171.192/27 
+ip prefix-list STATIC-TO-OSPF seq 90 permit 10.130.153.0/25 
+ip prefix-list STATIC-TO-OSPF seq 95 permit 10.130.153.128/27 
+ip prefix-list STATIC-TO-OSPF seq 100 permit 10.130.153.160/27 
+ip prefix-list STATIC-TO-OSPF seq 105 permit 10.130.153.192/28 
+ip prefix-list STATIC-TO-OSPF seq 110 permit 10.130.175.0/25 
+ip prefix-list STATIC-TO-OSPF seq 115 permit 10.130.255.192/28 
+ip prefix-list STATIC-TO-OSPF seq 120 permit 10.130.255.208/28 
+ip prefix-list STATIC-TO-OSPF seq 125 permit 10.130.255.224/28 
+ip prefix-list STATIC-TO-OSPF seq 200 permit 10.130.161.128/25 
+ip prefix-list STATIC-TO-OSPF seq 210 permit 10.130.166.0/24 
+ip prefix-list STATIC-TO-OSPF seq 230 permit 10.130.167.160/27 
+ip prefix-list STATIC-TO-OSPF seq 240 permit 10.130.167.192/26 
+ip prefix-list STATIC-TO-OSPF seq 250 permit 10.130.164.0/26 
+ip prefix-list STATIC-TO-OSPF seq 260 permit 10.130.164.64/26 
+ip prefix-list STATIC-TO-OSPF seq 270 permit 10.130.164.128/26 
+ip prefix-list STATIC-TO-OSPF seq 280 permit 10.130.164.192/27 
+ip prefix-list STATIC-TO-OSPF seq 290 permit 10.130.164.224/28 
+ip prefix-list STATIC-TO-OSPF seq 300 permit 10.130.165.0/24 
+ip prefix-list STATIC-TO-OSPF seq 310 permit 10.130.168.0/23 
+ip prefix-list STATIC-TO-OSPF seq 330 permit 10.130.160.0/25 
+ip prefix-list STATIC-TO-OSPF seq 340 permit 10.130.161.0/25 
+ip prefix-list STATIC-TO-OSPF seq 350 permit 10.130.163.0/25 
+ip prefix-list STATIC-TO-OSPF seq 360 permit 10.130.167.128/27 
+ip prefix-list STATIC-TO-OSPF seq 365 permit 10.130.137.0/24 
+ip prefix-list STATIC-TO-OSPF seq 370 permit 10.130.138.0/24 
+ip prefix-list STATIC-TO-OSPF seq 375 permit 10.130.139.0/24 
+ip prefix-list STATIC-TO-OSPF seq 380 permit 10.130.140.0/24 
+ip prefix-list STATIC-TO-OSPF seq 385 permit 10.130.129.0/24 
+ip prefix-list STATIC-TO-OSPF seq 390 permit 10.130.130.0/24 
+ip prefix-list STATIC-TO-OSPF seq 395 permit 10.130.131.0/24 
+ip prefix-list STATIC-TO-OSPF seq 400 permit 10.130.132.0/24 
+ip prefix-list STATIC-TO-OSPF seq 405 permit 10.130.133.0/24 
+ip prefix-list STATIC-TO-OSPF seq 410 permit 10.130.134.0/24 
+ip prefix-list STATIC-TO-OSPF seq 415 permit 10.130.141.0/24 
+ip prefix-list STATIC-TO-OSPF seq 420 permit 10.130.148.192/26 
+ip prefix-list STATIC-TO-OSPF seq 425 permit 10.130.152.0/24 
+ip prefix-list STATIC-TO-OSPF seq 430 permit 10.130.151.0/25 
+ip prefix-list STATIC-TO-OSPF seq 435 permit 10.130.143.224/28 
+ip prefix-list STATIC-TO-OSPF seq 440 permit 10.130.146.0/23 
+ip prefix-list STATIC-TO-OSPF seq 445 permit 10.129.73.0/25 
+ip prefix-list STATIC-TO-OSPF seq 450 permit 10.129.74.0/24 
+ip prefix-list STATIC-TO-OSPF seq 455 permit 10.129.70.64/27 
+ip prefix-list STATIC-TO-OSPF seq 460 permit 10.129.70.0/26 
+ip prefix-list STATIC-TO-OSPF seq 465 permit 10.129.71.0/24 
+ip prefix-list STATIC-TO-OSPF seq 470 permit 10.129.70.128/27 
+ip prefix-list STATIC-TO-OSPF seq 475 permit 10.129.72.128/25 
+ip prefix-list STATIC-TO-OSPF seq 480 permit 10.129.70.112/28 
+ip prefix-list STATIC-TO-OSPF seq 485 permit 10.129.70.224/27 
+ip prefix-list STATIC-TO-OSPF seq 490 permit 10.129.70.96/28 
+ip prefix-list STATIC-TO-OSPF seq 495 permit 10.129.78.0/25 
+ip prefix-list STATIC-TO-OSPF seq 500 permit 10.129.70.160/28 
+ip prefix-list STATIC-TO-OSPF seq 505 permit 10.129.70.192/27 
+ip prefix-list STATIC-TO-OSPF seq 510 permit 10.130.251.128/25 
+ip prefix-list STATIC-TO-OSPF seq 515 permit 10.130.230.120/29 
+ip prefix-list STATIC-TO-OSPF seq 520 permit 10.129.83.0/24 
+ip prefix-list STATIC-TO-OSPF seq 525 permit 10.129.73.128/26 
+route-map STATIC-TO-OSPF permit 10
+  match ip address prefix-list STATIC-TO-OSPF 
+vpc domain 4
+  peer-switch
+  peer-keepalive destination 169.254.2.2 source 169.254.2.1 vrf default
+  auto-recovery reload-delay 600
+
+
+interface Vlan1
+
+interface Vlan11
+  description OUT-OICT-CP-MAIN_nyse0043/nyse0044
+  no shutdown
+  ip address 10.130.128.5/28
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 11 
+    preempt 
+    priority 110
+    ip 10.130.128.6 
+
+interface Vlan21
+  description OUT-OICT-CP-MGMT_nyse0048/nyse0049
+  no shutdown
+  ip address 10.130.128.29/28
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 21 
+    preempt 
+    priority 110
+    ip 10.130.128.30 
+
+interface Vlan136
+  description OICT Management_Network
+  no shutdown
+  ip address 10.130.136.253/24
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 136 
+    preempt 
+    priority 110
+    ip 10.130.136.254 
+
+interface Vlan601
+  description ASA-FW-ADMIN-Context
+  no shutdown
+  ip address 10.130.155.242/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 601 
+    preempt 
+    priority 110
+    ip 10.130.155.241 
+
+interface Vlan615
+  description OUT-OICT-UMOJA
+  no shutdown
+  ip address 10.130.155.210/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 615 
+    preempt 
+    priority 110
+    ip 10.130.155.209 
+
+interface Vlan616
+  description OUT-OICT-SERVICES
+  no shutdown
+  ip address 10.130.155.218/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 616 
+    preempt 
+    priority 110
+    ip 10.130.155.217 
+
+interface Vlan617
+  description OUT-DC01-INFRASTRUCTURE
+  no shutdown
+  ip address 10.130.155.226/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 617 
+    preempt 
+    priority 110
+    ip 10.130.155.225 
+
+interface Vlan618
+  description OUT-DC01-SAN
+  no shutdown
+  ip address 10.130.155.234/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 618 
+    preempt 
+    priority 110
+    ip 10.130.155.233 
+
+interface Vlan619
+  description OUT-DC01-DEV-01
+  no shutdown
+  ip address 10.130.153.226/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 619 
+    preempt 
+    priority 110
+    ip 10.130.153.225 
+
+interface Vlan620
+  description OUT-DC01-DEV-02
+  no shutdown
+  ip address 10.130.153.234/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 620 
+    preempt 
+    priority 110
+    ip 10.130.153.233 
+
+interface Vlan621
+  description OUT-DC01-DEV-03
+  no shutdown
+  ip address 10.130.153.242/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 621 
+    preempt 
+    priority 110
+    ip 10.130.153.241 
+
+interface Vlan622
+  description L3 link PtP to->BDS-DC02-AGG-B-DC01-BDS
+  no shutdown
+  ip address 10.130.174.132/31
+  ip ospf cost 400
+  ip ospf network point-to-point
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+
+interface Vlan623
+  description OUT-DC01-DEV-04
+  no shutdown
+  ip address 10.130.153.250/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 623 
+    preempt 
+    priority 110
+    ip 10.130.153.249 
+
+interface Vlan686
+  description OUT-OICT-PREPRODUCTION
+  no shutdown
+  ip address 10.129.127.2/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 686 
+    preempt 
+    priority 110
+    ip 10.129.127.1 
+
+interface Vlan687
+  description OUT-OICT-ACCESS
+  no shutdown
+  ip address 10.129.127.10/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 687 
+    preempt 
+    priority 110
+    ip 10.129.127.9 
+
+interface Vlan688
+  description OUT-OICT-APP
+  no shutdown
+  ip address 10.129.127.18/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 688 
+    preempt 
+    priority 110
+    ip 10.129.127.17 
+
+interface Vlan689
+  description OUT-OICT-BACKEND
+  no shutdown
+  ip address 10.129.127.26/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+  hsrp version 2
+  hsrp 689 
+    preempt 
+    priority 110
+    ip 10.129.127.25 
+
+interface Vlan888
+  description vpc keepalive
+  no shutdown
+  ip address 169.254.2.1/30
+
+interface port-channel1
+  description to->BDS-DC01-FWA_po1
+  switchport
+  switchport mode trunk
+  vpc 1
+
+interface port-channel2
+  description to->BDS-DC01-FWB_po1
+  switchport
+  switchport mode trunk
+  vpc 2
+
+interface port-channel10
+  description BDS-EDGE-CORE-A_Po10
+  ip address 10.130.174.105/31
+  ip ospf dead-interval 6
+  ip ospf hello-interval 2
+  ip ospf network point-to-point
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+
+interface port-channel11
+  description BDS-EDGE-CORE-B_Po11
+  ip address 10.130.174.109/31
+  ip ospf dead-interval 6
+  ip ospf hello-interval 2
+  ip ospf network point-to-point
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.11
+
+interface port-channel65
+  description eth2/34, eth4/34 OICT NAS NYNE01458
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 39,1145
+  spanning-tree guard root
+
+interface port-channel67
+  description OICT-CP-nyse0048_bond1
+  switchport
+  switchport access vlan 21
+  spanning-tree port type edge
+  speed 1000
+  duplex full
+
+interface port-channel68
+  description OICT-CP-nyse0048_bond2
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 137-140
+  speed 1000
+  duplex full
+
+interface port-channel100
+  description SPAN-APM:ARX-Gi1
+  switchport
+  switchport monitor
+
+interface port-channel117
+  description NS-NYAP0073_BE_LA/2
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 134
+  switchport trunk allowed vlan 134,142,1421-1422
+  speed 1000
+  duplex full
+
+interface port-channel123
+  description BDS-DC02-ACC-E&F
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  vpc 123
+
+interface port-channel124
+  description BDS-DC02-ACC-G&H(Development) 
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 170,172,174,715,744-745,811-814
+  switchport trunk allowed vlan add 821-822,831,1710-1713,1715-1720
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  vpc 124
+
+interface port-channel125
+  description BDS-DC01-ACC-C&D
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  vpc 125
+
+interface port-channel200
+  description vBlock N5K port-channel
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3005,3020-3026
+  vpc 200
+
+interface port-channel300
+  description BDS DEV
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 1713
+  switchport trunk allowed vlan 1711,1713,1725
+  vpc 300
+
+interface port-channel301
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 170,744,811
+  vpc 301
+
+interface port-channel888
+  description VPC-peer-keepalive-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 888
+
+interface port-channel1001
+  description peer-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-887,889-998,1000-1999,2001-4094
+  spanning-tree port type network
+  speed 10000
+  vpc peer-link
+
+interface Ethernet2/1
+
+interface Ethernet2/2
+
+interface Ethernet2/3
+
+interface Ethernet2/4
+
+interface Ethernet2/5
+
+interface Ethernet2/6
+  description nyse0044_LOM_10.130.136.28
+  switchport
+  switchport access vlan 136
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet2/7
+  description NS-NYAP0073_Int1/2
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 130
+  switchport trunk allowed vlan 59,130
+  spanning-tree port type edge
+  speed 1000
+  duplex full
+  no shutdown
+
+interface Ethernet2/8
+  description NS-NYAP0073_Int1/3
+  switchport
+  switchport access vlan 87
+  spanning-tree port type edge
+  speed 1000
+  duplex full
+  no shutdown
+
+interface Ethernet2/9
+  description NS-NYAP0073_Int1/6
+  switchport
+  switchport access vlan 86
+  spanning-tree port type edge
+  speed 1000
+  duplex full
+  no shutdown
+
+interface Ethernet2/10
+  description NS-NYAP0073_BE_Int1/11
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 134
+  switchport trunk allowed vlan 134,142,1421-1422
+  speed 1000
+  duplex full
+  channel-group 117 mode active
+  no shutdown
+
+interface Ethernet2/11
+  description BDS DEV NS FE portchannel 300 (VIPs)
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 1713
+  switchport trunk allowed vlan 1711,1713,1725
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  channel-group 300 mode active
+  no shutdown
+
+interface Ethernet2/12
+  description vBlock N5K-A
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3005,3020-3026
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet2/13
+  description vBlock N5K-A
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3005,3020-3026
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet2/14
+  description vBlock N5K-A
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3005,3020-3026
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet2/15
+  description vBlock N5K-A
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3005,3020-3026
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet2/16
+  description to->BDS-EDGE-CORE-A_Ten0/1/0/0
+  channel-group 10 mode active
+  no shutdown
+
+interface Ethernet2/17
+  description nyse0048_eth1
+  switchport
+  switchport access vlan 21
+  spanning-tree port type edge
+  speed 1000
+  duplex full
+  channel-group 67 mode active
+  no shutdown
+
+interface Ethernet2/18
+  description nyse0048_eth3
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 137-140
+  speed 1000
+  duplex full
+  channel-group 68 mode active
+  no shutdown
+
+interface Ethernet2/19
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 170,172,174,715,744-745,811-814
+  switchport trunk allowed vlan add 821-822,831,1710-1713,1715-1720
+  storm-control broadcast level 5.00
+  channel-group 124 mode active
+  no shutdown
+
+interface Ethernet2/20
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 170,172,174,715,744-745,811-814
+  switchport trunk allowed vlan add 821-822,831,1710-1713,1715-1720
+  storm-control broadcast level 5.00
+  channel-group 124 mode active
+  no shutdown
+
+interface Ethernet2/21
+  description ASA-FWA_TenGig0/7
+  switchport
+  switchport access vlan 601
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet2/22
+  description ASA-FWB_TenGig0/7
+  switchport
+  switchport mode trunk
+  channel-group 2 mode active
+  no shutdown
+
+interface Ethernet2/23
+
+interface Ethernet2/24
+  description OICT-UN-IDS007-IT-BRI-1
+  switchport
+  switchport monitor
+  speed 1000
+
+interface Ethernet2/25
+  description BDS-DC01-ACC-C_Eth1/3
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 125 mode active
+  no shutdown
+
+interface Ethernet2/26
+  description BDS-DC01-ACC-D_Eth1/3
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 125 mode active
+  no shutdown
+
+interface Ethernet2/27
+  description to nexus-acc-e
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  storm-control broadcast level 5.00
+  channel-group 123 mode active
+  no shutdown
+
+interface Ethernet2/28
+  description to nexus-acc-f
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  storm-control broadcast level 5.00
+  channel-group 123 mode active
+  no shutdown
+
+interface Ethernet2/29
+  description DFS-AVMR-BDS-01-Eth1
+  switchport
+  switchport access vlan 178
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet2/30
+  description DFS-AVMR-BD-01-No01-Eth1
+  switchport
+  switchport access vlan 178
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet2/31
+  description dfs-isilon-01
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 744
+  spanning-tree port type edge trunk
+  no shutdown
+
+interface Ethernet2/32
+  description dfs-isilon-01
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 744
+  spanning-tree port type edge trunk
+  no shutdown
+
+interface Ethernet2/33
+  description OICT NAS NYNE01458
+
+interface Ethernet2/34
+  description OICT NAS NYNE01458
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 39,1145
+  spanning-tree port type edge
+  channel-group 65 mode active
+  no shutdown
+
+interface Ethernet2/35
+  description ESA_NYAP0136_10.130.137.51
+  switchport
+  switchport access vlan 137
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet2/36
+  description to ESA_DATA1_157.150.240.17
+  switchport
+  switchport access vlan 87
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet2/37
+
+interface Ethernet2/38
+  description DC02, Rack B-D2-C13,SPAN-APM:ARX-Gi2
+  switchport
+  switchport monitor
+  channel-group 100
+  no shutdown
+
+interface Ethernet2/39
+  description vBlock N5K-B
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3005,3020-3026
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet2/40
+  description vBlock N5K-B
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3005,3020-3026
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet2/41
+  description vBlock N5K-B
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3005,3020-3026
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet2/42
+  description vBlock N5K-B
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 3005,3020-3026
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet2/43
+  description OICT-CP-nyse0043_MGMT_10.130.136.30
+  switchport
+  switchport access vlan 136
+  spanning-tree port type edge
+  speed 1000
+  duplex full
+  no shutdown
+
+interface Ethernet2/44
+  description VPC-peer-keepalive-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 888
+  channel-group 888 mode active
+  no shutdown
+
+interface Ethernet2/45
+  description peer-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-887,889-998,1000-1999,2001-4094
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet2/46
+  description peer-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-887,889-998,1000-1999,2001-4094
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet2/47
+  description peer-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-887,889-998,1000-1999,2001-4094
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet2/48
+  description peer-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-887,889-998,1000-1999,2001-4094
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet4/1
+
+interface Ethernet4/2
+
+interface Ethernet4/3
+  description OICT-CP-nyse0043_eth3-01
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 86-87,130-134,141
+  no shutdown
+
+interface Ethernet4/4
+  description OICT-CP-nyse0043_eth2-01
+  switchport
+  switchport access vlan 11
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet4/5
+
+interface Ethernet4/6
+
+interface Ethernet4/7
+
+interface Ethernet4/8
+
+interface Ethernet4/9
+
+interface Ethernet4/10
+  description OICT-CP-nyse0048_MGMT_10.130.136.31
+  switchport
+  switchport access vlan 136
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet4/11
+
+interface Ethernet4/12
+
+interface Ethernet4/13
+
+interface Ethernet4/14
+
+interface Ethernet4/15
+
+interface Ethernet4/16
+  description to->BDS-EDGE-CORE-B_Ten0/1/0/0
+  channel-group 11 mode active
+  no shutdown
+
+interface Ethernet4/17
+  description nyse0048_eth2
+  switchport
+  switchport access vlan 21
+  spanning-tree port type edge
+  speed 1000
+  duplex full
+  channel-group 67 mode active
+  no shutdown
+
+interface Ethernet4/18
+  description nyse0048_eth4
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 137-140
+  speed 1000
+  duplex full
+  channel-group 68 mode active
+  no shutdown
+
+interface Ethernet4/19
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 170,172,174,715,744-745,811-814
+  switchport trunk allowed vlan add 821-822,831,1710-1713,1715-1720
+  storm-control broadcast level 5.00
+  channel-group 124 mode active
+  no shutdown
+
+interface Ethernet4/20
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 170,172,174,715,744-745,811-814
+  switchport trunk allowed vlan add 821-822,831,1710-1713,1715-1720
+  storm-control broadcast level 5.00
+  channel-group 124 mode active
+  no shutdown
+
+interface Ethernet4/21
+  description ASA-FWA_TenGig0/9
+  switchport
+  switchport mode trunk
+  channel-group 1 mode active
+  no shutdown
+
+interface Ethernet4/22
+  description NS-NYAP0073_BE_Int1/12
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 134
+  switchport trunk allowed vlan 134,142,1421-1422
+  speed 1000
+  duplex full
+  channel-group 117 mode active
+  no shutdown
+
+interface Ethernet4/23
+  description DCB1---Interface Gig10/9
+
+interface Ethernet4/24
+  description NS-VPX_Int10/1
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 130
+  switchport trunk allowed vlan 59,130
+  no shutdown
+
+interface Ethernet4/25
+  description BDS-DC01-ACC-C_Eth1/4
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 125 mode active
+  no shutdown
+
+interface Ethernet4/26
+  description BDS-DC01-ACC-D_Eth1/4
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 125 mode active
+  no shutdown
+
+interface Ethernet4/27
+  description to nexus-acc-e
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  storm-control broadcast level 5.00
+  channel-group 123 mode active
+  no shutdown
+
+interface Ethernet4/28
+  description to nexus-acc-f
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-743,746-887,889-998,1000-1999
+  switchport trunk allowed vlan add 2001-4094
+  storm-control broadcast level 5.00
+  channel-group 123 mode active
+  no shutdown
+
+interface Ethernet4/29
+  description EDC-Cluster1-RPA2-WAN
+  switchport
+  switchport access vlan 144
+  no shutdown
+
+interface Ethernet4/30
+  description EDC-Cluster1-RPA4-WAN
+  switchport
+  switchport access vlan 144
+  no shutdown
+
+interface Ethernet4/31
+
+interface Ethernet4/32
+  description NS-VPX_Int10/2
+  switchport
+  switchport access vlan 86
+  no shutdown
+
+interface Ethernet4/33
+  description OICT NAS NYNE01458
+
+interface Ethernet4/34
+  description OICT NAS NYNE01458
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 39,1145
+  spanning-tree port type edge
+  channel-group 65 mode active
+  no shutdown
+
+interface Ethernet4/35
+  description BDS DEV NS BE portchannel 301 (SNIPs)
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 170,744,811
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  channel-group 301 mode active
+  no shutdown
+
+interface Ethernet4/36
+  description to ESA_DATA2_10.130.130.44
+  switchport
+  switchport access vlan 130
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet4/37
+
+interface Ethernet4/38
+  description DC02, Rack B-D2-C13,SPAN-APM:ARX-Gi1
+  switchport
+  switchport monitor
+  channel-group 100
+  no shutdown
+
+interface Ethernet4/39
+
+interface Ethernet4/40
+  description DFS-AVMR-BDS-01-No02-Eth1
+  switchport
+  switchport access vlan 178
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet4/41
+  description DFS-AVMR-BDS-01No03-Eth1
+  switchport
+  switchport access vlan 178
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet4/42
+  description NS-VPX_Int10/3
+  switchport
+  switchport access vlan 87
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet4/43
+  switchport
+  switchport mode trunk
+  switchport access vlan 145
+  switchport trunk allowed vlan 137,145,159,1145,1713
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/44
+  description VPC-peer-keepalive-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 888
+  channel-group 888 mode active
+  no shutdown
+
+interface Ethernet4/45
+  description peer-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-887,889-998,1000-1999,2001-4094
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet4/46
+  description peer-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-887,889-998,1000-1999,2001-4094
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet4/47
+  description peer-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-887,889-998,1000-1999,2001-4094
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet4/48
+  description peer-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-887,889-998,1000-1999,2001-4094
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface mgmt0
+  ip address 10.130.194.160/24
+
+interface loopback0
+  ip address 10.130.216.221/32
+  ip router ospf 10 area 0.0.0.11
+logging logfile my_log 6
+logging server 10.130.94.60
+logging source-interface loopback 0
+cli alias name wr copy running-config startup-config
+line vty
+router ospf 10
+  router-id 10.130.216.221
+  area 0.0.0.11 nssa no-summary
+  redistribute static route-map STATIC-TO-OSPF
+  log-adjacency-changes
+  timers throttle spf 1000 1000 1000
+  auto-cost reference-bandwidth 1000000
+  passive-interface default
+monitor session 2 
+  description SPAN-APM:OPNET ARX
+  source interface port-channel1 both
+  source interface port-channel2 both
+  source interface port-channel123 both
+  rate-limit auto
+  destination interface port-channel100
+  no shut
+monitor session 3 
+  description SPAN-OICT-IDS
+  source interface port-channel1 both
+  source interface port-channel2 both
+  source interface port-channel123 both
+  rate-limit auto
+  destination interface Ethernet2/24

@@ -1,0 +1,186 @@
+!Command: show running-config
+!Time: Thu Nov 14 09:36:46 2019
+
+version 6.1(2)
+feature-set fex
+hostname bds-dc02-agg-a-oob
+
+feature telnet
+feature tacacs+
+feature lacp
+
+username admin password 5 $1$pVy34VoF$aoYDd.QWnQ0xRCRLLgD.z0  role vdc-admin
+no password strength-check
+ip domain-lookup
+tacacs-server key 7 "GY_G261_l1m1so"
+ip tacacs source-interface mgmt0
+tacacs-server deadtime 5
+tacacs-server host 10.130.94.191 
+tacacs-server host 10.130.222.52 
+aaa group server tacacs+ GSC-TACACS 
+    server 10.130.222.52 
+    server 10.130.94.191 
+    use-vrf management
+    source-interface mgmt0
+ip access-list 20
+  10 permit ip 10.130.94.20/32 any 
+  20 permit ip 10.130.94.22/32 any 
+  30 permit ip 10.130.94.60/32 any 
+  40 permit ip 10.130.222.7/32 any 
+ip access-list 22
+  10 permit ip 10.130.222.17/32 any 
+fex 101
+  pinning max-links 1
+  description "nexus_2000-a_rack_b2"
+fex 103
+  pinning max-links 1
+  description "nexus_2000-c_rack_b7"
+fex 105
+  pinning max-links 1
+  description "nexus_2000-san-a-dd1"
+fex 107
+  pinning max-links 1
+  description "nexus_2000-a_rack_c6"
+fex 109
+  pinning max-links 1
+  description "nexus_2000-a_rack_c6"
+snmp-server source-interface trap mgmt0
+snmp-server source-interface inform mgmt0
+snmp-server user admin vdc-admin auth md5 0x4b3ec726ad99ce2327ee7d4d2adcd122 priv 0x4b3ec726ad99ce2327ee7d4d2adcd122 localizedkey
+snmp-server host 10.130.222.7 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.20 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR! 
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server community Df5-b0rd3rR! group vdc-operator
+snmp-server community C1D3C03xt group vdc-operator
+snmp-server community Df5-b0rd3rR! use-acl 20
+snmp-server community C1D3C03xt use-acl 22
+aaa authentication login default group GSC-TACACS 
+aaa accounting default group GSC-TACACS 
+aaa authentication login error-enable 
+
+vrf context management
+  ip route 0.0.0.0/0 10.130.194.1
+vlan 1,4-5,23,26-27,32,145,180,224-227,332,1062
+vlan 4
+  name oob
+vlan 5
+  name 195
+vlan 23
+  name SAN
+vlan 27
+  name B261_Devices_217
+vlan 32
+  name management_222
+vlan 145
+  name rpa
+vlan 180
+  name CX4-208-0
+vlan 224
+  name ATS_Management
+vlan 225
+  name CMC_Management
+vlan 226
+  name PDU_Management
+vlan 227
+  name SAN_Management
+vlan 332
+  name FWM-MANAGEMENT
+vlan 1062
+  name TETRA-ILO_V1062
+
+
+interface port-channel101
+  switchport
+  switchport mode fex-fabric
+  fex associate 101
+
+interface port-channel103
+  description to nexus2000-rackb6
+  switchport
+  switchport mode fex-fabric
+  fex associate 103
+
+interface port-channel105
+  switchport
+  switchport mode fex-fabric
+  fex associate 105
+
+interface port-channel107
+  switchport
+  switchport mode fex-fabric
+  fex associate 107
+
+interface port-channel109
+  switchport
+  switchport mode fex-fabric
+  fex associate 109
+
+interface Ethernet1/1
+
+interface Ethernet1/2
+
+interface Ethernet1/3
+
+interface Ethernet1/4
+
+interface Ethernet1/5
+
+interface Ethernet1/6
+
+interface Ethernet1/7
+
+interface Ethernet1/8
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 4-5,23,26-27,32,145,180,224-227
+  switchport trunk allowed vlan add 332,1062
+  no shutdown
+
+interface Ethernet3/1
+
+interface Ethernet3/2
+
+interface Ethernet3/3
+
+interface Ethernet3/4
+
+interface Ethernet3/5
+  description connection to N5k 5020 BDS-DC02-OOB-A 
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 4-5,23,27,32,145,159,224-227,332
+  switchport trunk allowed vlan add 1062
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet3/6
+
+interface Ethernet3/7
+
+interface Ethernet3/8
+
+interface Ethernet3/9
+
+interface Ethernet3/10
+  description NetScaler UNRWA production (ns-bds-unrwa-dc02) LOM
+  switchport
+  switchport access vlan 5
+  no shutdown
+
+interface Ethernet3/11
+
+interface Ethernet3/12
+  description NetScaler UNRWA production (ns-bds-unrwa-dc02) MGMT
+  switchport
+  switchport access vlan 5
+  no shutdown
+
+interface mgmt0
+  ip address 10.130.194.154/24
+logging server 10.130.94.60 5 use-vrf management
+line vty

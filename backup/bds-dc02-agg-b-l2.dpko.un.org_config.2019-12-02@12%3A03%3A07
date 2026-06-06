@@ -1,0 +1,1678 @@
+!Command: show running-config
+!Time: Mon Dec  2 12:03:24 2019
+
+version 6.1(2)
+feature-set fex
+hostname DC02-BDS
+
+feature telnet
+feature tacacs+
+cfs eth distribute
+feature ospf
+feature private-vlan
+feature interface-vlan
+feature hsrp
+feature lacp
+feature vpc
+feature lldp
+
+logging level private-vlan 3
+username admin password 5 $1$cLIeSW5Z$FjObZEJBs3scx4/MaGMVa.  role vdc-admin
+ip domain-lookup
+tacacs-server key 7 "GY_G261_l1m1so"
+ip tacacs source-interface mgmt0
+tacacs-server deadtime 5
+tacacs-server host 10.130.94.191 
+tacacs-server host 10.130.222.52 
+aaa group server tacacs+ GSC-TACACS 
+    server 10.130.222.52 
+    server 10.130.94.191 
+    use-vrf management
+    source-interface mgmt0
+ip access-list 20
+  statistics per-entry
+  10 permit ip 10.130.94.20/32 any 
+  20 permit ip 10.130.94.22/32 any 
+  30 permit ip 10.130.94.60/32 any 
+  40 permit ip 10.130.222.7/32 any 
+  50 permit ip 10.130.239.133/32 any 
+  60 permit ip 10.130.222.130/32 any 
+ip access-list 22
+  10 permit ip 10.130.222.17/32 any 
+ip access-list 23
+  10 permit ip 10.130.239.138/32 any 
+snmp-server location  HUB|BR|DC02|C12|AGG
+snmp-server source-interface trap mgmt0
+snmp-server source-interface inform mgmt0
+snmp-server user admin vdc-admin auth md5 0x4b3ec726ad99ce2327ee7d4d2adcd122 priv 0x4b3ec726ad99ce2327ee7d4d2adcd122 localizedkey
+snmp-server host 10.130.222.7 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.20 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.222.130 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR! 
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server community O10S4uDiT group vdc-operator
+snmp-server community C1D3C03xt group vdc-operator
+snmp-server community Df5-b0rd3rR! group vdc-operator
+snmp-server community O10S4uDiT use-acl 23
+snmp-server community C1D3C03xt use-acl 22
+snmp-server community Df5-b0rd3rR! use-acl 20
+aaa authentication login default group GSC-TACACS 
+aaa accounting default group GSC-TACACS 
+aaa authentication login error-enable 
+
+ip route 10.129.64.0/24 Vlan675 10.130.218.124 name VCLOUD_2.0_Mgmt_Cluster_NFS
+ip route 10.129.65.0/24 Vlan675 10.130.218.124 name VCLOUD_2.0_Mgmt_Cluster_VTEP
+ip route 10.129.66.0/24 Vlan675 10.130.218.124 name VCLOUD_2.0_EDGE_Cluster_NFS
+ip route 10.129.67.0/24 Vlan675 10.130.218.124 name VCLOUD_2.0_EDGE_Cluster_VTEP
+ip route 10.129.75.0/24 Vlan643 10.130.218.21 name PRD-BCKND_V3131-via-DC02-ASA
+ip route 10.129.76.0/24 Vlan643 10.130.218.21 name PRD-BCKND_V3132-via-DC02-ASA
+ip route 10.129.77.0/24 Vlan643 10.130.218.21 name PRD-BCKND_V3133-via-DC02-ASA
+ip route 10.129.124.0/23 Vlan656 10.130.218.101 name NSX_VDI_v189_VDI
+ip route 10.129.224.0/24 Vlan651 10.130.218.61 name ATS_Management_V224_INFRASTRUCTURE
+ip route 10.129.225.0/24 Vlan651 10.130.218.61 name CMC_Management_V225_INFRASTRUCTURE
+ip route 10.129.226.0/23 Vlan651 10.130.218.61 name PDU_Management_V226_INFRASTRUCTURE
+ip route 10.129.228.0/24 Vlan651 10.130.218.61 name SAN_Management_V227_INFRASTRUCTURE
+ip route 10.130.173.0/25 Vlan656 10.130.218.101 name VDI-Unsmil-Users_vlan433_VDI
+ip route 10.130.173.128/26 Vlan656 10.130.218.101 name VDI-Unmeer-Users_vlan434_VDI
+ip route 10.130.173.192/26 Vlan656 10.130.218.101 name VDI-Undof-Users_vlan435_VDI
+ip route 10.130.175.128/27 Vlan656 10.130.218.101 name VDI-OPCW_V486
+ip route 10.130.192.0/24 Vlan651 10.130.218.61 name ESX_Hosts_192_vlan2_INFRASTRUCTURE
+ip route 10.130.194.0/24 Vlan651 10.130.218.61 name ILO_Servers_vlan4_INFRASTRUCTURE
+ip route 10.130.195.0/24 Vlan651 10.130.218.61 name ILO_Servers2_vlan5_INFRASTRUCTURE
+ip route 10.130.196.0/24 Vlan641 10.130.218.5 name WEB-VIP-196/24_vlan6_PRD-FRONTEND
+ip route 10.130.197.0/24 Vlan641 10.130.218.5 name DFS-Entprs-Public-Www_vlan7_PRD-FRONTEND
+ip route 10.130.198.0/24 Vlan641 10.130.218.5 name PRD-Hosted-FE_vlan8_PRD
+ip route 10.130.200.0/24 Vlan643 10.130.218.21 name PRD-Hosted-BE_vlan10_PRD
+ip route 10.130.201.0/24 Vlan641 10.130.218.5 name Hstd-SRVR-201_vlan9_PRD-FRON
+ip route 10.130.202.0/24 Vlan641 10.130.218.5 name Webmail-FE-202_vlan12_PRD-FRONTEND
+ip route 10.130.203.0/24 Vlan657 10.130.218.109 name Mail-routing-203_vlan13_MAIL
+ip route 10.130.204.0/25 Vlan655 10.130.218.93 name DR-BC_vlan14_SAN
+ip route 10.130.204.128/25 Vlan657 10.130.218.109 name SMTP-204-128_vlan121_MAIL
+ip route 10.130.205.0/24 Vlan642 10.130.218.13 name Hstd-APPS-205_vlan15_PRD-APP
+ip route 10.130.206.0/24 Vlan641 10.130.218.5 name DFS-APPS-206_vlan16_PRD-FRONTEND
+ip route 10.130.207.0/24 Vlan641 10.130.218.5 name DFS-Serv-207_vlan17_PRD-FRONTEND
+ip route 10.130.208.0/27 Vlan655 10.130.218.93 name CX4-208_vlan180_SAN
+ip route 10.130.208.128/26 Vlan651 10.130.218.61 name MISSION-CP-MGMNT_vlan42_INFRASTRUCTURE
+ip route 10.130.208.192/26 Vlan657 10.130.218.109 name EVAULT-REPLI_vlan56_MAIL
+ip route 10.130.209.0/25 Vlan642 10.130.218.13 name DFS-Entprs-Application_vlan90_PRD-APP
+ip route 10.130.209.128/25 Vlan672 10.130.218.117 name EXTERNAL-SERVICES_vlan76_EXTERNAL-SERVICES
+ip route 10.130.210.0/24 Vlan673 10.130.218.237 name QA-DMZ_210_vlan20_PRE
+ip route 10.130.211.0/25 Vlan643 10.130.218.21 name DFS-Entprs-Backend_vlan110_PRD-BE
+ip route 10.130.211.128/26 Vlan676 10.130.218.132 name TETRA-APP_V1060
+ip route 10.130.211.192/26 Vlan676 10.130.218.132 name TETRA-MGT_V1061
+ip route 10.130.212.0/24 Vlan643 10.130.218.21 name WEBMAIL-DMZ_212_vlan22_PRD-BE
+ip route 10.130.213.0/24 Vlan655 10.130.218.93 name SAN-DMZ-213_vlan23_SAN
+ip route 10.130.214.0/24 Vlan643 10.130.218.21 name GALILEO-BE-214_vlan24_PRD-BE
+ip route 10.130.215.0/24 Vlan643 10.130.218.21 name ONCOURSE-BE-215_vlan25_PRD-BE
+ip route 10.130.216.0/25 Vlan651 10.130.218.61 name Devices_216_25_vlan26_INFRASTRUCTURE
+ip route 10.130.216.129/32 Vlan651 10.130.218.61 name DFS-PfRMC-01-Management_222_vlan32_INFRASTRUCTURE
+ip route 10.130.217.0/24 Vlan651 10.130.218.61 name Devices_217_vlan27_INFRASTRUCTURE
+ip route 10.130.219.0/24 Vlan642 10.130.218.13 name Applications_219_vlan29_PRD-APP
+ip route 10.130.220.0/24 Vlan673 10.130.218.237 name PRE-PRODUCTION-DMZ_220_vlan30_PRE
+ip route 10.130.221.0/25 Vlan673 10.130.218.237 name PRE-PRODUCTION-VIP_vlan31_PRE
+ip route 10.130.221.128/26 Vlan673 10.130.218.237 name QA-VIP_221_vlan312_PRE
+ip route 10.130.221.192/29 Vlan641 10.130.218.5 name UNMEER-COSMOS-PROD_vlan49_PRD-FRONTEND
+ip route 10.130.221.200/29 Vlan651 10.130.218.61 name WINMAG_V3466_vlan3466_INFRASTRUCTURE
+ip route 10.130.221.208/28 Vlan673 10.130.218.237 name PRE-PRODUCTION_vlan3477_SCOM_INFRASTRUCTURE
+ip route 10.130.221.224/27 Vlan656 10.130.218.101 name VDI_SECURITY
+ip route 10.130.222.0/24 Vlan651 10.130.218.61 name Management_222_vlan32_INFRASTRUCTURE
+ip route 10.130.223.0/24 Vlan651 10.130.218.61 name KVM-CMC-UPS-223_vlan33_INFRASTRUCTURE
+ip route 10.130.225.0/25 Vlan673 10.130.218.237 name PRE-PRODUCTION-APP_vlan35_PRE
+ip route 10.130.225.128/25 Vlan673 10.130.218.237 name PRE-PRODUCTION-BE_vlan45_PRE
+ip route 10.130.226.0/27 Vlan641 10.130.218.5 name FE-UNRWA_vlan2036_PRD-FRONTEND
+ip route 10.130.226.64/27 Vlan641 10.130.218.5 name UNRWA-SAP_vlan50_PRD-FRONTEND
+ip route 10.130.226.192/27 Vlan641 10.130.218.5 name OCHA-FE-CSM_vlan2366_PRD-FRONTEND
+ip route 10.130.227.96/27 Vlan651 10.130.218.61 name ESX-INSPIRA-MGMT_vlan2045_INFRASTRUCTURE
+ip route 10.130.227.192/27 Vlan657 10.130.218.109 name EVAULT-PASSIVE_vlan65_MAIL
+ip route 10.130.227.224/28 Vlan676 10.130.218.132 name TETRA-ILO_V1062
+ip route 10.130.227.240/28 Vlan676 10.130.218.132 name TETRA-ESXI_V1063
+ip route 10.130.228.0/27 Vlan642 10.130.218.13 name APP-UNRWA_vlan2038_PRD-APP
+ip route 10.130.228.32/27 Vlan657 10.130.218.109 name EVAULT-DR_vlan75_MAIL
+ip route 10.130.228.64/27 Vlan673 10.130.218.237 name UNRWA-SAP-NonProd_vlan52_PRE
+ip route 10.130.228.96/27 10.130.218.237 name PRE-FE-EXC_HYBRID_V228-via-DC02-ASA
+ip route 10.130.228.128/27 10.130.218.237 name PRE-FE-EXC_DMZ_V231-via-DC02-ASA
+ip route 10.130.228.192/27 Vlan642 10.130.218.13 name APP-OCHA_vlan386_PRD-APP
+ip route 10.130.228.224/27 10.130.218.237 name PRE-FE-EXC_ACCOUNT_V229-via-DC02-ASA
+ip route 10.130.229.0/24 Vlan673 10.130.218.237 name PRE-PRODUCTION-DMZ_vlan39_PRE
+ip route 10.130.230.0/26 Vlan643 10.130.218.21 name Backend-UNRWA_vlan2040_PRD-BE
+ip route 10.130.230.64/27 Vlan643 10.130.218.21 name UNRWA-CITRIX_vlan51_PRD-BE
+ip route 10.130.230.96/28 Vlan641 10.130.218.5 name UNRWA-VIP_vlan2054_PRD-FRONTEND
+ip route 10.130.230.192/27 Vlan643 10.130.218.21 name Backend-OCHA_vlan406_PRD-BE
+ip route 10.130.230.224/27 Vlan657 10.130.218.109 name EVAULT-ACTIVE_vlan95_MAIL
+ip route 10.130.231.0/24 Vlan656 10.130.218.101 name VDI-Missions_vlan432_VDI
+ip route 10.130.232.0/24 Vlan656 10.130.218.101 name VDI-ASU-Support_vlan429_VDI
+ip route 10.130.233.0/25 Vlan656 10.130.218.101 name VDI-CITS-Users_vlan430_VDI
+ip route 10.130.233.128/25 Vlan656 10.130.218.101 name VDI-Consultants_vlan431_VDI
+ip route 10.130.234.0/27 Vlan641 10.130.218.5 name Customers-DMZ_vlan440_PRD-FRONTEND
+ip route 10.130.235.0/27 Vlan657 10.130.218.109 name msg-exchange-235-0_vlan115_MAIL
+ip route 10.130.235.64/26 Vlan657 10.130.218.109 name msg-srvs-235-64_vlan122_MAIL
+ip route 10.130.235.128/27 Vlan657 10.130.218.109 name msg-exchange-235-128_vlan116_MAIL
+ip route 10.130.235.192/27 Vlan657 10.130.218.109 name msg-exchange-235-192_vlan117_MAIL
+ip route 10.130.236.0/27 Vlan641 10.130.218.5 name PRD-HS_Production-FE_vlan460_PRD
+ip route 10.130.236.32/27 Vlan673 10.130.218.237 name HS_Pre-Production-FE_vlan461_PRE
+ip route 10.130.236.64/27 Vlan642 10.130.218.13 name HS-Apps-FE_vlan462_PRD-APP
+ip route 10.130.236.96/27 Vlan673 10.130.218.237 name HS_Pre-Production-Apps_vlan463_PRE
+ip route 10.130.236.128/27 Vlan643 10.130.218.21 name PRD-HS_Production-BE_vlan464_PRD
+ip route 10.130.236.160/27 Vlan673 10.130.218.237 name HS_Pre-Production-BE_vlan465_PRE
+ip route 10.130.237.0/24 Vlan656 10.130.218.101 name VDI-Mission-Users_vlan47_VDI
+ip route 10.130.238.0/24 Vlan656 10.130.218.101 name VDI-Application-Admin_vlan480_VDI
+ip route 10.130.239.0/24 Vlan656 10.130.218.101 name VDI-Network-System-Admin_vlan490_VDI
+ip route 10.130.244.0/26 Vlan656 10.130.218.101 name VDI-Minusma-Users_vlan436_VDI
+ip route 10.130.244.64/27 Vlan656 10.130.218.101 name VDI-RMS-Users_vlan437_VDI
+ip route 10.130.244.96/28 Vlan641 10.130.218.5 name PRD-FE-Airwatch_vlan66_PRD
+ip route 10.130.244.112/28 Vlan643 10.130.218.21 name PRD-BE-Airwatch_vlan67_PRD
+ip route 10.130.245.0/24 Vlan656 10.130.218.101 name VDI-UNHQ_vlan438_VDI
+ip route 10.130.246.0/24 Vlan657 10.130.218.109 name EXC-EVT_vlan68_MAIL
+ip route 10.130.247.0/24 Vlan657 10.130.218.109 name EXC-EVT_REP_vlan69_MAIL
+ip route 10.130.248.0/24 Vlan643 10.130.218.21 name GEO-CLUSTERS-HB_vlan89_PRD-BE
+ip route 10.130.252.0/24 Vlan651 10.130.218.61 name MISSION-CP-MGMNT_vlan43_INFRASTRUCTURE
+ip route 10.130.254.0/24 Vlan641 10.130.218.5 name WEB_VIP_254_vlan64_PRD-FRONTEND
+ip route 10.130.255.0/28 Vlan673 10.130.218.237 name PRE-GEO-CLUSTER-HB_V289-via-DC2-ASA
+vrf context TEST-DOMENICO
+  ip route 0.0.0.0/0 172.16.1.1
+  address-family ipv4 unicast
+vrf context management
+  ip route 0.0.0.0/0 10.130.194.1
+vlan 1-2,4-10,12-17,20,22-27,29-40,42-43,45-47,49-52,56,64-69,75-76,89-90,95,110,115-117,121-122,124-127,146-147,155,172,175,180-182,189,224-229,231,289,312,332,351,366,386,406,429-438,440,451-453,460-465,480,486,490,501,598-599,641-646,650-659,666,672-676,832-833,888,1050,1060-1063,1131,1498-1501,2008,2011,2016-2017,2020,2030,2036,2038,2040-2045,2054,2366,2500-2501,2700
+vlan 2801,3050-3051,3131-3133,3416,3424,3461,3463,3465-3466,3477
+vlan configuration 658
+  ip igmp snooping querier 10.129.65.4
+vlan configuration 659
+  ip igmp snooping querier 10.129.67.4
+vlan 2
+  name ESX_Hosts_192
+vlan 4
+  name ILO_Servers
+vlan 5
+  name ILO_Servers2
+vlan 6
+  name WEB_VIP_196
+vlan 7
+  name 7-DFS-Entprs-Public-Www
+vlan 8
+  name Hosted-FE-198
+vlan 9
+  name Hosted_Serv_201
+vlan 10
+  name Hosted-BE-200
+vlan 12
+  name Webmail-FE-202
+vlan 13
+  name Mail-routing-203
+vlan 14
+  name DRBC-204-0
+vlan 15
+  name Hosted-APPS-205
+vlan 16
+  name DFS-APPS-206
+vlan 17
+  name DFS-Serv-207
+vlan 20
+  name QA-DMZ_210
+vlan 22
+  name WEBMAIL-Backend-DMZ-212
+vlan 23
+  name SAN-Backend-DMZ-213
+vlan 24
+  name GALILEO-Backend-DMZ-214
+vlan 25
+  name ONCOURSE-DMZ-215
+vlan 26
+  name B261_Devices_216
+vlan 27
+  name Devices_217
+vlan 29
+  name Applications_219
+vlan 30
+  name PRE-PRODUCTION-DMZ_220
+vlan 31
+  name PRE-PRODUCTION-VIP
+vlan 32
+  name Management_222
+vlan 33
+  name KVM-CMC-UPS-223
+vlan 34
+  name NetScaler-Heartbeat
+vlan 35
+  name PRE-PRODUCION-APP
+vlan 36
+  name Customers-Frontend-UNRWA
+vlan 37
+  name PRD-VCLOUD-Mgmt_Cluster_Mgmt
+vlan 38
+  name Customers-Applications-UNRWA
+vlan 39
+  name PRE-PRODUCTION-DMZ_229
+vlan 40
+  name Customers-Backend-UNRWA
+vlan 42
+  name IN-MISSION-CP-MGMNT-208-128-26
+vlan 43
+  name MISSION_CP_MGMT_V43
+vlan 45
+  name PRE-PRODUCTION-BE
+vlan 46
+  name PRD-VCLOUD-Mgmt-vMotion
+vlan 47
+  name VDI-237-Mission-Users
+vlan 49
+  name UNMEER-COSMOS-PROD
+vlan 50
+  name Customers-UNRWA-SAP
+vlan 51
+  name Customers-UNRWA-CITRIX
+vlan 52
+  name UNRWA-SAP-NONPROD
+vlan 56
+  name EVAULT-REPLI
+vlan 64
+  name WEB_VIP_254
+vlan 65
+  name EVAULT-PASSIVE
+vlan 66
+  name PRD-FE-Airwatch_V66
+vlan 67
+  name PRD-BE-Airwatch_V66
+vlan 68
+  name PRD_EXC-EVT_V68
+vlan 69
+  name PRD_EXC-EVT_REP_V69
+vlan 75
+  name EVAULT-DR
+vlan 76
+  name EXTERNAL-SERVICES
+vlan 89
+  name GEO-CLUSTERS-HB
+vlan 90
+  name 209_0-DFS-Entprs-Application
+vlan 95
+  name EVAULT-ACTIVE
+vlan 110
+  name 211_0-DFS-Entprs-Backend
+vlan 115
+  name msg-exchange-235-0
+vlan 116
+  name msg-exchange-235-128
+vlan 117
+  name msg-exchange-235-192
+vlan 121
+  name SMTP-204-128
+vlan 122
+  name IN-MSG-SRVS-235-64-26
+vlan 124
+  name NSX-Mgmt-Edge-Uplink1
+vlan 125
+  name NSX-Mgmt-Edge-Uplink2
+vlan 126
+  name NSX-Compute-Edge-Uplink1
+vlan 127
+  name NSX-Compute-Edge-Uplink2
+vlan 146
+  name M1_Firewall_Management
+vlan 147
+  name M2_Server_Management
+vlan 155
+  name OICT-INT-XenApp-141-0-24
+vlan 172
+  name TEST-DOMENICO
+vlan 175
+  name IN-SECURITY_V175
+vlan 180
+  name CX4-208-0
+vlan 181
+  name PRD-VCLOUD-Mgmt_Cluster_NFS
+vlan 182
+  name PRD-VCLOUD-Edge_Cluster_NFS
+vlan 189
+  name NSX_VDI
+vlan 224
+  name ATS_Management
+vlan 225
+  name CMC_Management
+vlan 226
+  name PDU_Management
+vlan 227
+  name SAN_Management
+vlan 228
+  name PRE-FE-FIM_V228
+vlan 229
+  name PRE-FE-SYNC_V229
+vlan 231
+  name PRE-FE-EXC_DMZ_V231
+vlan 289
+  name PRE-GEO-CLUSTER-HB_V289
+vlan 312
+  name QA-VIP_221
+vlan 332
+  name FWM-MANAGEMENT
+vlan 351
+  name DC01-OICT-VRF
+vlan 366
+  name Cust-FE-OCHA
+vlan 386
+  name Cust-Apps-OCHA
+vlan 406
+  name Customers-Backend-OCHA
+vlan 429
+  name VDI-232.0-ASU-Support
+vlan 430
+  name VDI-233.0-Applcation-Admins
+vlan 431
+  name VDI-Consultants
+vlan 432
+  name VDI-Missions
+vlan 433
+  name VDI-Unsmil-User
+vlan 434
+  name VDI-Unmeer-User
+vlan 435
+  name VDI-Undof-User
+vlan 436
+  name VDI-Minusma-User
+vlan 437
+  name VDI-RMSTeam-User
+vlan 438
+  name VDI-UNHQ
+vlan 440
+  name Customers-DMZ-inside
+vlan 451
+  name comet-dr-1
+vlan 452
+  name comet-dr-2
+vlan 460
+  name HS_Production-FE
+vlan 461
+  name HS_Pre-Production-FE
+vlan 462
+  name HS_Production-Apps
+vlan 463
+  name HS_Pre-Pre-Production-Apps
+vlan 464
+  name HS_Production-BE
+vlan 465
+  name HS_Pre-Production-BE
+vlan 480
+  name VDI-238-inside
+vlan 486
+  name PRD-VDI-OPCW
+vlan 490
+  name VDI-239.0-Network-Admins
+vlan 501
+  name L3-nexus7k-bldgB
+vlan 598
+  name ESX-VMotion
+vlan 599
+  name ESX-FaultTolerance
+vlan 641
+  name OUT-DC02-PRODUCTION-FE
+vlan 642
+  name OUT-DC02-PROD-APP
+vlan 643
+  name OUT-DC02-PRD-BE
+vlan 644
+  name OUT-DC02-PRE-FE
+vlan 645
+  name OUT-DC02-PRE-APP
+vlan 646
+  name OUT-DC02-PRE-BE
+vlan 650
+  name OUT-DC02-NEG-SERVICES
+vlan 651
+  name OUT-DC02-INFRASTRUCTURE
+vlan 652
+  name OUT-DC02-MGMT
+vlan 653
+  name OUT-DC02-UNRWA
+vlan 654
+  name OUT-DC02-VCLOUD
+vlan 655
+  name OUT-DC02-SAN
+vlan 656
+  name OUT-DC02-VDI
+vlan 657
+  name OUT-DC02-MAIL
+vlan 658
+  name OUT-PRD-VCLOUD-Mgmt_Cluster_VTEP
+vlan 666
+  name MSCS-Heartbeat-Interfaces
+vlan 672
+  name OUT-DC02-EXTERNAL-SERVICES
+vlan 673
+  name OUT-DC02-PREPRODUCTION
+vlan 674
+  name OUT-DC02-DEV-BE
+vlan 676
+  name OUT-TETRA
+vlan 832
+  name IN-PRD-VCLOUD-Mgmt_Cluster_VTEP
+vlan 888
+  name VPC_peer_keepalive_169.254.2.0
+vlan 1050
+  name B178-Cust-App-UN-Ineed-preprod
+vlan 1060
+  name TETRA-APP_V1060
+vlan 1061
+  name TETRA-MGT_V1061
+vlan 1062
+  name TETRA-ILO_V1062
+vlan 1131
+  name PRE-PRODUCTION-VCLOUD
+vlan 1498
+  name Netscaler-vrouter
+vlan 1499
+  name frontend-inside-temp
+vlan 1501
+  name ebilling_private
+vlan 2008
+  name Hosted-FE-198-CSM
+vlan 2011
+  name HostedSRV-201-CSM
+vlan 2016
+  name Frontend-206-CSM
+vlan 2017
+  name Frontend-207-CSM
+vlan 2020
+  name QA-FARM_210
+vlan 2030
+  name PRE-PRODUCTION-FARM_220
+vlan 2036
+  name Customers-UNRWA-Frontend
+vlan 2038
+  name APPS-UNRWA-IN-FWSM
+vlan 2040
+  name BE-UNRWA-IN-FWSM
+vlan 2041
+  name Cust-INSPIRA-DR-PR0
+vlan 2042
+  name Cust-INSPIRA-DR-PRE
+vlan 2043
+  name Cust-INSPIRA-TR-PR0
+vlan 2044
+  name Cust-INSPIRA-TR-PRE
+vlan 2054
+  name UNRWA-VIP
+vlan 2366
+  name OCHA-FE-CSM
+vlan 2500
+  name Frontend-primary
+vlan 2501
+  name frontend-isolated
+vlan 2700
+  name backend
+vlan 2801
+  name BE_Active_Directory
+vlan 3050
+  name IN-UNRWA-NONPROD-105-0-27
+vlan 3051
+  name IN-UNRWA-PROD-105-32-27
+vlan 3131
+  name PRD-BCKND_V3131
+vlan 3132
+  name PRD-BCKND_V3132
+vlan 3133
+  name PRD-BCKND_V3133
+vlan 3416
+  name VLC_IN-DFS-APPS
+vlan 3424
+  name VLC_IN-GALILEO-BE
+vlan 3461
+  name comet-pre-FE
+vlan 3463
+  name comet-pre-APP
+vlan 3465
+  name comet-pre-BE
+vlan 3466
+  name WINMAG
+vlan 3477
+  name SCOM
+
+spanning-tree vlan 1-3967 priority 8192
+ip prefix-list STATIC-TO-OSPF seq 5 permit 10.130.225.0/25 
+ip prefix-list STATIC-TO-OSPF seq 10 permit 10.130.225.128/25 
+ip prefix-list STATIC-TO-OSPF seq 15 permit 10.130.229.0/24 
+ip prefix-list STATIC-TO-OSPF seq 20 permit 10.130.220.0/24 
+ip prefix-list STATIC-TO-OSPF seq 25 permit 10.130.221.0/25 
+ip prefix-list STATIC-TO-OSPF seq 30 permit 10.130.221.128/26 
+ip prefix-list STATIC-TO-OSPF seq 40 permit 172.16.1.0/28 
+ip prefix-list STATIC-TO-OSPF seq 45 permit 10.130.232.0/24 
+ip prefix-list STATIC-TO-OSPF seq 50 permit 10.130.233.0/25 
+ip prefix-list STATIC-TO-OSPF seq 55 permit 10.130.233.128/25 
+ip prefix-list STATIC-TO-OSPF seq 60 permit 10.130.231.0/24 
+ip prefix-list STATIC-TO-OSPF seq 65 permit 10.130.173.0/25 
+ip prefix-list STATIC-TO-OSPF seq 70 permit 10.130.173.128/26 
+ip prefix-list STATIC-TO-OSPF seq 75 permit 10.130.173.192/26 
+ip prefix-list STATIC-TO-OSPF seq 80 permit 10.130.244.0/26 
+ip prefix-list STATIC-TO-OSPF seq 85 permit 10.130.244.64/27 
+ip prefix-list STATIC-TO-OSPF seq 90 permit 10.130.245.0/24 
+ip prefix-list STATIC-TO-OSPF seq 95 permit 10.130.238.0/24 
+ip prefix-list STATIC-TO-OSPF seq 100 permit 10.130.239.0/24 
+ip prefix-list STATIC-TO-OSPF seq 105 permit 10.130.237.0/24 
+ip prefix-list STATIC-TO-OSPF seq 110 permit 10.130.204.0/25 
+ip prefix-list STATIC-TO-OSPF seq 115 permit 10.130.208.0/27 
+ip prefix-list STATIC-TO-OSPF seq 120 permit 10.130.213.0/24 
+ip prefix-list STATIC-TO-OSPF seq 125 permit 10.130.235.0/27 
+ip prefix-list STATIC-TO-OSPF seq 130 permit 10.130.235.64/26 
+ip prefix-list STATIC-TO-OSPF seq 135 permit 10.130.235.128/27 
+ip prefix-list STATIC-TO-OSPF seq 140 permit 10.130.235.192/27 
+ip prefix-list STATIC-TO-OSPF seq 145 permit 10.130.204.128/25 
+ip prefix-list STATIC-TO-OSPF seq 150 permit 10.130.208.192/26 
+ip prefix-list STATIC-TO-OSPF seq 155 permit 10.130.227.192/27 
+ip prefix-list STATIC-TO-OSPF seq 160 permit 10.130.228.32/27 
+ip prefix-list STATIC-TO-OSPF seq 165 permit 10.130.230.224/27 
+ip prefix-list STATIC-TO-OSPF seq 170 permit 10.130.203.0/24 
+ip prefix-list STATIC-TO-OSPF seq 175 permit 10.130.236.32/27 
+ip prefix-list STATIC-TO-OSPF seq 180 permit 10.130.236.160/27 
+ip prefix-list STATIC-TO-OSPF seq 185 permit 10.130.236.96/27 
+ip prefix-list STATIC-TO-OSPF seq 190 permit 10.130.244.96/28 
+ip prefix-list STATIC-TO-OSPF seq 195 permit 10.130.198.0/24 
+ip prefix-list STATIC-TO-OSPF seq 200 permit 10.130.236.0/27 
+ip prefix-list STATIC-TO-OSPF seq 205 permit 10.130.244.112/28 
+ip prefix-list STATIC-TO-OSPF seq 210 permit 10.130.200.0/24 
+ip prefix-list STATIC-TO-OSPF seq 215 permit 10.130.236.128/27 
+ip prefix-list STATIC-TO-OSPF seq 220 permit 10.130.226.0/27 
+ip prefix-list STATIC-TO-OSPF seq 225 permit 10.130.226.64/27 
+ip prefix-list STATIC-TO-OSPF seq 230 permit 10.130.226.192/27 
+ip prefix-list STATIC-TO-OSPF seq 235 permit 10.130.227.96/27 
+ip prefix-list STATIC-TO-OSPF seq 240 permit 10.130.230.96/28 
+ip prefix-list STATIC-TO-OSPF seq 245 permit 10.130.234.0/27 
+ip prefix-list STATIC-TO-OSPF seq 250 permit 10.130.201.0/24 
+ip prefix-list STATIC-TO-OSPF seq 255 permit 10.130.202.0/24 
+ip prefix-list STATIC-TO-OSPF seq 260 permit 10.130.206.0/24 
+ip prefix-list STATIC-TO-OSPF seq 265 permit 10.130.207.0/24 
+ip prefix-list STATIC-TO-OSPF seq 270 permit 10.130.254.0/24 
+ip prefix-list STATIC-TO-OSPF seq 275 permit 10.130.196.0/24 
+ip prefix-list STATIC-TO-OSPF seq 280 permit 10.130.197.0/24 
+ip prefix-list STATIC-TO-OSPF seq 285 permit 10.130.205.0/24 
+ip prefix-list STATIC-TO-OSPF seq 290 permit 10.130.219.0/24 
+ip prefix-list STATIC-TO-OSPF seq 295 permit 10.130.209.0/25 
+ip prefix-list STATIC-TO-OSPF seq 300 permit 10.130.228.0/27 
+ip prefix-list STATIC-TO-OSPF seq 305 permit 10.130.228.192/27 
+ip prefix-list STATIC-TO-OSPF seq 310 permit 10.130.228.64/27 
+ip prefix-list STATIC-TO-OSPF seq 315 permit 10.130.230.0/26 
+ip prefix-list STATIC-TO-OSPF seq 320 permit 10.130.230.192/27 
+ip prefix-list STATIC-TO-OSPF seq 325 permit 10.130.230.64/27 
+ip prefix-list STATIC-TO-OSPF seq 330 permit 10.130.211.0/25 
+ip prefix-list STATIC-TO-OSPF seq 335 permit 10.130.212.0/24 
+ip prefix-list STATIC-TO-OSPF seq 340 permit 10.130.214.0/24 
+ip prefix-list STATIC-TO-OSPF seq 345 permit 10.130.215.0/24 
+ip prefix-list STATIC-TO-OSPF seq 350 permit 10.130.222.0/24 
+ip prefix-list STATIC-TO-OSPF seq 355 permit 10.130.223.0/24 
+ip prefix-list STATIC-TO-OSPF seq 360 permit 10.130.208.128/26 
+ip prefix-list STATIC-TO-OSPF seq 365 permit 10.130.216.0/25 
+ip prefix-list STATIC-TO-OSPF seq 370 permit 10.130.217.0/24 
+ip prefix-list STATIC-TO-OSPF seq 375 permit 10.130.192.0/24 
+ip prefix-list STATIC-TO-OSPF seq 380 permit 10.130.194.0/24 
+ip prefix-list STATIC-TO-OSPF seq 385 permit 10.130.195.0/24 
+ip prefix-list STATIC-TO-OSPF seq 390 permit 10.130.210.0/24 
+ip prefix-list STATIC-TO-OSPF seq 395 permit 10.130.221.192/29 
+ip prefix-list STATIC-TO-OSPF seq 400 permit 10.130.236.64/27 
+ip prefix-list STATIC-TO-OSPF seq 405 permit 10.130.246.0/24 
+ip prefix-list STATIC-TO-OSPF seq 410 permit 10.130.247.0/24 
+ip prefix-list STATIC-TO-OSPF seq 415 permit 10.130.248.0/24 
+ip prefix-list STATIC-TO-OSPF seq 420 permit 10.130.209.128/25 
+ip prefix-list STATIC-TO-OSPF seq 425 permit 10.130.175.128/27 
+ip prefix-list STATIC-TO-OSPF seq 650 permit 10.130.228.96/27 
+ip prefix-list STATIC-TO-OSPF seq 660 permit 10.130.228.224/27 
+ip prefix-list STATIC-TO-OSPF seq 670 permit 10.130.228.128/27 
+ip prefix-list STATIC-TO-OSPF seq 680 permit 10.130.252.0/24 
+ip prefix-list STATIC-TO-OSPF seq 685 permit 10.130.255.0/28 
+ip prefix-list STATIC-TO-OSPF seq 690 permit 10.130.216.129/32 
+ip prefix-list STATIC-TO-OSPF seq 720 permit 10.129.64.0/24 
+ip prefix-list STATIC-TO-OSPF seq 725 permit 10.129.69.0/24 
+ip prefix-list STATIC-TO-OSPF seq 730 permit 10.129.66.0/24 
+ip prefix-list STATIC-TO-OSPF seq 740 permit 10.130.211.128/26 
+ip prefix-list STATIC-TO-OSPF seq 745 permit 10.130.211.192/26 
+ip prefix-list STATIC-TO-OSPF seq 750 permit 10.130.227.224/28 
+ip prefix-list STATIC-TO-OSPF seq 755 permit 10.130.227.240/28 
+ip prefix-list STATIC-TO-OSPF seq 760 permit 10.130.221.200/29 
+ip prefix-list STATIC-TO-OSPF seq 770 permit 10.130.221.208/28 
+ip prefix-list STATIC-TO-OSPF seq 850 permit 10.129.75.0/24 
+ip prefix-list STATIC-TO-OSPF seq 855 permit 10.129.76.0/24 
+ip prefix-list STATIC-TO-OSPF seq 860 permit 10.129.77.0/24 
+ip prefix-list STATIC-TO-OSPF seq 865 permit 10.129.124.0/23 
+ip prefix-list STATIC-TO-OSPF seq 870 permit 10.129.224.0/24 
+ip prefix-list STATIC-TO-OSPF seq 875 permit 10.129.225.0/24 
+ip prefix-list STATIC-TO-OSPF seq 880 permit 10.129.226.0/23 
+ip prefix-list STATIC-TO-OSPF seq 885 permit 10.129.228.0/24 
+ip prefix-list STATIC-TO-OSPF seq 890 permit 10.130.221.224/27 
+ip prefix-list STATIC-TO-OSPF-TEST seq 5 permit 172.16.1.0/28 
+route-map STATIC-TO-OSPF permit 5
+  match ip address prefix-list STATIC-TO-OSPF-TEST 
+  set tag 123 
+  set metric-type type-1
+route-map STATIC-TO-OSPF permit 10
+  match ip address prefix-list STATIC-TO-OSPF 
+vpc domain 4
+  peer-switch
+  peer-keepalive destination 169.254.2.10 source 169.254.2.9 vrf default
+  auto-recovery reload-delay 600
+
+
+interface Vlan1
+
+interface Vlan124
+  description NSX-Mgmt-Edge-Uplink1
+  no shutdown
+  no ip redirects
+  ip address 10.130.216.18/29
+  ip ospf passive-interface
+
+interface Vlan125
+  description NSX-Mgmt-Edge-Uplink2
+  no shutdown
+  no ip redirects
+  ip address 10.130.216.26/29
+  ip ospf passive-interface
+
+interface Vlan126
+  description NSX-Compute-Edge-Uplink1
+  no shutdown
+  no ip redirects
+  ip address 10.130.216.34/29
+  ip ospf passive-interface
+
+interface Vlan127
+  description NSX-Compute-Edge-Uplink2
+  no shutdown
+  no ip redirects
+  ip address 10.130.216.42/29
+  ip ospf passive-interface
+
+interface Vlan172
+  no shutdown
+  vrf member TEST-DOMENICO
+  ip address 172.16.1.11/28
+
+interface Vlan332
+  description FWM-MANAGEMENT
+  no shutdown
+  ip address 10.130.218.251/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 332 
+    priority 90
+    ip 10.130.218.249 
+
+interface Vlan501
+  description L3 link PtP to->BDS-DC02-AGG-A-DC02-BDS
+  no shutdown
+  ip address 10.130.174.226/30
+  ip ospf cost 400
+  ip ospf network point-to-point
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+
+interface Vlan641
+  description OUT-DC02-PROD-FRONTEND
+  no shutdown
+  ip address 10.130.218.3/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 641 
+    priority 90
+    ip 10.130.218.1 
+
+interface Vlan642
+  description OUT-DC02-PROD-APP
+  no shutdown
+  ip address 10.130.218.11/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 642 
+    priority 90
+    ip 10.130.218.9 
+
+interface Vlan643
+  description OUT-DC02-PRD-BACKEND
+  no shutdown
+  ip address 10.130.218.19/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 643 
+    priority 90
+    ip 10.130.218.17 
+
+interface Vlan651
+  description OUT-DC02-INFRASTRUCTURE
+  no shutdown
+  ip address 10.130.218.59/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 651 
+    priority 90
+    ip 10.130.218.57 
+
+interface Vlan655
+  description OUT-DC02-SAN
+  no shutdown
+  ip address 10.130.218.91/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 655 
+    priority 90
+    ip 10.130.218.89 
+
+interface Vlan656
+  description OUT-DC02-VDI
+  no shutdown
+  ip address 10.130.218.99/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 656 
+    priority 90
+    ip 10.130.218.97 
+
+interface Vlan657
+  description OUT-DC02-MAIL
+  no shutdown
+  ip address 10.130.218.107/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 657 
+    priority 90
+    ip 10.130.218.105 
+
+interface Vlan658
+  description OUT-PRD-VCLOUD-Mgmt_Cluster_VTEP
+  no shutdown
+  mtu 4470
+  no ip redirects
+  ip address 10.129.65.3/24
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 658 
+    priority 90
+    ip 10.129.65.1 
+
+interface Vlan659
+  description OUT-PRD-VCLOUD-Compute_Cluster_VTEP
+  no shutdown
+  mtu 4470
+  no ip redirects
+  ip address 10.129.67.3/24
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 659 
+    priority 90
+    ip 10.129.67.1 
+
+interface Vlan672
+  description OUT-DC02-EXTERNAL-SERVICES
+  no shutdown
+  ip address 10.130.218.115/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 672 
+    priority 90
+    ip 10.130.218.113 
+
+interface Vlan673
+  description OUT-DC02-PREPRODUCTION
+  no shutdown
+  ip address 10.130.218.235/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 673 
+    priority 90
+    ip 10.130.218.233 
+
+interface Vlan675
+  description OUT-DC02-VCLOUD
+  no shutdown
+  ip address 10.130.218.123/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 675 
+    preempt 
+    priority 90
+    ip 10.130.218.121 
+
+interface Vlan676
+  description OUT-DC02-DEVELOPMENT
+  no shutdown
+  no ip redirects
+  ip address 10.130.218.131/29
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+  hsrp version 2
+  hsrp 676 
+    priority 90
+    ip 10.130.218.129 
+
+interface Vlan888
+  description vpc keepalice
+  no shutdown
+  ip address 169.254.2.9/30
+
+interface port-channel1
+  description to->BDS-DC2-FWA_po1
+  switchport
+  switchport mode trunk
+  mtu 9216
+  vpc 1
+
+interface port-channel2
+  description to->BDS-DC2-FWB_po1
+  switchport
+  switchport mode trunk
+  mtu 9216
+  vpc 2
+
+interface port-channel22
+  description BDS-EDGE-CORE-A_Po22
+  mtu 4470
+  ip address 10.130.174.115/31
+  ip ospf dead-interval 6
+  ip ospf hello-interval 2
+  ip ospf network point-to-point
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+
+interface port-channel23
+  description BDS-EDGE-CORE-B_Po23
+  mtu 4470
+  ip address 10.130.174.103/31
+  ip ospf dead-interval 6
+  ip ospf hello-interval 2
+  ip ospf network point-to-point
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+
+interface port-channel32
+  description CORE/DC02 Interconnect (IP) to r1-core-bds
+  shutdown
+  mtu 4470
+  ip address 10.130.174.247/31
+  ip ospf dead-interval 6
+  ip ospf hello-interval 2
+  ip ospf network point-to-point
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+
+interface port-channel34
+  description CORE/DC02 Interconnect (IP) to r2-core-bds
+  shutdown
+  mtu 4470
+  ip address 10.130.174.251/31
+  ip ospf dead-interval 6
+  ip ospf hello-interval 2
+  ip ospf network point-to-point
+  no ip ospf passive-interface
+  ip router ospf 10 area 0.0.0.12
+
+interface port-channel41
+  description NetScaler Preproduction (bdr-pre-dc02-b.ns) Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 34
+  switchport trunk allowed vlan 31,34,312
+  spanning-tree bpduguard enable
+  vpc 41
+
+interface port-channel42
+  description NetScaler Preproduction (bdr-pre-dc02-b.ns) Backend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 8,11,16,20,24,30,32,39,45,228
+  spanning-tree bpduguard enable
+  vpc 42
+
+interface port-channel51
+  description NetScaler Production (bdr-pro-dc02-a.ns) Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 34
+  switchport trunk allowed vlan 6,34,64
+  spanning-tree bpduguard enable
+  speed 1000
+  duplex full
+  vpc 51
+
+interface port-channel52
+  description NetScaler Production (bdr-pro-dc02-a.ns) Backend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 7-8,11-13,16-17,24,29-30,32,36,40
+  switchport trunk allowed vlan add 49,66,68-69,90,136,141,366,386,1498
+  switchport trunk allowed vlan add 2008,2011,2016,2036,2038,3131
+  spanning-tree bpduguard enable
+  vpc 52
+
+interface port-channel61
+  description NetScaler Production (bdr-pro-dc02-b.ns) Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 34
+  switchport trunk allowed vlan 6,34,64
+  spanning-tree bpduguard enable
+  vpc 61
+
+interface port-channel62
+  description NetScaler Production (bdr-pro-dc02-b.ns) Backend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 7-9,11-13,16-17,24,29-30,32,36,40
+  switchport trunk allowed vlan add 49,66,68-69,90,116,121,141,366,386
+  switchport trunk allowed vlan add 1498,2008,2011,2016,2036,2038,3131
+  spanning-tree bpduguard enable
+  vpc 62
+
+interface port-channel121
+  description to BDS-DC02-ACC-A & BDS-DC02-ACC-B
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  spanning-tree guard root
+  mtu 9216
+  storm-control broadcast level 5.00
+  vpc 121
+
+interface port-channel122
+  description to->BDS-DC02-ACC-C/BDS-DC02-ACC-D
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  spanning-tree guard root
+  storm-control broadcast level 5.00
+  vpc 122
+
+interface port-channel123
+  description to nexus-acc-e&f
+  shutdown
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  spanning-tree guard root
+  storm-control broadcast level 5.00
+  vpc 123
+
+interface port-channel124
+  description to BDS-DC01-ACC-A/B
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967
+  switchport trunk allowed vlan add 4048-4093
+  spanning-tree port type network
+  spanning-tree guard root
+  storm-control broadcast level 5.00
+  vpc 124
+
+interface port-channel131
+  description NetScaler Preproduction (bdr-pre-dc02-a.ns) Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 34
+  switchport trunk allowed vlan 31,34,312
+  spanning-tree bpduguard enable
+  vpc 31
+
+interface port-channel132
+  description NetScaler Preproduction (bdr-pre-dc02-a.ns) Backend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 8,11,16,20,24,30,32,39,45,811
+  spanning-tree bpduguard enable
+  vpc 32
+
+interface port-channel141
+  description NetScaler UNRWA production (ns-bds-unrwa-dc02) Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 2054
+  switchport trunk allowed vlan 2054,3131-3133
+  spanning-tree bpduguard enable
+  vpc 141
+
+interface port-channel142
+  description NetScaler UNRWA production (ns-bds-unrwa-dc02) Backend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 32,50-52
+  spanning-tree bpduguard enable
+  vpc 142
+
+interface port-channel888
+  description VPC-peer-keepalive-link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 888
+
+interface port-channel1001
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-887,889-3967,4048-4093
+  spanning-tree port type network
+  speed 10000
+  vpc peer-link
+
+interface Ethernet1/13
+  description reserved to new ACS
+  switchport
+  switchport access vlan 32
+
+interface Ethernet1/14
+  description ASA-FWB_TenGig0/6
+  switchport
+  switchport mode trunk
+  mtu 9216
+  channel-group 2 mode active
+  no shutdown
+
+interface Ethernet1/15
+  description CORE/DC02 Interconnect (IP) to r2-core-bds
+  mtu 4470
+  channel-group 34 mode active
+
+interface Ethernet1/16
+  description ASA-FWA_TenGig0/6
+  switchport
+  switchport mode trunk
+  mtu 9216
+  channel-group 1 mode active
+  no shutdown
+
+interface Ethernet1/17
+  description Provisioning EDC-Cluster-RPA-WAN
+  switchport
+  switchport access vlan 180
+  spanning-tree port type edge
+  no shutdown
+
+interface Ethernet1/18
+  description to dfs-isilon-01
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 12,23,39,181
+  spanning-tree port type edge trunk
+  no shutdown
+
+interface Ethernet1/19
+  description Provisioning EDC-Cluster-RPA-WAN
+  switchport
+  switchport access vlan 180
+  no shutdown
+
+interface Ethernet1/20
+  description to dfs-isilon-01
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 12,23,39,181
+  spanning-tree port type edge trunk
+  no shutdown
+
+interface Ethernet1/21
+  description to dfs-isilon-01
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 12,23,39,181
+  spanning-tree port type edge trunk
+  no shutdown
+
+interface Ethernet1/22
+  description DD-Coming-From-B178
+  switchport
+  switchport access vlan 24
+  no shutdown
+
+interface Ethernet1/23
+  description CORE/DC02 Interconnect (IP) to r1-core-bds
+  mtu 4470
+  channel-group 32 mode active
+
+interface Ethernet1/24
+  description to->BDS-EDGE-CORE-A_Ten0/2/0/1
+  mtu 4470
+  channel-group 22 mode active
+  no shutdown
+
+interface Ethernet1/25
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  mtu 9216
+  storm-control broadcast level 5.00
+  channel-group 121 mode active
+  no shutdown
+
+interface Ethernet1/26
+  description NetScaler UNRWA production (ns-bds-unrwa-dc02) Int8: Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 2054
+  switchport trunk allowed vlan 2054,3131-3133
+  channel-group 141 mode active
+  no shutdown
+
+interface Ethernet1/27
+  description vpc to->BDS-DC02-ACC-B
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  mtu 9216
+  storm-control broadcast level 5.00
+  channel-group 121 mode active
+  no shutdown
+
+interface Ethernet1/28
+  description NetScaler UNRWA production (ns-bds-unrwa-dc02) Int10: Backend trunk
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 32,50-52
+  channel-group 142 mode active
+  no shutdown
+
+interface Ethernet1/29
+  description to->BDS-DC02-ACC-C_Eth1/2
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 122 mode active
+  no shutdown
+
+interface Ethernet1/30
+  description to-vdc-oob-mgmt-eth1-8
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 4-5,23,26-27,32,145,224-227,332
+  switchport trunk allowed vlan add 1062
+  no shutdown
+
+interface Ethernet1/31
+  description to->BDS-DC02-ACC-D_Eth1/2
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 122 mode active
+  no shutdown
+
+interface Ethernet1/32
+  description to BDS-DC01-ACC-A/B
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967
+  switchport trunk allowed vlan add 4048-4093
+  storm-control broadcast level 5.00
+  channel-group 124 mode active
+  no shutdown
+
+interface Ethernet1/33
+  description NetScaler Production (ns-prd-bds-DC02-a) Int8: Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 34
+  switchport trunk allowed vlan 6,34,64
+  spanning-tree bpduguard enable
+  speed 1000
+  duplex full
+  channel-group 51 mode active
+  no shutdown
+
+interface Ethernet1/34
+  description description NetScaler Production (ns-prd-bds-DC02-b) Int8: Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 34
+  switchport trunk allowed vlan 6,34,64
+  spanning-tree bpduguard enable
+  channel-group 61 mode active
+  no shutdown
+
+interface Ethernet1/35
+  description NetScaler NetScaler Production (ns-prd-bds-DC02-a) Int10: Backend trunk
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 7-8,11-13,16-17,24,29-30,32,36,40
+  switchport trunk allowed vlan add 49,66,68-69,90,136,141,366,386,1498
+  switchport trunk allowed vlan add 2008,2011,2016,2036,2038,3131
+  spanning-tree bpduguard enable
+  channel-group 52 mode active
+  no shutdown
+
+interface Ethernet1/36
+  description NetScaler NetScaler Production (ns-prd-bds-DC02-b) Int9: Backend trunk
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 7-9,11-13,16-17,24,29-30,32,36,40
+  switchport trunk allowed vlan add 49,66,68-69,90,116,121,141,366,386
+  switchport trunk allowed vlan add 1498,2008,2011,2016,2036,2038,3131
+  spanning-tree bpduguard enable
+  channel-group 62 mode active
+  no shutdown
+
+interface Ethernet1/37
+  description NetScaler Pre-production (ns-pre-bds-DC02-a) Int8: Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 34
+  switchport trunk allowed vlan 31,34,312
+  channel-group 131 mode active
+  no shutdown
+
+interface Ethernet1/38
+  description NetScaler Pre-production (ns-pre-bds-DC02-b) Int8: Frontend
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 34
+  switchport trunk allowed vlan 31,34,312
+  channel-group 41 mode active
+  no shutdown
+
+interface Ethernet1/39
+  description NetScaler Pre-production (ns-pre-bds-DC02-a) Int10: Backend trunk
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 8,11,16,20,24,30,32,39,45,811
+  channel-group 132 mode active
+  no shutdown
+
+interface Ethernet1/40
+  description NetScaler Pre-production (ns-pre-bds-DC02-b) Int10: Backend trunk
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 8,11,16,20,24,30,32,39,45,228
+  channel-group 42 mode active
+  no shutdown
+
+interface Ethernet1/41
+  description to dfs-isilon-01
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 12,23,39,181
+  spanning-tree port type edge trunk
+  no shutdown
+
+interface Ethernet1/42
+  description to BDS-DC01-ACC-A/B
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967
+  switchport trunk allowed vlan add 4048-4093
+  storm-control broadcast level 5.00
+  channel-group 124 mode active
+  no shutdown
+
+interface Ethernet1/43
+  description OPNet monitor
+  switchport
+  switchport monitor
+  priority-flow-control mode off
+  flowcontrol receive desired
+  flowcontrol send on
+  no shutdown
+
+interface Ethernet1/44
+  description peer keepalive
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 888
+  channel-group 888 mode active
+  no shutdown
+
+interface Ethernet1/45
+  description vpc peer link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-887,889-3967,4048-4093
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet1/46
+  description vpc peer link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-887,889-3967,4048-4093
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet1/47
+  description vpc peer link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-887,889-3967,4048-4093
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet1/48
+  description vpc peer link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-887,889-3967,4048-4093
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet3/13
+
+interface Ethernet3/14
+  description ASA-FWB_TenGig0/8
+  switchport
+  switchport mode trunk
+  mtu 9216
+  channel-group 2 mode active
+  no shutdown
+
+interface Ethernet3/15
+  description CORE/DC02 Interconnect (IP) to r2-core-bds
+  mtu 4470
+  channel-group 34 mode active
+
+interface Ethernet3/16
+  description ASA-FWA_TenGig0/8
+  switchport
+  switchport mode trunk
+  mtu 9216
+  channel-group 1 mode active
+  no shutdown
+
+interface Ethernet3/17
+
+interface Ethernet3/18
+  description to Catalyst3750, DC01,  Rack C07 BDS-DC01-ACC-C07
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 4
+  switchport trunk allowed vlan 4,23,180
+
+interface Ethernet3/19
+  description to BDS-DC01-ACC-A/B
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967
+  switchport trunk allowed vlan add 4048-4093
+  storm-control broadcast level 5.00
+  channel-group 124 mode active
+  no shutdown
+
+interface Ethernet3/20
+  description to BDS-DC01-ACC-A/B
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967
+  switchport trunk allowed vlan add 4048-4093
+  storm-control broadcast level 5.00
+  channel-group 124 mode active
+  no shutdown
+
+interface Ethernet3/21
+  description to dfs-isilon-01
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 12,23,181
+  spanning-tree port type edge trunk
+  no shutdown
+
+interface Ethernet3/22
+
+interface Ethernet3/23
+  description CORE/DC02 Interconnect (IP) to r1-core-bds
+  mtu 4470
+  channel-group 32 mode active
+
+interface Ethernet3/24
+
+interface Ethernet3/25
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  mtu 9216
+  storm-control broadcast level 5.00
+  channel-group 121 mode active
+  no shutdown
+
+interface Ethernet3/26
+  description dfs-isilon-01
+  switchport
+  switchport mode trunk
+  storm-control broadcast level 5.00
+  no shutdown
+
+interface Ethernet3/27
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  mtu 9216
+  storm-control broadcast level 5.00
+  channel-group 121 mode active
+  no shutdown
+
+interface Ethernet3/28
+  description dfs-isilon-01
+  switchport
+  switchport mode trunk
+  storm-control broadcast level 5.00
+  no shutdown
+
+interface Ethernet3/29
+  description to->BDS-DC02-ACC-C_Eth3/2
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 122 mode active
+  no shutdown
+
+interface Ethernet3/30
+  description dfs-isilon-01
+  switchport
+  switchport mode trunk
+  storm-control broadcast level 5.00
+  no shutdown
+
+interface Ethernet3/31
+  description to->BDS-DC02-ACC-D_Eth3/2
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 122 mode active
+  no shutdown
+
+interface Ethernet3/32
+  description unlb-fire-ss-01_10.130.223.132
+  switchport
+  switchport access vlan 33
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet3/33
+  description dfs-firesrv-01 10.130.222.190
+  switchport
+  switchport access vlan 32
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet3/34
+  description unlb-fire-ss-01_10.130.223.132
+  switchport
+  switchport access vlan 33
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet3/35
+  description dfs-hirovisor-01_10.130.223.134
+  switchport
+  switchport access vlan 32
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet3/36
+  switchport
+  no shutdown
+
+interface Ethernet3/37
+  description Cluster3-RPA2-WAN
+  switchport
+  switchport access vlan 180
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet3/38
+  description Cluster2-RPA3-WAN
+  switchport
+  switchport access vlan 180
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet3/39
+  description Cluster2-RPA1-WAN
+  switchport
+  switchport access vlan 180
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet3/40
+  description Cluster2-RPA2-WAN
+  switchport
+  switchport access vlan 180
+  spanning-tree port type edge
+  speed 1000
+  no shutdown
+
+interface Ethernet3/41
+  switchport
+  no shutdown
+
+interface Ethernet3/42
+  description to->BDS-EDGE-CORE-B_Ten0/2/0/1
+  mtu 4470
+  channel-group 23 mode active
+  no shutdown
+
+interface Ethernet3/43
+  switchport
+  no shutdown
+
+interface Ethernet3/44
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 888
+  channel-group 888 mode active
+  no shutdown
+
+interface Ethernet3/45
+  description vpc peer link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-887,889-3967,4048-4093
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet3/46
+  description vpc peer link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-887,889-3967,4048-4093
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet3/47
+  description vpc peer link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-887,889-3967,4048-4093
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface Ethernet3/48
+  description vpc peer link
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-887,889-3967,4048-4093
+  speed 10000
+  channel-group 1001 mode active
+  no shutdown
+
+interface mgmt0
+  vrf member management
+  ip address 10.130.194.151/24
+
+interface loopback0
+  ip address 10.130.216.249/32
+  ip router ospf 10 area 0.0.0.12
+logging logfile my_log 6
+logging server 10.130.94.60 5 use-vrf management
+logging source-interface loopback 0
+cli alias name wr copy running-config startup-config
+line vty
+router ospf 10
+  router-id 10.130.216.249
+  area 0.0.0.12 nssa no-summary
+  redistribute static route-map STATIC-TO-OSPF
+  log-adjacency-changes
+  timers throttle spf 1000 1000 1000
+  auto-cost reference-bandwidth 1000000
+  passive-interface default
+monitor session 1 
+  description OPNet monitor
+  source interface port-channel1 both
+  source interface port-channel2 both
+  source interface port-channel121 both
+  source interface port-channel122 both
+  rate-limit auto
+  destination interface Ethernet1/43
+  no shut

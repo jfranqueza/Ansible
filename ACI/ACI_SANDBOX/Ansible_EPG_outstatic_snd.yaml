@@ -1,0 +1,39 @@
+---
+- name: REMOVE STATIC BINDING FROM EPG
+  hosts: sandbox
+  connection: local
+  gather_facts: no
+  vars:
+    EPGS:
+      - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v310_10_129_22_176_28_EPG, static_binding: "{{ Bindings }}"  }
+      - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v732_10_130_43_64_27_EPG, static_binding: "{{ Bindings }}" }
+    Bindings:
+      - { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/26 }
+      - { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/26 }
+      - { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/28 }
+      - { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/28 }
+
+      
+
+  tasks:
+
+
+    - name: Remove Static Path binding for given EPG
+      aci_static_binding_to_epg:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: "{{ item.0.Tenant_name }}"
+        ap: "{{ item.0.AppProfile_name }}"
+        epg: "{{ item.0.EPG_name }}"
+        interface_type: "{{ item.1.interface_type }}"
+        pod: "{{ item.1.Pod_ID }}"
+        leafs: "{{ item.1.Switch_ID }}"
+        interface: '{{ item.1.port}}'
+        state: absent
+      loop: "{{ EPGS|subelements('static_binding') }}"  
+      loop_control:
+        pause: "{{ loop_control_pause | default(0) }}"      
+      delegate_to: localhost
+

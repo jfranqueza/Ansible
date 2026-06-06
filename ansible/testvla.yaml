@@ -1,0 +1,14 @@
+---
+- name: PARSED VLAN BRIEF
+  hosts: BACK_DC
+  vars:
+    ansible_network_os : ios
+
+
+  tasks:
+
+      - name: CAPTURE VLANS
+        ios_command:
+          commands: show vlan brief
+        
+

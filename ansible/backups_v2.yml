@@ -1,0 +1,13 @@
+---
+- name: BACKUP SWITCHES V2.8
+  hosts: bds-dc02-agg-a.dpko.un.org
+  gather_facts: no
+
+  tasks:
+
+    - name: BACKUP SWITCH NX
+      nxos_config:
+        backup: yes
+        backup_options:
+          #filename: "{{ inventory_hostname }}.cfg"
+          dir_path: "./backup"

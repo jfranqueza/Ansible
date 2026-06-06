@@ -1,0 +1,30 @@
+ansible_network_os: nxos
+
+port_uplink: port-channel121
+
+
+
+interfaces:
+- Ethernet103/1/10
+- Ethernet103/1/2
+- Ethernet103/1/11
+- Ethernet103/1/3
+- Ethernet107/1/12
+- Ethernet107/1/4
+- Ethernet108/1/12
+- Ethernet108/1/4
+- Ethernet103/1/12
+- Ethernet103/1/4
+- Ethernet103/1/13
+- Ethernet103/1/5
+- Ethernet106/1/9
+- Ethernet106/1/1
+- Ethernet106/1/10
+- Ethernet106/1/2
+- Ethernet106/1/11
+- Ethernet106/1/3
+
+
+uplinks:
+ - port-channel1001  # VPC peer-link
+ - port-channel121  # N7K DC0 VPC 

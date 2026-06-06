@@ -1,0 +1,7 @@
+- name: ADD VLAN TO TRUNK
+  nxos_l2_interfaces:
+    config:
+      - name: "{{ item.intf }}"
+        trunk: 
+          allowed_vlans: "{{ item.vlans_in }}"
+  loop: "{{ vlans }}"

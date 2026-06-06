@@ -1,0 +1,34 @@
+# Ansible
+# https://docs.ansible.com/ansible/latest/collections/cisco/aci/aci_tenant_module.html#ansible-collections-cisco-aci-aci-tenant-module
+# APIC
+# Tenants > ALL TENANTS
+- name: Tenants
+  ignore_errors: yes
+  cisco.aci.aci_tenant:
+    hostname: "{{ ansible_host }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: no
+    tenant: "{{ item.Tenant_name }}"
+    state: "{{ whattodo | default('present', true) }}"
+  with_items: "{{ Tenants_VRFs }}"
+  loop_control:
+    pause: "{{ loop_control_pause | default(0) }}"
+
+# Ansible
+# https://docs.ansible.com/ansible/latest/collections/cisco/aci/aci_vrf_module.html#ansible-collections-cisco-aci-aci-vrf-module
+# APIC
+# Tenants > Tenant > Networking > VRFs
+- name: Tenants > VRFs
+  ignore_errors: yes
+  cisco.aci.aci_vrf:
+    hostname: "{{ ansible_host }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: no
+    tenant: "{{ item.Tenant_name }}"
+    vrf: "{{ item.VRF_name }}"
+    state: "{{ whattodo | default('present', true) }}"
+  with_items: "{{ Tenants_VRFs }}"
+  loop_control:
+    pause: "{{ loop_control_pause | default(0) }}"

@@ -1,0 +1,31 @@
+---
+- hosts: all
+  vars_prompt:
+
+    - name: Loopback
+      prompt: "What is Loopback0 int?"
+      private: no
+
+    - name: Loopback_Mask
+      prompt: "What is Loopback0 IP/Mask?"
+      private: no
+
+  # tasks:
+
+    # - copy:
+    #     dest: "/home/reponeg/nexus/dschiano/output.cfg"
+    #     content: '{{ Loopback }}'
+                 
+                                 
+    # - name: SKIZZO
+    #   lineinfile:
+    #     path: /home/reponeg/nexus/dschiano/output.cfg
+    #     regexp: '^Loopback0'
+    #     insertafter: '^Loopback0'
+    #     line: '{{ Loopback_Mask }}'
+
+
+
+
+
+

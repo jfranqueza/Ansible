@@ -1,0 +1,28 @@
+---
+- name: ENABLE LACP
+  hosts: N5KDC02_VLC
+  gather_facts: no
+
+
+  tasks:
+ 
+  - name: REMOVE FROM PORT-CHANNELS
+    nxos_config:
+      lines: no channel-group 3
+      parents: "{{item}}"
+    loop: "{{nameif_uplinks}}"
+
+  - name: ADD LACP TO PORT-CHANNELS
+    nxos_config:
+      lines: channel-group 3 mode active
+      parents: "{{item}}"
+    loop: "{{nameif_uplinks}}"
+        
+  
+  - name: REMOVE FROM PORT-CHANNELS
+    nxos_command:
+      commands:
+        - sh port-channel summary | grep 3
+        - sh interface po3
+        - sh vpc 3
+      

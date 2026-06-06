@@ -1,0 +1,54 @@
+---
+- hosts: N5KDC01_VLC,N5KDC02_VLC,N5KDC02_BDS,N5KDC01_BDS
+  connection: network_cli
+  gather_facts: no
+  roles:
+    - ansible-pyats
+
+  tasks:
+
+  - name: PARSE COMMAND DC02 N5K
+    pyats_parse_command:
+      command: show interface {{port_uplink}}
+    register: command_5k
+
+  - name: CREATE THE ANSIBLE FACT FOR THE VARIABLE
+    set_fact:
+      if_set: "{{ command_5k.structured }}"
+
+    
+  - name: TEMPLATING THE COMMAND
+    template:
+      src: ./templates/parsed_interface.j2
+      dest: ./templates/facts/{{ inventory_hostname}}_parsed.md
+
+
+  - name: CREATE MASTER REPORT   ### AVENGERS!!!! assemble
+    assemble:
+      src: ./templates/facts/
+      dest: ./templates/errors-report.md
+      # dest: ./templates/errors-report__{{ lookup('pipe', 'date +%Y%m%d') }}.md
+      delimiter: "---"
+    run_once: true
+
+
+
+
+##### EMAIL 
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+
+  - name: Sending an e-mail
+ 
+    mail:
+      host: dfs-smtp.dfs.un.org
+      from: ansible-Jenkins@un.org
+      to: franqueza@un.org, nst-neg@un.org 
+      subject: '#AUTO|#MAIN UPLINKS Preventive Maintenance routine to check all DC uplinks -  Report'
+      body: "{{ lookup('file', './templates/errors-report.md') }}"
+      attach: 
+        - ./templates/errors-report.md
+      #- /home/reponeg/nexus/franquezaj/templates/errors-report__{{ lookup('pipe', 'date +%Y%m%d') }}.md
+    delegate_to: localhost

@@ -1,0 +1,14 @@
+- name: Add vlans to trunks & create vlans
+  hosts: vlc-dc02-acc-a
+  gather_facts: no
+
+  # comment the role that yoou do not need
+  roles:
+    #- create_vlans
+    - add_vlans_2_trunk
+
+  tasks:
+    - name: WRITE MEMORY
+      nxos_config:
+        lines: 
+          - wr

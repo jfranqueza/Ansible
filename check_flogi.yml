@@ -1,0 +1,22 @@
+---
+- name: CHECK FLOGI TABLE DC02 N5K
+  hosts: N5KDC02_VLC
+  gather_facts: no
+  
+  
+  tasks:
+    - name: CHECK SHOW COMMANDS
+      nxos_command:
+        commands:
+          - show npv flogi-table
+      register: flogi
+
+    - name: DEBUG DATA
+      debug:
+        var: flogi.stdout_lines
+      
+
+
+    
+
+         

@@ -1,0 +1,18 @@
+---
+- name: CONFIGURE SMPV3 USER IN DC DEVICES
+  hosts: N7KDC02_BDS
+  gather_facts: no
+
+  tasks:
+
+    # - name: Send SNMP V3 user to N5K
+    #   nxos_config:
+    #     lines: snmp-server user CISCO network-operator auth sha C1D3C03xt priv aes-128 C1D3C03xt
+    #     save_when: modified
+
+    - name: Send SNMP V3 user to N7K
+      nxos_config:
+        lines: snmp-server user CISCO vdc-operator auth sha C1D3C03xt priv aes-128 C1D3C03xt
+#        save_when: modified
+
+

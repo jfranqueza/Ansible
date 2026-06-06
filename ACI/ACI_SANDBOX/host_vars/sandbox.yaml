@@ -1,0 +1,462 @@
+###############################
+#                             #
+#       Access Policies       #
+#                             #
+###############################
+
+###################################
+# roles:                          #
+# - Interface_Selectors           #
+# - Switch_and_Interface_Profiles #
+# - enable_or_disable_ports       #
+###################################
+
+Switch_name_suffix: '_SwProf'
+Interface_name_suffix: '_IntProf'
+include_node_id_in_switch_profile_name: 'no'
+
+Switches_and_Interfaces_map:
+  - switch_name: leaf-101
+    pod: 1
+    switch_node_id: 101
+    ports_list:
+    - { port: 1,  port_state: enabled, port_description: NSX-T_Management,          interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 2,  port_state: enabled, port_description: NSX-T_Management,          interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 4,  port_state: enabled, port_description: NSX-T_Workload_Production, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 21, port_state: enabled, port_description: NSX-T_Management,          interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 22, port_state: enabled, port_description: NSX-T_Management,          interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 23, port_state: enabled, port_description: NSX-T_Workload_Production, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 24, port_state: enabled, port_description: NSX-T_Workload_Production, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    ###### CONFIGURATION FOR THE NETWORK CENTRIC MIGRATION DEV #####
+    - { port: 26,  port_state: enabled, port_description: PRE-VLCVI-P-ILOC-6-p0_1, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 28,  port_state: enabled, port_description: PRE-VLCVI-P-ILOC-5-p0_1, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 30,  port_state: enabled, port_description: PRE-VLCVI-P-ILOC-4-p0_1, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 32,  port_state: enabled, port_description: PRE-VLCVI-P-ILOC-3.p0_1, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+
+  - switch_name: leaf-102
+    pod: 1      
+    switch_node_id: 102
+    ports_list:
+    - { port: 1,  port_state: enabled, port_description: NSX-T_Management,          interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 2,  port_state: enabled, port_description: NSX-T_Management,          interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 4,  port_state: enabled, port_description: NSX-T_Workload_Production, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 21, port_state: enabled, port_description: NSX-T_Management,          interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 22, port_state: enabled, port_description: NSX-T_Management,          interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 23, port_state: enabled, port_description: NSX-T_Workload_Production, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 24, port_state: enabled, port_description: NSX-T_Workload_Production, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    ###### CONFIGURATION FOR THE NETWORK CENTRIC MIGRATION DEV #####
+    - { port: 26,  port_state: enabled, port_description: PRE-VLCVI-P-ILOC-6-p7_1, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 28,  port_state: enabled, port_description: PRE-VLCVI-P-ILOC-5-p7_1, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 30,  port_state: enabled, port_description: PRE-VLCVI-P-ILOC-4-p5_1, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+    - { port: 32,  port_state: enabled, port_description: PRE-VLCVI-P-ILOC-3.p5_1, interface_type: switch_port, interface_policy_group: 25G_CDP_LLDP_AccessPort }
+
+
+
+###################################
+# roles                           #
+# - Interface_Policy_Groups       #
+###################################
+
+Interface_Policy_Group_task_config:
+  - interface_policy_group: 25G_CDP_LLDP_AccessPort
+    lag_type: leaf
+    AAEP: DCnetworks_AAEP
+    link_level_policy: 25GigAuto
+    cdp_policy: CDP_On
+    lldp_policy: LLDP_On
+
+###################################
+# roles:                          #
+# - AAEPs                         #
+# - Domains                       #
+# - VLAN_Pools                    #
+###################################
+
+# AAEPs, Domains and VLAN Pools
+AAEP_task_config:
+  - name: EDGE_CORE_AAEP
+    domains:
+      - domain_type: l3dom
+        domain_name: EDGE_CORE_L3Dom
+        vlan_pools:
+        - vlan_pool_name: EDGE_CORE_StaticVLPool
+          vlan_pool_allocation_mode: static
+          vlans:
+          - { vlan_range_start: 755, vlan_range_end: 758, description: 'Tenant PrivateCloud_NSX L3Out Core_VLC_L3Out' }
+
+  - name: DCnetworks_AAEP
+    domains:
+      - domain_type: phys
+        domain_name: DCnetworks_PhysDom
+        vlan_pools:
+        - vlan_pool_name: DCnetworks_StaticVLPool
+          vlan_pool_allocation_mode: static
+          vlans:
+          - { vlan_range_start: 1001, vlan_range_end: 1004, description: 'NSX-T underlay vlans for Management Domain' }
+          - { vlan_range_start: 1021, vlan_range_end: 1024, description: 'NSX-T underlay vlans for Production Domain' }
+          - { vlan_range_start: 1031, vlan_range_end: 1034, description: 'NSX-T underlay vlans for PreProduction Domain' }
+
+      ##### VLAN POOL FOR DEV ###
+        - vlan_pool_name: UNGSC_DEV_StaticVLPool
+          vlan_pool_allocation_mode: static
+          vlans:
+          - { vlan_range_start: 310, vlan_range_end: 310, description: 'Network legacy DEV vlan' }
+          - { vlan_range_start: 731, vlan_range_end: 733, description: 'Network legacy DEV vlan' }
+          - { vlan_range_start: 735, vlan_range_end: 735, description: 'Network legacy DEV vlan' }
+          - { vlan_range_start: 737, vlan_range_end: 737, description: 'Network legacy DEV vlan' }
+          - { vlan_range_start: 173, vlan_range_end: 173, description: 'Network legacy DEV vlan' }                              
+          - { vlan_range_start: 744, vlan_range_end: 745, description: 'Network legacy DEV vlan' }
+          - { vlan_range_start: 745, vlan_range_end: 745, description: 'Network legacy DEV vlan' }
+
+      - domain_type: l3dom
+        domain_name: DCnetworks_L3Dom
+        vlan_pools:
+        - vlan_pool_name: DCnetworks_StaticVLPool
+          vlan_pool_allocation_mode: static
+          vlans:
+          - { vlan_range_start: 1501, vlan_range_end: 1502, description: 'NSX-T Management Domain. L3Out to T0 Routers' }
+          - { vlan_range_start: 1511, vlan_range_end: 1512, description: 'NSX-T Production Domain. L3Out to T0 Routers' }
+          - { vlan_range_start: 1531, vlan_range_end: 1532, description: 'NSX-T PreProduction Domain. L3Out to T0 Routers' }
+
+
+###############################
+#                             #
+#           Tenants           #
+#                             #
+###############################
+
+###################################
+# roles:                          #
+# - Tenants_and_VRFs              #
+###################################
+
+Tenants_VRFs:
+- { Tenant_name: PrivateCloud_NSX,  VRF_name: NSX_VRF, vzAny: yes }
+
+### UNGSC DC TENANT VLC ####
+- { Tenant_name: UNGSC_VLC_DC,  VRF_name: VLC_DC_VRF, vzAny: no }
+
+###################################
+# roles:                          #
+# - BridgeDomains_and_Subnets     #
+###################################
+
+BridgeDomains_Subnets:
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: MD_MGMT_v1001_10_129_32_0_24_BD,              bd_subnet: 10.129.32.1, bd_subnet_mask: 24,  enable_routing: yes, scope: public, advertise_via_l3out: Core_VLC_L3Out, arp_flooding: no, l2_unknown_unicast: proxy }  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: MD_vMo_v1002_192_168_100_0_25_BD,                                                          enable_routing: no,  scope: public,                                      arp_flooding: no, l2_unknown_unicast: proxy }  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: MD_vSAN_v1003_192_168_100_128_25_BD,                                                       enable_routing: no,  scope: public,                                      arp_flooding: no, l2_unknown_unicast: proxy }  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: MD_HOV_v1004_10_129_33_0_26_BD,               bd_subnet: 10.129.33.1, bd_subnet_mask: 26,  enable_routing: yes, scope: public, advertise_via_l3out: Core_VLC_L3Out, arp_flooding: no, l2_unknown_unicast: proxy } 
+     
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: WLD_Pro_MGMT_v1021_10_129_34_0_24_BD,         bd_subnet: 10.129.34.1, bd_subnet_mask: 24,  enable_routing: yes, scope: public, advertise_via_l3out: Core_VLC_L3Out, arp_flooding: no, l2_unknown_unicast: proxy }  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: WLD_Pro_vMo_v1022_192_168_101_0_25_BD,                                                     enable_routing: no,  scope: public,                                      arp_flooding: no, l2_unknown_unicast: proxy }  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: WLD_Pro_vSAN_v1023_192_168_101_128_25_BD,                                                  enable_routing: no,  scope: public,                                      arp_flooding: no, l2_unknown_unicast: proxy }  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: WLD_Pro_HOV_v1024_10_129_35_0_24_BD,          bd_subnet: 10.129.35.1, bd_subnet_mask: 24,  enable_routing: yes, scope: public, advertise_via_l3out: Core_VLC_L3Out, arp_flooding: no, l2_unknown_unicast: proxy } 
+  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: WLD_PrePro_MGMT_v1031_10_129_36_0_24_BD,      bd_subnet: 10.129.36.1, bd_subnet_mask: 24,  enable_routing: yes, scope: public, advertise_via_l3out: Core_VLC_L3Out, arp_flooding: no, l2_unknown_unicast: proxy }  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: WLD_PrePro_vMo_v1032_192_168_102_0_25_BD,                                                  enable_routing: no,  scope: public,                                      arp_flooding: no, l2_unknown_unicast: proxy }  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: WLD_PrePro_vSAN_v1033_192_168_102_128_25_BD,                                               enable_routing: no,  scope: public,                                      arp_flooding: no, l2_unknown_unicast: proxy }  
+- { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, BD_name: WLD_PrePro_HOV_v1034_10_129_37_0_24_BD,       bd_subnet: 10.129.37.1, bd_subnet_mask: 24,  enable_routing: yes, scope: public, advertise_via_l3out: Core_VLC_L3Out, arp_flooding: no, l2_unknown_unicast: proxy } 
+
+
+#### BD FOR LEGACY DC VLANS VLC ####
+
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, BD_name: DC_DEV_v310_10_129_22_176_28_BD, enable_routing: no, arp_flooding: yes, l2_unknown_unicast: proxy }
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, BD_name: DC_DEV_v731_10_130_43_32_27_BD, enable_routing: no, arp_flooding: yes, l2_unknown_unicast: proxy }  
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, BD_name: DC_DEV_v732_10_130_43_64_27_BD, enable_routing: no, arp_flooding: yes, l2_unknown_unicast: proxy }  
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, BD_name: DC_DEV_v733_10_130_43_96_27_BD, enable_routing: no, arp_flooding: yes, l2_unknown_unicast: proxy }  
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, BD_name: DC_DEV_v735_10_130_43_176_28_BD, enable_routing: no, arp_flooding: yes, l2_unknown_unicast: proxy }  
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, BD_name: DC_DEV_v737_10_130_44_224_27_BD, enable_routing: no, arp_flooding: yes, l2_unknown_unicast: proxy }  
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, BD_name: DC_DEV_v173_10_130_122_16_29_BD, enable_routing: no, arp_flooding: yes, l2_unknown_unicast: proxy }  
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, BD_name: DC_DEV_v744_10_130_38_0_24_BD, enable_routing: no, arp_flooding: yes, l2_unknown_unicast: proxy }  
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, BD_name: DC_DEV_v745_192_168_10_0_24_BD, enable_routing: no, arp_flooding: yes, l2_unknown_unicast: proxy }  
+
+
+#####################################
+# roles:                            #
+# - AppProfiles_and_EPGs            #
+# - Domains_and_EPG_Static_Bindings #
+#####################################
+
+AppProfiles_EPGs_Domains_Static_Bindings:
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Management,             EPG_name: MD_MGMT_v1001_10_129_32_0_24_EPG,              BD_name: MD_MGMT_v1001_10_129_32_0_24_BD,             domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1001, Static_Binding: "{{ StaticBinding_ManagementDomain }}" }
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Management,             EPG_name: MD_vMo_v1002_192_168_100_0_25_EPG,             BD_name: MD_vMo_v1002_192_168_100_0_25_BD,            domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1002, Static_Binding: "{{ StaticBinding_ManagementDomain }}" }
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Management,             EPG_name: MD_vSAN_v1003_192_168_100_128_25_EPG,          BD_name: MD_vSAN_v1003_192_168_100_128_25_BD,         domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1003, Static_Binding: "{{ StaticBinding_ManagementDomain }}" }
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Management,             EPG_name: MD_HOV_v1004_10_129_33_0_26_EPG,               BD_name: MD_HOV_v1004_10_129_33_0_26_BD,              domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1004, Static_Binding: "{{ StaticBinding_ManagementDomain }}" }
+          
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Workload_Production,    EPG_name: WLD_Pro_MGMT_v1021_10_129_34_0_24_EPG,         BD_name: WLD_Pro_MGMT_v1021_10_129_34_0_24_BD,        domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1021, Static_Binding: "{{ StaticBinding_Prod_and_Mgmt }}" }
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Workload_Production,    EPG_name: WLD_Pro_vMo_v1022_192_168_101_0_25_EPG,        BD_name: WLD_Pro_vMo_v1022_192_168_101_0_25_BD,       domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1022, Static_Binding: "{{ StaticBinding_WorkloadProduction }}" }
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Workload_Production,    EPG_name: WLD_Pro_vSAN_v1023_192_168_101_128_25_EPG,     BD_name: WLD_Pro_vSAN_v1023_192_168_101_128_25_BD,    domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1023, Static_Binding: "{{ StaticBinding_WorkloadProduction }}" }
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Workload_Production,    EPG_name: WLD_Pro_HOV_v1024_10_129_35_0_24_EPG,          BD_name: WLD_Pro_HOV_v1024_10_129_35_0_24_BD,         domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1024, Static_Binding: "{{ StaticBinding_WorkloadProduction }}" }
+ 
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Workload_PreProduction, EPG_name: WLD_PrePro_MGMT_v1031_10_129_36_0_24_EPG,      BD_name: WLD_PrePro_MGMT_v1031_10_129_36_0_24_BD,     domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1031, Static_Binding: "{{ StaticBinding_PreProd_and_Mgmt }}" }
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Workload_PreProduction, EPG_name: WLD_PrePro_vMo_v1032_192_168_102_0_25_EPG,     BD_name: WLD_PrePro_vMo_v1032_192_168_102_0_25_BD,    domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1032, Static_Binding: "{{ StaticBinding_WorkloadPreProduction }}" }
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Workload_PreProduction, EPG_name: WLD_PrePro_vSAN_v1033_192_168_102_128_25_EPG,  BD_name: WLD_PrePro_vSAN_v1033_192_168_102_128_25_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1033, Static_Binding: "{{ StaticBinding_WorkloadPreProduction }}" }
+# - { Tenant_name: PrivateCloud_NSX, VRF_name: NSX_VRF, AppProfile_name: NSX-T_Workload_PreProduction, EPG_name: WLD_PrePro_HOV_v1034_10_129_37_0_24_EPG,       BD_name: WLD_PrePro_HOV_v1034_10_129_37_0_24_BD,      domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 1034, Static_Binding: "{{ StaticBinding_WorkloadPreProduction }}" }
+
+
+#### AppProfiles and EPGs FOR LEGACY DC VLANS VLC ####
+
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v310_10_129_22_176_28_EPG, BD_name: DC_DEV_v310_10_129_22_176_28_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 310, Static_Binding: "{{ StaticBinding_Legacy_Dev }}" }
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v731_10_130_43_32_27_EPG, BD_name: DC_DEV_v731_10_130_43_32_27_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 731, Static_Binding: "{{ StaticBinding_Legacy_Dev }}" }
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v732_10_130_43_64_27_EPG, BD_name: DC_DEV_v732_10_130_43_64_27_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 732, Static_Binding: "{{ StaticBinding_Legacy_Dev }}" }
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v733_10_130_43_96_27_EPG, BD_name: DC_DEV_v733_10_130_43_96_27_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 733, Static_Binding: "{{ StaticBinding_Legacy_Dev }}" }
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v735_10_130_43_176_28_EPG, BD_name: DC_DEV_v735_10_130_43_176_28_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 735, Static_Binding: "{{ StaticBinding_Legacy_Dev }}" }
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v737_10_130_44_224_27_EPG, BD_name: DC_DEV_v737_10_130_44_224_27_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 737, Static_Binding: "{{ StaticBinding_Legacy_Dev }}" }
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v173_10_130_122_16_29_EPG, BD_name: DC_DEV_v173_10_130_122_16_29_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 173, Static_Binding: "{{ StaticBinding_Legacy_Dev }}" }
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v744_10_130_38_0_24_EPG, BD_name: DC_DEV_v744_10_130_38_0_24_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 744, Static_Binding: "{{ StaticBinding_Legacy_Dev }}" }
+- { Tenant_name: UNGSC_VLC_DC, VRF_name: VLC_DC_VRF, AppProfile_name: DC_VLC_DEV_AP, EPG_name: DC_DEV_v745_192_168_10_0_24_EPG, BD_name: DC_DEV_v745_192_168_10_0_24_BD, domain_name: DCnetworks_PhysDom, domain_type: phys, Encap_VLAN: 745, Static_Binding: "{{ StaticBinding_Legacy_Dev }}" }
+
+
+
+StaticBinding_PreProd_and_Mgmt:
+- { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/1  }
+- { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/1  }
+- { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/2  }
+- { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/2  }
+- { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/21 }
+- { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/21 }
+- { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/22 }
+- { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/22 }
+
+
+##### LEGACY VLANS SUBNETS STATIC PATH BINDING  #####
+StaticBinding_Legacy_Dev:
+- { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/26 }
+- { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/26 }
+- { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/28 }
+- { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/28 }
+- { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/30 }
+- { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/30 }
+- { Pod_ID: 1, Switch_ID: 101, interface_type: switch_port, port: 1/32 }
+- { Pod_ID: 1, Switch_ID: 102, interface_type: switch_port, port: 1/32 }
+
+
+
+
+
+
+####################################
+# roles:                           #
+# - L3Outs                         #
+####################################
+
+# L3Outs:
+#   ### L3Out Initial configuration section ###
+#   - L3Out_name: Core_VLC_L3Out
+#     Tenant_name: PrivateCloud_NSX
+#     VRF_name: NSX_VRF
+#     L3Domain_name: EDGE_CORE_L3Dom
+#     enable_OSPF: yes
+#     OSPF_Area_ID: 0.0.0.24
+#     OSPF_Area_Type: nssa        # OSPF_Area_Type: nssa | regular| stub
+#     ### Node Profiles ###
+#     NodeProfiles:
+#     - NodeProfile_name: NodeProfile
+#       Router_ID_as_Loopback: "yes"
+#       Switches:
+#       - Switch_Pod_ID: 1
+#         Switch_Node_ID: 103
+#         Switch_Router_ID: 10.130.88.182
+#       - Switch_Pod_ID: 1
+#         Switch_Node_ID: 104
+#         Switch_Router_ID: 10.130.88.183
+#       ### Interface Profiles ###
+#       InterfaceProfiles:
+#       - InterfaceProfile_name: InterfaceProfile
+#         Interfaces:
+#           ### port-channel section ###
+#         - Layer3_type: sub-interface
+#           Layer2_type: port-channel
+#           Switch_Pod_ID: 1
+#           Switch_Node_ID: 103
+#           PC_Policy_Group: EDGE_CORE_A_PC  # Eth1/47 - VLC-EDGE_CORE-A
+#           IP_Address_Mask: 10.130.46.101/31
+#           VLAN_ID: 755
+#           MTU: 4470
+#           #############################
+#         - Layer3_type: sub-interface
+#           Layer2_type: port-channel
+#           Switch_Pod_ID: 1
+#           Switch_Node_ID: 103
+#           PC_Policy_Group: EDGE_CORE_B_PC  # Eth1/48 - VLC-EDGE_CORE-B
+#           IP_Address_Mask: 10.130.46.103/31
+#           VLAN_ID: 756
+#           MTU: 4470
+#           #############################
+#         - Layer3_type: sub-interface
+#           Layer2_type: port-channel
+#           Switch_Pod_ID: 1
+#           Switch_Node_ID: 104
+#           PC_Policy_Group: EDGE_CORE_A_PC  # Eth1/47 - VLC-EDGE_CORE-A
+#           IP_Address_Mask: 10.130.46.105/31
+#           VLAN_ID: 757
+#           MTU: 4470
+#           #############################
+#         - Layer3_type: sub-interface
+#           Layer2_type: port-channel
+#           Switch_Pod_ID: 1
+#           Switch_Node_ID: 104
+#           PC_Policy_Group: EDGE_CORE_B_PC  # Eth1/48 - VLC-EDGE_CORE-B
+#           IP_Address_Mask: 10.130.46.107/31
+#           VLAN_ID: 758
+#           MTU: 4470
+#           #############################
+
+
+
+#   ### L3Out Initial configuration section ###
+#   - L3Out_name: NSX_Mgmt_VLC_L3Out
+#     Tenant_name: PrivateCloud_NSX
+#     VRF_name: NSX_VRF
+#     L3Domain_name: DCnetworks_L3Dom
+#     enable_BGP: yes
+#     ### Node Profiles ###
+#     NodeProfiles:
+#     - NodeProfile_name: NodeProfile
+#       Router_ID_as_Loopback: "yes"
+#       Switches:
+#       - Switch_Pod_ID: 1
+#         Switch_Node_ID: 101
+#         Switch_Router_ID: 10.130.88.180
+#       - Switch_Pod_ID: 1
+#         Switch_Node_ID: 102
+#         Switch_Router_ID: 10.130.88.181
+#       InterfaceProfiles:
+#       - InterfaceProfile_name: InterfaceProfile
+#         Interfaces:
+#           ### single-port specific section ###
+#         - Layer3_type: svi
+#           Layer2_type: single-port
+#           Switch_Pod_ID: 1             
+#           Switch_Node_ID: 101
+#           Port: xx
+#           IP_Address_Mask: 10.129.33.65/28
+#           VLAN_ID: 1501
+#           MTU: 1500
+#           BGP_Peers:
+#           - Peer_IP: 10.129.33.66
+#             Remote_AS: 65521
+#           - Peer_IP: 10.129.33.67
+#             Remote_AS: 65521
+#           #############################
+#           ### single-port specific section ###
+#         - Layer3_type: svi
+#           Layer2_type: single-port
+#           Switch_Pod_ID: 1
+#           Switch_Node_ID: 102
+#           Port: xx
+#           IP_Address_Mask: 10.129.33.81/28
+#           VLAN_ID: 1502
+#           MTU: 1500
+#           BGP_Peers:
+#           - Peer_IP: 10.129.33.82
+#             Remote_AS: 65521
+#           - Peer_IP: 10.129.33.83
+#             Remote_AS: 65521
+#           #############################
+
+
+
+#   ### L3Out Initial configuration section ###
+#   - L3Out_name: NSX_Prod_VLC_L3Out
+#     Tenant_name: PrivateCloud_NSX
+#     VRF_name: NSX_VRF
+#     L3Domain_name: DCnetworks_L3Dom
+#     enable_BGP: yes
+#     ### Node Profiles ###
+#     NodeProfiles:
+#     - NodeProfile_name: NodeProfile
+#       Router_ID_as_Loopback: "no"
+#       Switches:
+#       - Switch_Pod_ID: 1
+#         Switch_Node_ID: 101
+#         Switch_Router_ID: 10.130.88.180
+#       - Switch_Pod_ID: 1
+#         Switch_Node_ID: 102
+#         Switch_Router_ID: 10.130.88.181
+#       InterfaceProfiles:
+#       - InterfaceProfile_name: InterfaceProfile
+#         Interfaces:
+#           ### single-port specific section ###
+#         - Layer3_type: svi
+#           Layer2_type: single-port
+#           Switch_Pod_ID: 1
+#           Switch_Node_ID: 101
+#           Port: xx
+#           IP_Address_Mask: 10.129.33.97/28
+#           VLAN_ID: 1511
+#           MTU: 1500
+#           BGP_Peers:
+#           - Peer_IP: 10.129.33.98
+#             Remote_AS: 65522
+#           - Peer_IP: 10.129.33.99
+#             Remote_AS: 65522
+#           #############################
+#           ### single-port specific section ###
+#         - Layer3_type: svi
+#           Layer2_type: single-port
+#           Switch_Pod_ID: 1
+#           Switch_Node_ID: 102
+#           Port: xx
+#           IP_Address_Mask: 10.129.33.113/28
+#           VLAN_ID: 1512
+#           MTU: 1500
+#           BGP_Peers:
+#           - Peer_IP: 10.129.33.114
+#             Remote_AS: 65522
+#           - Peer_IP: 10.129.33.115
+#             Remote_AS: 65522
+#           #############################
+
+
+
+#   ### L3Out Initial configuration section ###
+#   - L3Out_name: NSX_PreProd_VLC_L3Out
+#     Tenant_name: PrivateCloud_NSX
+#     VRF_name: NSX_VRF
+#     L3Domain_name: DCnetworks_L3Dom
+#     enable_BGP: yes
+#     ### Node Profiles ###
+#     NodeProfiles:
+#     - NodeProfile_name: NodeProfile
+#       Router_ID_as_Loopback: "no"
+#       Switches:
+#       - Switch_Pod_ID: 1
+#         Switch_Node_ID: 103
+#         Switch_Router_ID: 10.130.88.182
+#       - Switch_Pod_ID: 1
+#         Switch_Node_ID: 104
+#         Switch_Router_ID: 10.130.88.183
+#       InterfaceProfiles:
+#       - InterfaceProfile_name: InterfaceProfile
+#         Interfaces:
+#           ### single-port specific section ###
+#         - Layer3_type: svi
+#           Layer2_type: single-port
+#           Switch_Pod_ID: 1
+#           Switch_Node_ID: 103
+#           Port: xx
+#           IP_Address_Mask: 10.129.33.129/28
+#           VLAN_ID: 1531
+#           MTU: 1500
+#           BGP_Peers:
+#           - Peer_IP: 10.129.33.130
+#             Remote_AS: 65523
+#           - Peer_IP: 10.129.33.131
+#             Remote_AS: 65523
+#           #############################
+#           ### single-port specific section ###
+#         - Layer3_type: svi
+#           Layer2_type: single-port
+#           Switch_Pod_ID: 1
+#           Switch_Node_ID: 104
+#           Port: xx
+#           IP_Address_Mask: 10.129.33.145/28
+#           VLAN_ID: 1532
+#           MTU: 1500
+#           BGP_Peers:
+#           - Peer_IP: 10.129.33.146
+#             Remote_AS: 65523
+#           - Peer_IP: 10.129.33.147
+#             Remote_AS: 65523
+#           #############################

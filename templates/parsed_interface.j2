@@ -1,0 +1,57 @@
+
+## {{ inventory_hostname }}
+
+### interface {{ port_uplink }}
+{% if  port_uplink == "port-channel3" %}
+  members: {{ if_set['port-channel3']['port_channel']['port_channel_member_intfs']}}
+    > - txload: {{ if_set['port-channel3']['txload']}}
+    > - rxload: {{ if_set['port-channel3']['rxload'] }}
+    > - in_crc_errors: {{ if_set['port-channel3']['counters']['in_crc_errors'] }}
+    > - in_errors: {{ if_set['port-channel3']['counters']['in_errors'] }}
+    > - out_errors: {{ if_set['port-channel3']['counters']['out_errors'] }}
+
+{% elif  port_uplink == "port-channel1" %}
+  members: {{ if_set['port-channel1']['port_channel']['port_channel_member_intfs']}}
+    > - txload: {{ if_set['port-channel1']['txload']}}
+    > - rxload: {{ if_set['port-channel1']['rxload'] }}
+    > - in_crc_errors: {{ if_set['port-channel1']['counters']['in_crc_errors'] }}
+    > - in_errors: {{ if_set['port-channel1']['counters']['in_errors'] }}
+    > - out_errors: {{ if_set['port-channel1']['counters']['out_errors'] }}
+
+{% elif  port_uplink == "port-channel123" %}
+  members: {{ if_set['port-channel123']['port_channel']['port_channel_member_intfs']}}
+    > - txload: {{ if_set['port-channel123']['txload']}}
+    > - rxload: {{ if_set['port-channel123']['rxload'] }}
+    > - in_crc_errors: {{ if_set['port-channel123']['counters']['in_crc_errors'] }}
+    > - in_errors: {{ if_set['port-channel123']['counters']['in_errors'] }}
+    > - out_errors: {{ if_set['port-channel123']['counters']['out_errors'] }}
+
+{% elif  port_uplink == "port-channel125" %}
+  members: {{ if_set['port-channel125']['port_channel']['port_channel_member_intfs']}}
+    > - txload: {{ if_set['port-channel125']['txload']}}
+    > - rxload: {{ if_set['port-channel125']['rxload'] }}
+    > - in_crc_errors: {{ if_set['port-channel125']['counters']['in_crc_errors'] }}
+    > - in_errors: {{ if_set['port-channel125']['counters']['in_errors'] }}
+    > - out_errors: {{ if_set['port-channel125']['counters']['out_errors'] }}
+
+
+{% elif  port_uplink == "port-channel121" %}
+  members: {{ if_set['port-channel121']['port_channel']['port_channel_member_intfs']}}
+    > - txload: {{ if_set['port-channel121']['txload']}}
+    > - rxload: {{ if_set['port-channel121']['rxload'] }}
+    > - in_crc_errors: {{ if_set['port-channel121']['counters']['in_crc_errors'] }}
+    > - in_errors: {{ if_set['port-channel121']['counters']['in_errors'] }}
+    > - out_errors: {{ if_set['port-channel121']['counters']['out_errors'] }}
+
+{% elif  port_uplink == "port-channel122" %}
+  members: {{ if_set['port-channel122']['port_channel']['port_channel_member_intfs']}}
+    > - txload: {{ if_set['port-channel122']['txload']}}
+    > - rxload: {{ if_set['port-channel122']['rxload'] }}
+    > - in_crc_errors: {{ if_set['port-channel122']['counters']['in_crc_errors'] }}
+    > - in_errors: {{ if_set['port-channel122']['counters']['in_errors'] }}
+    > - out_errors: {{ if_set['port-channel122']['counters']['out_errors'] }}
+
+{% endif %}
+
+
+

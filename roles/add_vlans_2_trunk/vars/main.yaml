@@ -1,0 +1,12 @@
+#PLEASE REMEMBER TO ADD ALL INTERFACES, UPLINKS AND PEER-LINK
+
+vlans:
+  - intf: 'Po141'
+    vlans_in: '188'
+  - intf: 'Po142'
+    vlans_in: '188'
+  - intf: 'Po143'
+    vlans_in: '188'
+  - intf: 'Po144'
+    vlans_in: '188'
+

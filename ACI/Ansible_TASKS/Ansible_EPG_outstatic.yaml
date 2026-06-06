@@ -1,0 +1,164 @@
+---
+- name: REMOVE STATIC BINDING FROM EPG
+  hosts: bds
+  connection: local
+  gather_facts: no
+
+  ### MODIFY vars WITH YOUR REQUIRED VALUES  ####
+  vars:
+    EPGS:
+      # - { Tenant_name: common, AppProfile_name: Storage_FC_FCoE, EPG_name: Storage_Native_Vlan_EPG, static_binding: "{{ Bindings }}"  }
+      #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRO_AP, vlanID: 17, mode: trunk, EPG_name: DC_PRO_v17_10_130_79_0_24_EPG, static_binding: "{{ Bindings }}"}
+      #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRO_AP, vlanID: 18, mode: trunk, EPG_name: DC_PRO_v18_10_130_80_32_27_EPG, static_binding: "{{ Bindings }}"}
+      #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRO_AP, vlanID: 21, mode: trunk, EPG_name: DC_PRO_v21_10_130_71_128_27_EPG, static_binding: "{{ Bindings }}"}
+      #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRO_AP, vlanID: 23, mode: trunk, EPG_name: DC_PRO_v23_10_130_85_0_24_EPG, static_binding: "{{ Bindings }}"}
+      #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRO_AP, vlanID: 32, mode: trunk, EPG_name: DC_PRO_v32_10_130_94_0_24_EPG, static_binding: "{{ Bindings }}"}
+      #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRO_AP, vlanID: 68, mode: trunk, EPG_name: DC_PRO_v68_10_130_70_0_24_EPG, static_binding: "{{ Bindings }}"}
+      #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRO_AP, vlanID: 462, mode: trunk, EPG_name: DC_PRO_v462_10_130_108_64_27_EPG, static_binding: "{{ Bindings }}"}
+      #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRO_AP, vlanID: 3131, mode: trunk, EPG_name: DC_PRO_v3131_10_129_14_0_24_EPG, static_binding: "{{ Bindings }}"}
+      #HOST 05,11 vlans
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 68, mode: trunk, EPG_name: DC_PRO_v68_10_130_244_0_24_EPG, static_binding: "{{ Bindings }}"} 
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 69, mode: trunk, EPG_name: DC_PRO_v69_10_130_247_0_24_EPG, static_binding: "{{ Bindings }}"} 
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 116, mode: trunk, EPG_name: DC_PRO_v116_10_130_235_128_27_EPG, static_binding: "{{ Bindings }}"} 
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 117, mode: trunk, EPG_name: DC_PRO_v117_10_130_235_192_27_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 35, mode: trunk, EPG_name: DC_PRE_v35_10_130_225_0_25_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 39, mode: trunk, EPG_name: DC_PRE_v39_10_130_229_0_24_EPG, static_binding: "{{ Bindings }}"} 
+
+      #HOST 15 PRE vlans
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 15, mode: trunk, EPG_name: DC_PRE_v15_10_130_205_0_24_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 20, mode: trunk, EPG_name: DC_PRE_v20_10_130_210_0_24_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 30, mode: trunk, EPG_name: DC_PRE_v30_10_130_220_0_24_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 31, mode: trunk, EPG_name: DC_PRE_v31_10_130_221_0_25_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 35, mode: trunk, EPG_name: DC_PRE_v35_10_130_225_0_25_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 39, mode: trunk, EPG_name: DC_PRE_v39_10_130_229_0_24_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 45, mode: trunk, EPG_name: DC_PRE_v45_10_130_225_128_25_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 228, mode: trunk, EPG_name: DC_PRE_v228_10_130_228_96_27_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 289, mode: trunk, EPG_name: DC_PRE_v289_10_130_255_0_28_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 366, mode: trunk, EPG_name: DC_PRE_v366_nonrouted_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 666, mode: trunk, EPG_name: DC_PRE_v666_non_routed_EPG, static_binding: "{{ Bindings }}"} 
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 2801, mode: trunk, EPG_name: DC_PRE_v2801_nonrouted_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 3477, mode: trunk, EPG_name: DC_PRE_v3477_10_130_221_208_28_EPG, static_binding: "{{ Bindings }}"}
+      # BDS PRO CL
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 7, mode: trunk, EPG_name: DC_PRO_v7_10_130_197_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 8, mode: trunk, EPG_name: DC_PRO_v8_10_130_198_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 9, mode: trunk, EPG_name: DC_PRO_v9_10_130_201_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 10, mode: trunk, EPG_name: DC_PRO_v10_10_130_200_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 12, mode: trunk, EPG_name: DC_PRO_v12_10_130_202_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 13, mode: trunk, EPG_name: DC_PRO_v13_10_130_203_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 14, mode: trunk, EPG_name: DC_PRO_v14_10_130_204_0_25_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 15, mode: trunk, EPG_name: DC_PRO_v15_10_130_205_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 16, mode: trunk, EPG_name: DC_PRO_v16_10_130_206_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 17, mode: trunk, EPG_name: DC_PRO_v17_10_130_207_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 20, mode: trunk, EPG_name: DC_PRO_v20_10_130_210_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 22, mode: trunk, EPG_name: DC_PRO_v22_10_130_212_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 23, mode: trunk, EPG_name: DC_PRO_v23_10_130_213_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 24, mode: trunk, EPG_name: DC_PRO_v24_10_130_214_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 27, mode: trunk, EPG_name: DC_PRO_v27_10_130_217_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 29, mode: trunk, EPG_name: DC_PRO_v29_10_130_219_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 30, mode: trunk, EPG_name: DC_PRO_v30_10_130_220_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 49, mode: trunk, EPG_name: DC_PRO_v49_10_130_221_192_29_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 50, mode: trunk, EPG_name: DC_PRO_v50_10_130_226_64_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 51, mode: trunk, EPG_name: DC_PRO_v51_10_130_230_64_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 52, mode: trunk, EPG_name: DC_PRO_v52_10_130_228_64_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 76, mode: trunk, EPG_name: DC_PRO_v76_10_130_209_128_25_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 90, mode: trunk, EPG_name: DC_PRO_v90_10_130_209_0_25_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 110, mode: trunk, EPG_name: DC_PRO_v110_10_130_211_0_25_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 115, mode: trunk, EPG_name: DC_PRO_v115_10_130_235_0_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 121, mode: trunk, EPG_name: DC_PRO_v121_10_130_204_128_25_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 122, mode: trunk, EPG_name: DC_PRO_v122_10_130_235_64_26_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 175, mode: trunk, EPG_name: DC_PRO_v175_10_130_221_224_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 386, mode: trunk, EPG_name: DC_PRO_v386_10_130_228_192_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 406, mode: trunk, EPG_name: DC_PRO_v406_10_130_230_192_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 440, mode: trunk, EPG_name: DC_PRO_v440_10_130_234_0_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 460, mode: trunk, EPG_name: DC_PRO_v460_10_130_236_0_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 462, mode: trunk, EPG_name: DC_PRO_v462_10_130_236_64_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 464, mode: trunk, EPG_name: DC_PRO_v464_10_130_236_128_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 490, mode: trunk, EPG_name: DC_PRO_v490_10_130_239_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 825, mode: trunk, EPG_name: DC_PRO_v825_10_129_80_16_28_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 826, mode: trunk, EPG_name: DC_PRO_v826_10_129_80_16_28_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 3131, mode: trunk, EPG_name: DC_PRO_v3131_10_129_75_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 3132, mode: trunk, EPG_name: DC_PRO_v3132_10_129_76_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 3133, mode: trunk, EPG_name: DC_PRO_v3133_10_129_77_0_24_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 667, mode: trunk, EPG_name: DC_PRO_v667_nonrouted_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 36, mode: trunk, EPG_name: DC_PRO_v36_10_130_226_0_27_EPG, static_binding: "{{ Bindings }}"}
+      # - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, vlanID: 40, mode: trunk, EPG_name: DC_PRO_v40_10_130_230_0_26_EPG, static_binding: "{{ Bindings }}"}
+
+
+    Bindings:
+    #CM vlan 89 PRE
+      # - { Switch_ID: 101, interface_type: switch_port, port: 1/16}
+      # - { Switch_ID: 102, interface_type: switch_port, port: 1/16}  
+      # - { Switch_ID: 101, interface_type: switch_port, port: 1/29}
+      # - { Switch_ID: 102, interface_type: switch_port, port: 1/29}  
+      # - { Switch_ID: 101, interface_type: switch_port, port: 1/30}
+      # - { Switch_ID: 102, interface_type: switch_port, port: 1/30}
+      # - { Switch_ID: 103, interface_type: switch_port, port: 1/20}
+      # - { Switch_ID: 103, interface_type: switch_port, port: 1/20}  
+      #Other hosts  
+      # - { Switch_ID: 103, interface_type: switch_port, port: 1/16}
+      # - { Switch_ID: 104, interface_type: switch_port, port: 1/16}  
+      - { Switch_ID: 101, interface_type: switch_port, port: 1/31}
+      - { Switch_ID: 102, interface_type: switch_port, port: 1/31}  
+      - { Switch_ID: 101, interface_type: switch_port, port: 1/32}
+      - { Switch_ID: 102, interface_type: switch_port, port: 1/32}  
+    #CLUSTER PRE BDS
+      # - { Switch_ID: 101, interface_type: switch_port, port: 1/17}
+      # - { Switch_ID: 102, interface_type: switch_port, port: 1/17}  
+      # - { Switch_ID: 101, interface_type: switch_port, port: 1/22}
+      # - { Switch_ID: 102, interface_type: switch_port, port: 1/22}  
+      # - { Switch_ID: 101, interface_type: switch_port, port: 1/26 }
+      # - { Switch_ID: 102, interface_type: switch_port, port: 1/26 }
+      # - { Switch_ID: 103, interface_type: switch_port, port: 1/16 }
+      # - { Switch_ID: 104, interface_type: switch_port, port: 1/16 }
+      # - { Switch_ID: 103, interface_type: switch_port, port: 1/24 }
+      # - { Switch_ID: 104, interface_type: switch_port, port: 1/24 }
+      # - { Switch_ID: 103, interface_type: switch_port, port: 1/27 }
+      # - { Switch_ID: 104, interface_type: switch_port, port: 1/27 }
+
+    # # #CLUSTER PRO VLC
+      #  - { Switch_ID: 101, interface_type: switch_port, port: 1/31 }
+      #  - { Switch_ID: 102, interface_type: switch_port, port: 1/31 }
+      #  - { Switch_ID: 101, interface_type: switch_port, port: 1/12 }
+      #  - { Switch_ID: 102, interface_type: switch_port, port: 1/12 }
+      #  - { Switch_ID: 103, interface_type: switch_port, port: 1/11 }
+      #  - { Switch_ID: 104, interface_type: switch_port, port: 1/11 }
+      #  - { Switch_ID: 103, interface_type: switch_port, port: 1/9 }
+      #  - { Switch_ID: 104, interface_type: switch_port, port: 1/9 }
+      #  - { Switch_ID: 103, interface_type: switch_port, port: 1/7 }
+      #  - { Switch_ID: 104, interface_type: switch_port, port: 1/7}
+      #  - { Switch_ID: 103, interface_type: switch_port, port: 1/32 }
+      #  - { Switch_ID: 104, interface_type: switch_port, port: 1/32}
+      #  - { Switch_ID: 103, interface_type: switch_port, port: 1/30}
+      #  - { Switch_ID: 104, interface_type: switch_port, port: 1/30 }
+      #  - { Switch_ID: 103, interface_type: switch_port, port: 1/28}
+      #  - { Switch_ID: 104, interface_type: switch_port, port: 1/28 }
+      #  - { Switch_ID: 103, interface_type: switch_port, port: 1/27}
+      #  - { Switch_ID: 104, interface_type: switch_port, port: 1/27 }
+      #  - { Switch_ID: 103, interface_type: switch_port, port: 1/25}
+      #  - { Switch_ID: 104, interface_type: switch_port, port: 1/25 }
+      #  - { Switch_ID: 103, interface_type: switch_port, port: 1/23}
+      #  - { Switch_ID: 104, interface_type: switch_port, port: 1/23 }
+
+
+  tasks:
+
+
+    - name: Remove Static Path binding for given EPG
+      aci_static_binding_to_epg:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: "{{ item.0.Tenant_name }}"
+        ap: "{{ item.0.AppProfile_name }}"
+        epg: "{{ item.0.EPG_name }}"
+        interface_type: "{{ item.1.interface_type }}"
+        pod: 1
+        leafs: "{{ item.1.Switch_ID }}"
+        interface: '{{ item.1.port}}'
+        state: absent
+      loop: "{{ EPGS|subelements('static_binding') }}"  
+      loop_control:
+        pause: "{{ loop_control_pause | default(0) }}"      
+      delegate_to: localhost
+

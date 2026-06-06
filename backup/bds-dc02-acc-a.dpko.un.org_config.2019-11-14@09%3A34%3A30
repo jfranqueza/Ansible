@@ -1,0 +1,3266 @@
+!Command: show running-config
+!Time: Thu Nov 14 09:34:09 2019
+
+version 7.3(3)N1(1)
+feature fcoe
+
+hostname BDS-DC02-ACC-A
+
+feature telnet
+feature tacacs+
+cfs ipv4 distribute
+cfs eth distribute
+feature private-vlan
+feature interface-vlan
+feature lacp
+feature vpc
+feature lldp
+feature fex
+
+logging level adbm 2
+logging level feature-mgr 0
+logging level pltfm_config 4
+username admin password 5 $1$wO7BZg1.$H4KEL4OoLFcwzj07KXaXJ.  role network-admin
+username sdi password 5 $1$cw1R3DGt$fikIlmZMSni4Go0WsT/1e.  role network-operator
+username sdi role network-admin
+username sdi passphrase  lifetime 99999 warntime 14 gracetime 3
+username san password 5 $1$5dwTBvyN$QiFCAw7uQmP/QT5BzDiK61  role san-admin
+username san passphrase  lifetime 99999 warntime 14 gracetime 3
+username pafiore password 5 $1$Q1qTTgl9$aaa9LXo1m4u8BOgtJlwHX/  role network-admin
+username pafiore passphrase  lifetime 99999 warntime 14 gracetime 3
+username fm password 5 $1$IcHG/8or$1Zv/entt3uOGfTzpAfNcs.  role network-admin
+username fm passphrase  lifetime 99999 warntime 14 gracetime 3
+username dloparco password 5 $1$sOIqms3y$/Pn3I34zA./amfz3a4JUT.  role network-admin
+username dloparco passphrase  lifetime 99999 warntime 14 gracetime 3
+username mchandler password 5 $1$OMUKQfX5$ZuFWwLUi2LkAfPC0OOZiJ/  role network-admin
+username mchandler passphrase  lifetime 99999 warntime 14 gracetime 3
+username dcnm password 5 $1$s4FOE2Ua$sn/FssmmFblzbMHJG.A760  role network-admin
+username dcnm passphrase  lifetime 99999 warntime 14 gracetime 3
+
+banner motd "
+********************************************************************************
+                               United Nations
+                                    DPKO
+
+
+          This system is for specifically authorized personnel from the
+        United Nations, any unauthorized use of this system is unlawful
+             and may be subject to civil and/or criminal penalties.
+
+      Any use of this system may be logged or monitored without further
+         notice, and resulting logs may be used as evidence in court.
+
+Should you require access please request authorization by contacting your CITS
+  office, or the CITS office at the United Nations Logistics Base (UNLB).
+
+         email:ncc@unlb.org VSAT:158 6222 International:+39 0831 056222
+********************************************************************************
+> "
+
+ip domain-lookup
+tacacs-server key 7 "GY_G261_l1m1so"
+ip tacacs source-interface mgmt0
+tacacs-server host 10.130.222.52
+tacacs-server host 10.130.94.191
+aaa group server tacacs+ GSC-TACACS
+  server 10.130.222.52
+  server 10.130.94.191
+  use-vrf management
+  source-interface mgmt0
+ip access-list 20
+  10 permit ip 10.130.94.20/32 any
+  20 permit ip 10.130.94.22/32 any
+  30 permit ip 10.130.94.60/32 any
+  40 permit ip 10.130.222.7/32 any
+  50 permit ip 10.130.239.133/32 any
+  60 permit ip 10.130.222.130/32 any
+ip access-list 22
+  10 permit ip 10.130.222.17/32 any
+ip access-list 23
+  10 permit ip 10.130.239.138/32 any
+policy-map type control-plane copp-system-policy-customized
+  class copp-system-class-hsrp-vrrp
+    police cir 1024 kbps bc 4800000 bytes
+  class copp-system-class-l3dest-miss
+    police cir 64 kbps bc 3200000 bytes
+fex 101
+  pinning max-links 1
+  description "DC02-B01-01"
+fex 102
+  pinning max-links 1
+  description "DC02-B01-02"
+fex 103
+  pinning max-links 1
+  description "DC02-B02-01"
+fex 105
+  pinning max-links 1
+  description "DC02-B03-01"
+fex 106
+  pinning max-links 1
+  description "DC02-B03-02"
+fex 107
+  pinning max-links 1
+  description "DC02-B04-01"
+fex 108
+  pinning max-links 1
+  description "DC02-B04-02"
+fex 109
+  pinning max-links 1
+  description "DC02-B05-01"
+fex 110
+  pinning max-links 1
+  description "DC02-B05-02"
+slot 1
+  port 45-48 type fc
+slot 2
+  port 13-16 type fc
+slot 3
+  port 13-16 type fc
+slot 4
+  port 13-16 type fc
+snmp-server contact ncc@un.org
+snmp-server location HUB|BR|DC02|B02|ACC
+snmp-server user fm network-admin auth md5 0x8af84c7556b4808e99df804d3895d448 priv 0x8af84c7556b4808e99df804d3895d448 localizedkey
+snmp-server user san san-admin auth md5 0x4116e4383b0eb2b4e04ecee32d88e977 priv 0x4116e4383b0eb2b4e04ecee32d88e977 localizedkey
+snmp-server user sdi network-admin auth md5 0x963352aa3b59245269d2f17e72e6ea3d priv 0x963352aa3b59245269d2f17e72e6ea3d localizedkey
+snmp-server user sdi network-operator
+snmp-server user dcnm network-admin auth md5 0x403f8087478ab14ca4c2e941386f9106 priv 0x403f8087478ab14ca4c2e941386f9106 localizedkey
+snmp-server user admin network-admin auth md5 0x169c669c58a00424c0086fff019f999d priv 0x169c669c58a00424c0086fff019f999d localizedkey
+snmp-server user pafiore network-admin auth md5 0xbc5195b073a3521e4293bd8bb09d2806 priv 0xbc5195b073a3521e4293bd8bb09d2806 localizedkey
+snmp-server user dloparco network-admin auth md5 0x385994f28b9d6bfe13a02fc2fd183e25 priv 0x385994f28b9d6bfe13a02fc2fd183e25 localizedkey
+snmp-server user mchandler network-admin auth md5 0xf539808f5c353ab4e69657df6f0021dd priv 0xf539808f5c353ab4e69657df6f0021dd localizedkey
+snmp-server host 10.130.222.83 traps version 2c public udp-port 2162
+snmp-server host 192.168.100.150 traps version 2c public udp-port 2162
+snmp-server host 10.130.222.7 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.222.130 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.94.20 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.94.221 traps version 3 noauth Df5-b0rd3rR! udp-port 2041
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server community O10S4uDiT group network-operator
+snmp-server community Df5-b0rd3rR! group network-operator
+snmp-server community C1D3C03xt group network-operator
+snmp-server community O10S4uDiT use-acl 23
+snmp-server community Df5-b0rd3rR! use-acl 20
+snmp-server community C1D3C03xt use-acl 22
+ntp server 10.130.216.253 prefer use-vrf management
+ntp server 10.130.216.254 use-vrf management
+aaa authentication login default group GSC-TACACS local
+aaa authentication login console group GSC-TACACS local none
+aaa authorization config-commands default group GSC-TACACS local
+aaa authorization commands default group GSC-TACACS local
+aaa accounting default group GSC-TACACS
+aaa authentication login error-enable
+policy-map type network-qos jumbo
+  class type network-qos class-fcoe
+    pause no-drop
+    mtu 2158
+  class type network-qos class-default
+    mtu 9216
+    multicast-optimize
+system qos
+  service-policy type network-qos jumbo
+  service-policy type queuing input fcoe-default-in-policy
+  service-policy type queuing output fcoe-default-out-policy
+  service-policy type qos input fcoe-default-in-policy
+
+vlan configuration 658
+  ip igmp snooping querier 10.129.65.5
+vlan configuration 659
+  ip igmp snooping querier 10.129.67.5
+vlan 1
+vlan 2
+  name ESX_Hosts_192
+vlan 6
+  name WEB_VIP_196
+vlan 7
+  name 7-DFS-Entprs-Public-Www
+vlan 8
+  name Hosted-FE-198
+vlan 9
+  name Hosted_Serv_201
+vlan 10
+  name Hosted-BE-200
+vlan 12
+  name Webmail-FE-202
+vlan 13
+  name Mail-routing-203
+vlan 14
+  name DRBC-204-0
+vlan 15
+  name Hosted-APPS-205
+vlan 16
+  name DFS-APPS-206
+vlan 17
+  name DFS-Serv-207
+vlan 20
+  name QA-DMZ_210
+vlan 22
+  name WEBMAIL-Backend-DMZ-212
+vlan 23
+  name SAN-Backend-DMZ-213
+vlan 24
+  name GALILEO-Backend-DMZ-214
+vlan 25
+  name ONCOURSE-DMZ-215
+vlan 26
+  name B261_Devices_216
+vlan 27
+  name Devices_217
+vlan 29
+  name Applications_219
+vlan 30
+  name PRE-PRODUCTION-DMZ_220
+vlan 32
+  name Management_222
+vlan 35
+  name PRE-PRODUCION-APP
+vlan 36
+  name Customers-Frontend-UNRWA
+vlan 37
+  name PRD-VCLOUD-Mgmt_Cluster_Mgmt
+vlan 38
+  name Customers-Applications-UNRWA
+vlan 39
+  name PRE-PRODUCTION-DMZ_229
+vlan 40
+  name Customers-Backend-UNRWA
+vlan 42
+  name IN-MISSION-CP-MGMNT-208-128-26
+vlan 45
+  name PRE-PRODUCTION-BE
+vlan 46
+  name PRD-VCLOUD-Mgmt-vMotion
+vlan 47
+  name VDI-237-Mission-Users
+vlan 49
+  name UNMEER-COSMOS-PROD
+vlan 64
+vlan 65
+  name EVAULT-PASSIVE
+vlan 66
+  name PRD-FE-Airwatch_V66
+vlan 67
+  name PRD-BE-Airwatch_V66
+vlan 68
+  name PRD_EXC-EVT_V68
+vlan 69
+  name PRD_EXC-EVT_REP_V69
+vlan 75
+  name EVAULT-DR
+vlan 76
+  name EXTERNAL-SERVICES
+vlan 89
+  name geo-cluster-heartbeat
+vlan 90
+  name 209_0-DFS-Entprs-Application
+vlan 95
+  name EVAULT-ACTIVE
+vlan 110
+  name 211_0-DFS-Entprs-Backend
+vlan 115
+  name msg-exchange-235-0
+vlan 116
+  name msg-exchange-235-128
+vlan 117
+  name msg-exchange-235-192
+vlan 121
+  name SMTP-204-128
+vlan 122
+  name IN-MSG-SRVS-235-64-26
+vlan 124
+  name NSX-Mgmt-Edge-Uplink1
+vlan 125
+  name NSX-Mgmt-Edge-Uplink2
+vlan 126
+  name NSX-Compute-Edge-Uplink1
+vlan 127
+  name NSX-Compute-Edge-Uplink2
+vlan 175
+  name IN-SECURITY_V175
+vlan 181
+  name PRD-VCLOUD-Mgmt_Cluster_NFS
+vlan 182
+  name PRD-VCLOUD-Edge_Cluster_NFS
+vlan 189
+  name NSX_VDI
+vlan 228
+  name PRE-FE-EXC_HYBRID_V228
+vlan 289
+  name PRE-GEO-CLUSTER-HB_V289
+vlan 366
+  name Cust-FE-OCHA
+vlan 386
+  name Cust-Apps-OCHA
+vlan 406
+  name VDI-233.128-Consultants
+vlan 429
+  name VDI-232.0-ASU-Support
+vlan 430
+  name VDI-233.0-Applcation-Admins
+vlan 431
+vlan 433
+  name VDI-Unsmil-User
+vlan 434
+  name VDI-Unmeer-User
+vlan 435
+  name VDI-Undof-User
+vlan 436
+  name VDI-Minusma-User
+vlan 437
+  name VDI-RMSTeam-User
+vlan 438
+  name VDI-UNHQ
+vlan 440
+  name Customers-DMZ-inside
+vlan 451
+  name comet-dr-1
+vlan 452
+  name comet-dr-2
+vlan 453
+vlan 460
+  name HS_Production-FE
+vlan 462
+  name HS_Production-Apps
+vlan 464
+  name HS_Production-BE
+vlan 480
+  name VDI-238-inside
+vlan 486
+  name PRD-VDI-OPCW
+vlan 490
+  name VDI-239.0-Network-Admins
+vlan 598
+  name ESX-VMotion
+vlan 599
+  name ESX-FaultTolerance
+vlan 658-659
+vlan 666
+  name MSCS-Heartbeat-Interfaces
+vlan 832
+  name PRD-VCLOUD-Mgmt_Cluster_VTEP
+vlan 833
+  name PRD-VCLOUD-Edge_Cluster_VTEP
+vlan 888
+  name VPC_peer_keepalive_169.254.2.0
+vlan 1010
+  fcoe vsan 10
+  name fabricA
+vlan 1498
+  name Netscaler-vrouter
+vlan 1499
+  name frontend-inside-temp
+vlan 1500
+vlan 1501
+  name ebilling_private
+vlan 2008
+  name Hosted-FE-198-CSM
+vlan 2011
+  name HostedSRV-201-CSM
+vlan 2016
+  name Frontend-206-CSM
+vlan 2017
+  name Frontend-207-CSM
+vlan 2020
+  name QA-FARM_210
+vlan 2030
+  name PRE-PRODUCTION-FARM_220
+vlan 2038
+  name APPS-UNRWA-IN-FWSM
+vlan 2040
+  name BE-UNRWA-IN-FWSM
+vlan 2041
+  name Cust-INSPIRA-DR-PR0
+vlan 2042
+  name Cust-INSPIRA-DR-PRE
+vlan 2043
+  name Cust-INSPIRA-TR-PR0
+vlan 2044
+  name Cust-INSPIRA-TR-PRE
+vlan 2045
+vlan 2500
+  name Frontend-primary
+vlan 2501
+  name frontend-isolated
+vlan 2700
+  name backend
+vlan 2801
+  name BE_Active_Directory
+vlan 3131
+  name PRD-BCKND_V3131
+vlan 3132
+  name PRD-BCKND_V3132
+vlan 3133
+  name PRD-BCKND_V3133
+vlan 3416
+  name VLC_IN-DFS-APPS
+vlan 3424
+  name VLC_IN-GALILEO-BE
+vlan 3461
+  name comet-pre-FE
+vlan 3463
+  name comet-pre-APP
+vlan 3465
+  name comet-pre-BE
+vlan 3466
+  name WINMAG
+vlan 3477
+  name SCOM
+vrf context management
+  ip route 0.0.0.0/0 10.130.194.1
+vpc domain 3
+  peer-switch
+  peer-keepalive destination 169.254.2.6 source 169.254.2.5 vrf default
+  auto-recovery reload-delay 600
+vsan database
+  vsan 10 name "Fabric_A"
+
+
+interface Vlan1
+
+interface Vlan888
+  description vpc keepalice
+  no shutdown
+  ip address 169.254.2.5/30
+
+interface san-port-channel 111
+  channel mode active
+  switchport mode NP
+  switchport trunk allowed vsan 10
+  switchport description To BDS-DC02-MDS-DIR-A
+
+interface port-channel101
+  description to b22 left enclosure BDS-ENC-B-D2-B01-01
+  switchport mode fex-fabric
+  fex associate 101
+
+interface port-channel103
+  description to b22 left enclosure BDS-ENC-B-D2-B02-01
+  switchport mode fex-fabric
+  no lacp suspend-individual
+  fex associate 103
+
+interface port-channel105
+  description to b22 left enclosure BDS-ENC-B-D2-B03-01
+  switchport mode fex-fabric
+  no lacp suspend-individual
+  fex associate 105
+
+interface port-channel106
+  description to b22 left enclosure BDS-ENC-B-D2-B03-02
+  switchport mode fex-fabric
+  no lacp suspend-individual
+  fex associate 106
+
+interface port-channel107
+  description to b22 left enclosure BDS-ENC-B-D2-B04-01
+  switchport mode fex-fabric
+  no lacp suspend-individual
+  fex associate 107
+
+interface port-channel108
+  description to b22 left enclosure BDS-ENC-B-D2-B04-02
+  switchport mode fex-fabric
+  no lacp suspend-individual
+  fex associate 108
+
+interface port-channel109
+  description to b22 left enclosure BDS-ENC-B-D2-B05-01
+  switchport mode fex-fabric
+  no lacp suspend-individual
+  fex associate 109
+
+interface port-channel110
+  description to b22 left enclosure BDS-ENC-B-D2-B05-02
+  switchport mode fex-fabric
+  no lacp suspend-individual
+  fex associate 110
+
+interface port-channel121
+  description uplink to N7k-agg-a&b
+  switchport mode trunk
+  no lacp suspend-individual
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  vpc 121
+
+interface port-channel202
+  description to b22 left enclosure BDS-ENC-B-D2-B01-02
+  switchport mode fex-fabric
+  fex associate 102
+
+interface port-channel300
+  description to-> BDS-VC-B-D2-B02-02-A
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2,16,24,47,189,429-430,433-438,480,486,490,598,1010
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface port-channel888
+  description VPC-peer-keepalive-link
+  switchport mode trunk
+  no lacp suspend-individual
+  switchport trunk allowed vlan 888
+
+interface port-channel1001
+  switchport mode trunk
+  no lacp suspend-individual
+  switchport trunk allowed vlan 1-99,101-699,701-887,889-3967,4048-4093
+  spanning-tree port type network
+  speed 10000
+  vpc peer-link
+
+interface vfc100
+
+interface vfc101
+  bind interface Ethernet101/1/1
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 1, dfs-esx-b-d2-b01-01-01, P1
+  no shutdown
+
+interface vfc102
+  bind interface Ethernet101/1/2
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 2, dfs-esx-b-d2-b01-01-02, P1
+  no shutdown
+
+interface vfc103
+  bind interface Ethernet101/1/3
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 3, dfs-esx-b-d2-b01-01-03, P1
+  no shutdown
+
+interface vfc104
+  bind interface Ethernet101/1/4
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 4, dfs-esx-b-d2-b01-01-04, P1
+  no shutdown
+
+interface vfc105
+  bind interface Ethernet101/1/5
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 5, dfs-esx-b-d2-b01-01-05, P1
+  no shutdown
+
+interface vfc106
+  bind interface Ethernet101/1/6
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 6, dfs-esx-b-d2-b01-01-06, P1
+  no shutdown
+
+interface vfc107
+  bind interface Ethernet101/1/7
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 7, dfs-esx-b-d2-b01-01-07, P1
+  no shutdown
+
+interface vfc108
+  bind interface Ethernet101/1/8
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 8, dfs-esx-b-d2-b01-01-08, P1
+  no shutdown
+
+interface vfc109
+  bind interface Ethernet101/1/9
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 1, dfs-esx-b-d2-b01-01-01, P3
+  no shutdown
+
+interface vfc110
+  bind interface Ethernet101/1/10
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 2, dfs-esx-b-d2-b01-01-02, P3
+  no shutdown
+
+interface vfc111
+  bind interface Ethernet101/1/11
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 3, dfs-esx-b-d2-b01-01-03, P3
+  no shutdown
+
+interface vfc112
+  bind interface Ethernet101/1/12
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 4, dfs-esx-b-d2-b01-01-04, P3
+  no shutdown
+
+interface vfc113
+  bind interface Ethernet101/1/13
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 5, dfs-esx-b-d2-b01-01-05, P3
+  no shutdown
+
+interface vfc114
+  bind interface Ethernet101/1/14
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 6, dfs-esx-b-d2-b01-01-06, P3
+  no shutdown
+
+interface vfc115
+  bind interface Ethernet101/1/15
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 7, dfs-esx-b-d2-b01-01-07, P3
+  no shutdown
+
+interface vfc116
+  bind interface Ethernet101/1/16
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 8, dfs-esx-b-d2-b01-01-08, P3
+  no shutdown
+
+interface vfc143
+  bind interface Ethernet1/43
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, EDC-ESX-B-D2-A01-01, P1
+
+interface vfc144
+  bind interface Ethernet1/44
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, EDC-ESX-B-D2-A01-01, P3
+
+interface vfc201
+  bind interface Ethernet102/1/1
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 1, dfs-esx-b-d2-b01-02-01, P1
+  no shutdown
+
+interface vfc202
+  bind interface Ethernet102/1/2
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 2, dfs-esx-b-d2-b01-02-02, P1
+  no shutdown
+
+interface vfc203
+  bind interface Ethernet102/1/3
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 3, dfs-esx-b-d2-b01-02-03, P1
+  no shutdown
+
+interface vfc204
+  bind interface Ethernet102/1/4
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 4, dfs-esx-b-d2-b01-02-04, P1
+  no shutdown
+
+interface vfc205
+  bind interface Ethernet102/1/5
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 5, dfs-esx-b-d2-b01-02-05, P1
+  no shutdown
+
+interface vfc206
+  bind interface Ethernet102/1/6
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 6, dfs-esx-b-d2-b01-02-06, P1
+  no shutdown
+
+interface vfc207
+  bind interface Ethernet102/1/7
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 7, dfs-esx-b-d2-b01-02-07, P1
+  no shutdown
+
+interface vfc208
+  bind interface Ethernet102/1/8
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 8, dfs-esx-b-d2-b01-02-08, P1
+  no shutdown
+
+interface vfc209
+  bind interface Ethernet102/1/9
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 1, dfs-esx-b-d2-b01-02-01, P3
+  no shutdown
+
+interface vfc210
+  bind interface Ethernet102/1/10
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 2, dfs-esx-b-d2-b01-02-02, P3
+  no shutdown
+
+interface vfc211
+  bind interface Ethernet102/1/11
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 3, dfs-esx-b-d2-b01-02-03, P3
+  no shutdown
+
+interface vfc212
+  bind interface Ethernet102/1/12
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 4, dfs-esx-b-d2-b01-02-04, P3
+  no shutdown
+
+interface vfc213
+  bind interface Ethernet102/1/13
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 5, dfs-esx-b-d2-b01-02-05, P3
+  no shutdown
+
+interface vfc214
+  bind interface Ethernet102/1/14
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 6, dfs-esx-b-d2-b01-02-06, P3
+  no shutdown
+
+interface vfc215
+  bind interface Ethernet102/1/15
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 7, dfs-esx-b-d2-b01-02-07, P3
+  no shutdown
+
+interface vfc216
+  bind interface Ethernet102/1/16
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 8, dfs-esx-b-d2-b01-02-08, P3
+  no shutdown
+
+interface vfc301
+  bind interface Ethernet103/1/1
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 1, dfs-esx-b-d2-b02-01-01, P1
+  no shutdown
+
+interface vfc302
+  bind interface Ethernet103/1/2
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 2, dfs-esx-b-d2-b02-01-02, P1
+  no shutdown
+
+interface vfc303
+  bind interface Ethernet103/1/3
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 3, dfs-esx-b-d2-b02-01-03, P1
+  no shutdown
+
+interface vfc304
+  bind interface Ethernet103/1/4
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 4, dfs-esx-b-d2-b02-01-04, P1
+  no shutdown
+
+interface vfc305
+  bind interface Ethernet103/1/5
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 5, dfs-esx-b-d2-b02-01-05, P1
+  no shutdown
+
+interface vfc306
+  bind interface Ethernet103/1/6
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 6, dfs-esx-b-d2-b02-01-06, P1
+  no shutdown
+
+interface vfc307
+  bind interface Ethernet103/1/7
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 7, dfs-esx-b-d2-b02-01-07, P1
+  no shutdown
+
+interface vfc308
+  bind interface Ethernet103/1/8
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 8, dfs-esx-b-d2-b02-01-08, P1
+  no shutdown
+
+interface vfc309
+  bind interface Ethernet103/1/9
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 1, dfs-esx-b-d2-b02-01-01, P3
+  no shutdown
+
+interface vfc310
+  bind interface Ethernet103/1/10
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 2, dfs-esx-b-d2-b02-01-02, P3
+  no shutdown
+
+interface vfc311
+  bind interface Ethernet103/1/11
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 3, dfs-esx-b-d2-b02-01-03, P3
+  no shutdown
+
+interface vfc312
+  bind interface Ethernet103/1/12
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 4, dfs-esx-b-d2-b02-01-04, P3
+  no shutdown
+
+interface vfc313
+  bind interface Ethernet103/1/13
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 5, dfs-esx-b-d2-b02-01-05, P3
+  no shutdown
+
+interface vfc314
+  bind interface Ethernet103/1/14
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 6, dfs-esx-b-d2-b02-01-06, P3
+  no shutdown
+
+interface vfc315
+  bind interface Ethernet103/1/15
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 7, dfs-esx-b-d2-b02-01-07, P3
+  no shutdown
+
+interface vfc316
+  bind interface Ethernet103/1/16
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 8, dfs-esx-b-d2-b02-01-08, P3
+  no shutdown
+
+interface vfc501
+  bind interface Ethernet105/1/1
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 1, dfs-esx-b-d2-b03-01-01, P1
+  no shutdown
+
+interface vfc502
+  bind interface Ethernet105/1/2
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 2, dfs-esx-b-d2-b03-01-02, P1
+  no shutdown
+
+interface vfc503
+  bind interface Ethernet105/1/3
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 3, dfs-esx-b-d2-b03-01-03, P1
+  no shutdown
+
+interface vfc504
+  bind interface Ethernet105/1/4
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 4, dfs-esx-b-d2-b03-01-04, P1
+  no shutdown
+
+interface vfc505
+  bind interface Ethernet105/1/5
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 5, dfs-esx-b-d2-b03-01-05, P1
+  no shutdown
+
+interface vfc506
+  bind interface Ethernet105/1/6
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 6, dfs-esx-b-d2-b03-01-06, P1
+  no shutdown
+
+interface vfc507
+  bind interface Ethernet105/1/7
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 7, dfs-esx-b-d2-b03-01-07, P1
+  no shutdown
+
+interface vfc508
+  bind interface Ethernet105/1/8
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 8, dfs-esx-b-d2-b03-01-08, P1
+  no shutdown
+
+interface vfc509
+  bind interface Ethernet105/1/9
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 1, dfs-esx-b-d2-b03-01-01, P3
+  no shutdown
+
+interface vfc510
+  bind interface Ethernet105/1/10
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 2, dfs-esx-b-d2-b03-01-02, P3
+  no shutdown
+
+interface vfc511
+  bind interface Ethernet105/1/11
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 3, dfs-esx-b-d2-b03-01-03, P3
+  no shutdown
+
+interface vfc512
+  bind interface Ethernet105/1/12
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 4, dfs-esx-b-d2-b03-01-04, P3
+  no shutdown
+
+interface vfc513
+  bind interface Ethernet105/1/13
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 5, dfs-esx-b-d2-b03-01-05, P3
+  no shutdown
+
+interface vfc514
+  bind interface Ethernet105/1/14
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 6, dfs-esx-b-d2-b03-01-06, P3
+  no shutdown
+
+interface vfc515
+  bind interface Ethernet105/1/15
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 7, dfs-esx-b-d2-b03-01-07, P3
+  no shutdown
+
+interface vfc516
+  bind interface Ethernet105/1/16
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 8, dfs-esx-b-d2-b03-01-08, P3
+  no shutdown
+
+interface vfc601
+  bind interface Ethernet106/1/1
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 1, dfs-esx-b-d2-b03-02-01, P1
+  no shutdown
+
+interface vfc602
+  bind interface Ethernet106/1/2
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 2, dfs-esx-b-d2-b03-02-02, P1
+  no shutdown
+
+interface vfc603
+  bind interface Ethernet106/1/3
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 3, dfs-esx-b-d2-b03-02-03, P1
+  no shutdown
+
+interface vfc604
+  bind interface Ethernet106/1/4
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 4, dfs-esx-b-d2-b03-02-04, P1
+  no shutdown
+
+interface vfc605
+  bind interface Ethernet106/1/5
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 5, dfs-esx-b-d2-b03-02-05, P1
+  no shutdown
+
+interface vfc606
+  bind interface Ethernet106/1/6
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 6, dfs-esx-b-d2-b03-02-06, P1
+  no shutdown
+
+interface vfc607
+  bind interface Ethernet106/1/7
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 7, dfs-esx-b-d2-b03-02-07, P1
+  no shutdown
+
+interface vfc608
+  bind interface Ethernet106/1/8
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 8, dfs-esx-b-d2-b03-02-08, P1
+  no shutdown
+
+interface vfc609
+  bind interface Ethernet106/1/9
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 1, dfs-esx-b-d2-b03-02-01, P3
+  no shutdown
+
+interface vfc610
+  bind interface Ethernet106/1/10
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 2, dfs-esx-b-d2-b03-02-02, P3
+  no shutdown
+
+interface vfc611
+  bind interface Ethernet106/1/11
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 3, dfs-esx-b-d2-b03-02-03, P3
+  no shutdown
+
+interface vfc612
+  bind interface Ethernet106/1/12
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 4, dfs-esx-b-d2-b03-02-04, P3
+  no shutdown
+
+interface vfc613
+  bind interface Ethernet106/1/13
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 5, dfs-esx-b-d2-b03-02-05, P3
+  no shutdown
+
+interface vfc614
+  bind interface Ethernet106/1/14
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 6, dfs-esx-b-d2-b03-02-06, P3
+  no shutdown
+
+interface vfc615
+  bind interface Ethernet106/1/15
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 7, dfs-esx-b-d2-b03-02-07, P3
+  no shutdown
+
+interface vfc616
+  bind interface Ethernet106/1/16
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 8, dfs-esx-b-d2-b03-02-08, P3
+  no shutdown
+
+interface vfc701
+  bind interface Ethernet107/1/1
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 1, dfs-esx-b-d2-b04-01-01, P1
+  no shutdown
+
+interface vfc702
+  bind interface Ethernet107/1/2
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 2, dfs-esx-b-d2-b04-01-02, P1
+  no shutdown
+
+interface vfc703
+  bind interface Ethernet107/1/3
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 3, dfs-esx-b-d2-b04-01-03, P1
+  no shutdown
+
+interface vfc704
+  bind interface Ethernet107/1/4
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 4, dfs-esx-b-d2-b04-01-04, P1
+  no shutdown
+
+interface vfc705
+  bind interface Ethernet107/1/5
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 5, dfs-esx-b-d2-b04-01-05, P1
+  no shutdown
+
+interface vfc706
+  bind interface Ethernet107/1/6
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 6, dfs-esx-b-d2-b04-01-06, P1
+  no shutdown
+
+interface vfc708
+  bind interface Ethernet107/1/8
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 8, dfs-esx-b-d2-b04-01-08, P1
+  no shutdown
+
+interface vfc709
+  bind interface Ethernet107/1/9
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 1, dfs-esx-b-d2-b04-01-01, P3
+  no shutdown
+
+interface vfc710
+  bind interface Ethernet107/1/10
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 2, dfs-esx-b-d2-b04-01-02, P3
+  no shutdown
+
+interface vfc711
+  bind interface Ethernet107/1/11
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 3, dfs-esx-b-d2-b04-01-03, P3
+  no shutdown
+
+interface vfc712
+  bind interface Ethernet107/1/12
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 4, dfs-esx-b-d2-b04-01-04, P3
+  no shutdown
+
+interface vfc713
+  bind interface Ethernet107/1/13
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 5, dfs-esx-b-d2-b04-01-05, P3
+  no shutdown
+
+interface vfc714
+  bind interface Ethernet107/1/14
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 6, dfs-esx-b-d2-b04-01-06, P3
+  no shutdown
+
+interface vfc716
+  bind interface Ethernet107/1/16
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 8, dfs-esx-b-d2-b04-01-08, P3
+  no shutdown
+
+interface vfc801
+  bind interface Ethernet108/1/1
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 1, dfs-esx-B-D2-B04-02-01, P1
+  no shutdown
+
+interface vfc802
+  bind interface Ethernet108/1/2
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 2, dfs-esx-B-D2-B04-02-02, P1
+  no shutdown
+
+interface vfc803
+  bind interface Ethernet108/1/3
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 3, dfs-esx-B-D2-B04-02-03, P1
+  no shutdown
+
+interface vfc804
+  bind interface Ethernet108/1/4
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 4, dfs-esx-B-D2-B04-02-04, P1
+  no shutdown
+
+interface vfc805
+  bind interface Ethernet108/1/5
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 5, dfs-esx-B-D2-B04-02-05, P1
+  no shutdown
+
+interface vfc806
+  bind interface Ethernet108/1/6
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 6, dfs-esx-B-D2-B04-02-06, P1
+  no shutdown
+
+interface vfc807
+  bind interface Ethernet108/1/7
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 7, dfs-esx-B-D2-B04-02-07, P1
+  no shutdown
+
+interface vfc808
+  bind interface Ethernet108/1/8
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 8, dfs-esx-B-D2-B04-02-08, P1
+  no shutdown
+
+interface vfc809
+  bind interface Ethernet108/1/9
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 1, dfs-esx-B-D2-B04-02-01, P3
+  no shutdown
+
+interface vfc810
+  bind interface Ethernet108/1/10
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 2, dfs-esx-B-D2-B04-02-02, P3
+  no shutdown
+
+interface vfc811
+  bind interface Ethernet108/1/11
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 3, dfs-esx-B-D2-B04-02-03, P3
+  no shutdown
+
+interface vfc812
+  bind interface Ethernet108/1/12
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 4, dfs-esx-B-D2-B04-02-04, P3
+  no shutdown
+
+interface vfc813
+  bind interface Ethernet108/1/13
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 5, dfs-esx-B-D2-B04-02-05, P3
+  no shutdown
+
+interface vfc814
+  bind interface Ethernet108/1/14
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 6, dfs-esx-B-D2-B04-02-06, P3
+  no shutdown
+
+interface vfc815
+  bind interface Ethernet108/1/15
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 7, dfs-esx-B-D2-B04-02-07, P3
+  no shutdown
+
+interface vfc816
+  bind interface Ethernet108/1/16
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 8, dfs-esx-B-D2-B04-02-08, P3
+  no shutdown
+
+interface vfc901
+  bind interface Ethernet109/1/1
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 1, dfs-esx-B-D2-B05-01-01, P1
+  no shutdown
+
+interface vfc902
+  bind interface Ethernet109/1/2
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 2, dfs-esx-B-D2-B05-01-02, P1
+  no shutdown
+
+interface vfc903
+  bind interface Ethernet109/1/3
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 3, dfs-esx-B-D2-B05-01-03, P1
+  no shutdown
+
+interface vfc904
+  bind interface Ethernet109/1/4
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 4, dfs-esx-B-D2-B05-01-04, P1
+  no shutdown
+
+interface vfc905
+  bind interface Ethernet109/1/5
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 5, dfs-esx-B-D2-B05-01-05, P1
+  no shutdown
+
+interface vfc906
+  bind interface Ethernet109/1/6
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 6, dfs-esx-B-D2-B05-01-06, P1
+  no shutdown
+
+interface vfc907
+  bind interface Ethernet109/1/7
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 7, dfs-esx-B-D2-B05-01-07, P1
+  no shutdown
+
+interface vfc908
+  bind interface Ethernet109/1/8
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 8, dfs-esx-B-D2-B05-01-08, P1
+  no shutdown
+
+interface vfc909
+  bind interface Ethernet109/1/9
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 1, dfs-esx-B-D2-B05-01-01, P3
+  no shutdown
+
+interface vfc910
+  bind interface Ethernet109/1/10
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 2, dfs-esx-B-D2-B05-01-02, P3
+  no shutdown
+
+interface vfc911
+  bind interface Ethernet109/1/11
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 3, dfs-esx-B-D2-B05-01-03, P3
+  no shutdown
+
+interface vfc912
+  bind interface Ethernet109/1/12
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 S
+  no shutdown
+
+interface vfc913
+  bind interface Ethernet109/1/13
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 5, dfs-esx-B-D2-B05-01-05, P3
+  no shutdown
+
+interface vfc914
+  bind interface Ethernet109/1/14
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 6, dfs-esx-B-D2-B05-01-06, P3
+  no shutdown
+
+interface vfc915
+  bind interface Ethernet109/1/15
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 7, dfs-esx-B-D2-B05-01-07, P3
+  no shutdown
+
+interface vfc916
+  bind interface Ethernet109/1/16
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 8, dfs-esx-B-D2-B05-01-08, P3
+  no shutdown
+
+interface vfc1001
+  bind interface Ethernet110/1/1
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P1
+  no shutdown
+
+interface vfc1002
+  bind interface Ethernet110/1/2
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 2, dfs-esx-B-D2-B05-02-02, P1
+  no shutdown
+
+interface vfc1003
+  bind interface Ethernet110/1/3
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 3, dfs-esx-B-D2-B05-02-03, P1
+  no shutdown
+
+interface vfc1004
+  bind interface Ethernet110/1/4
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 4, dfs-esx-B-D2-B05-02-04, P1
+  no shutdown
+
+interface vfc1005
+  bind interface Ethernet110/1/5
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 5, dfs-esx-B-D2-B05-02-05, P1
+  no shutdown
+
+interface vfc1006
+  bind interface Ethernet110/1/6
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 6, dfs-esx-B-D2-B05-02-06, P1
+  no shutdown
+
+interface vfc1007
+  bind interface Ethernet110/1/7
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 7, dfs-esx-B-D2-B05-02-07, P1
+  no shutdown
+
+interface vfc1008
+  bind interface Ethernet110/1/8
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 8, dfs-esx-B-D2-B05-02-08, P1
+  no shutdown
+
+interface vfc1009
+  bind interface Ethernet110/1/9
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P3
+  no shutdown
+
+interface vfc1010
+  bind interface Ethernet110/1/10
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 2, dfs-esx-B-D2-B05-02-02, P3
+  no shutdown
+
+interface vfc1011
+  bind interface Ethernet110/1/11
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 3, dfs-esx-B-D2-B05-02-03, P3
+  no shutdown
+
+interface vfc1012
+  bind interface Ethernet110/1/12
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 4, dfs-esx-B-D2-B05-02-04, P3
+  no shutdown
+
+interface vfc1013
+  bind interface Ethernet110/1/13
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 5, dfs-esx-B-D2-B05-02-05, P3
+  no shutdown
+
+interface vfc1014
+  bind interface Ethernet110/1/14
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 6, dfs-esx-B-D2-B05-02-06, P3
+  no shutdown
+
+interface vfc1015
+  bind interface Ethernet110/1/15
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 7, dfs-esx-B-D2-B05-02-07, P3
+  no shutdown
+
+interface vfc1016
+  bind interface Ethernet110/1/16
+  switchport trunk allowed vsan 10
+  switchport description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 8, dfs-esx-B-D2-B05-02-08, P3
+  no shutdown
+vsan database
+  vsan 10 interface vfc101
+  vsan 10 interface vfc102
+  vsan 10 interface vfc103
+  vsan 10 interface vfc104
+  vsan 10 interface vfc105
+  vsan 10 interface vfc106
+  vsan 10 interface vfc107
+  vsan 10 interface vfc108
+  vsan 10 interface vfc109
+  vsan 10 interface vfc110
+  vsan 10 interface vfc111
+  vsan 10 interface vfc112
+  vsan 10 interface vfc113
+  vsan 10 interface vfc114
+  vsan 10 interface vfc115
+  vsan 10 interface vfc116
+  vsan 10 interface vfc143
+  vsan 10 interface vfc144
+  vsan 10 interface vfc201
+  vsan 10 interface vfc202
+  vsan 10 interface vfc203
+  vsan 10 interface vfc204
+  vsan 10 interface vfc205
+  vsan 10 interface vfc206
+  vsan 10 interface vfc207
+  vsan 10 interface vfc208
+  vsan 10 interface vfc209
+  vsan 10 interface vfc210
+  vsan 10 interface vfc211
+  vsan 10 interface vfc212
+  vsan 10 interface vfc213
+  vsan 10 interface vfc214
+  vsan 10 interface vfc215
+  vsan 10 interface vfc216
+  vsan 10 interface vfc301
+  vsan 10 interface vfc302
+  vsan 10 interface vfc303
+  vsan 10 interface vfc304
+  vsan 10 interface vfc305
+  vsan 10 interface vfc306
+  vsan 10 interface vfc307
+  vsan 10 interface vfc308
+  vsan 10 interface vfc309
+  vsan 10 interface vfc310
+  vsan 10 interface vfc311
+  vsan 10 interface vfc312
+  vsan 10 interface vfc313
+  vsan 10 interface vfc314
+  vsan 10 interface vfc315
+  vsan 10 interface vfc316
+  vsan 10 interface vfc501
+  vsan 10 interface vfc502
+  vsan 10 interface vfc503
+  vsan 10 interface vfc504
+  vsan 10 interface vfc505
+  vsan 10 interface vfc506
+  vsan 10 interface vfc507
+  vsan 10 interface vfc508
+  vsan 10 interface vfc509
+  vsan 10 interface vfc510
+  vsan 10 interface vfc511
+  vsan 10 interface vfc512
+  vsan 10 interface vfc513
+  vsan 10 interface vfc514
+  vsan 10 interface vfc515
+  vsan 10 interface vfc516
+  vsan 10 interface vfc601
+  vsan 10 interface vfc602
+  vsan 10 interface vfc603
+  vsan 10 interface vfc604
+  vsan 10 interface vfc605
+  vsan 10 interface vfc606
+  vsan 10 interface vfc607
+  vsan 10 interface vfc608
+  vsan 10 interface vfc609
+  vsan 10 interface vfc610
+  vsan 10 interface vfc611
+  vsan 10 interface vfc612
+  vsan 10 interface vfc613
+  vsan 10 interface vfc614
+  vsan 10 interface vfc615
+  vsan 10 interface vfc616
+  vsan 10 interface vfc701
+  vsan 10 interface vfc702
+  vsan 10 interface vfc703
+  vsan 10 interface vfc704
+  vsan 10 interface vfc705
+  vsan 10 interface vfc706
+  vsan 10 interface vfc708
+  vsan 10 interface vfc709
+  vsan 10 interface vfc710
+  vsan 10 interface vfc711
+  vsan 10 interface vfc712
+  vsan 10 interface vfc713
+  vsan 10 interface vfc714
+  vsan 10 interface vfc716
+  vsan 10 interface vfc801
+  vsan 10 interface vfc802
+  vsan 10 interface vfc803
+  vsan 10 interface vfc804
+  vsan 10 interface vfc805
+  vsan 10 interface vfc806
+  vsan 10 interface vfc807
+  vsan 10 interface vfc808
+  vsan 10 interface vfc809
+  vsan 10 interface vfc810
+  vsan 10 interface vfc811
+  vsan 10 interface vfc812
+  vsan 10 interface vfc813
+  vsan 10 interface vfc814
+  vsan 10 interface vfc815
+  vsan 10 interface vfc816
+  vsan 10 interface vfc901
+  vsan 10 interface vfc902
+  vsan 10 interface vfc903
+  vsan 10 interface vfc904
+  vsan 10 interface vfc905
+  vsan 10 interface vfc906
+  vsan 10 interface vfc907
+  vsan 10 interface vfc908
+  vsan 10 interface vfc909
+  vsan 10 interface vfc910
+  vsan 10 interface vfc911
+  vsan 10 interface vfc912
+  vsan 10 interface vfc913
+  vsan 10 interface vfc914
+  vsan 10 interface vfc915
+  vsan 10 interface vfc916
+  vsan 10 interface vfc1001
+  vsan 10 interface vfc1002
+  vsan 10 interface vfc1003
+  vsan 10 interface vfc1004
+  vsan 10 interface vfc1005
+  vsan 10 interface vfc1006
+  vsan 10 interface vfc1007
+  vsan 10 interface vfc1008
+  vsan 10 interface vfc1009
+  vsan 10 interface vfc1010
+  vsan 10 interface vfc1011
+  vsan 10 interface vfc1012
+  vsan 10 interface vfc1013
+  vsan 10 interface vfc1014
+  vsan 10 interface vfc1015
+  vsan 10 interface vfc1016
+  vsan 10 interface san-port-channel 111
+  vsan 10 interface fc1/47
+  vsan 10 interface fc1/48
+  vsan 10 interface fc2/13
+  vsan 10 interface fc2/15
+  vsan 10 interface fc2/16
+  vsan 10 interface fc3/13
+  vsan 10 interface fc3/15
+  vsan 10 interface fc3/16
+  vsan 10 interface fc4/13
+  vsan 10 interface fc4/15
+  vsan 10 interface fc4/16
+feature npv
+
+
+interface fc1/45
+
+interface fc1/46
+  switchport description To BDS-DC02-MDS-DIR-A
+  channel-group 111 force
+  no shutdown
+
+interface fc1/47
+  switchport trunk allowed vsan 10
+
+interface fc1/48
+  switchport trunk allowed vsan 10
+
+interface fc2/13
+  switchport trunk allowed vsan 10
+
+interface fc2/14
+  switchport description To BDS-DC02-MDS-DIR-A
+  channel-group 111 force
+  no shutdown
+
+interface fc2/15
+  switchport trunk allowed vsan 10
+
+interface fc2/16
+  switchport trunk allowed vsan 10
+
+interface fc3/13
+  switchport trunk allowed vsan 10
+
+interface fc3/14
+  switchport description To BDS-DC02-MDS-DIR-A
+  channel-group 111 force
+  no shutdown
+
+interface fc3/15
+  switchport trunk allowed vsan 10
+
+interface fc3/16
+  switchport trunk allowed vsan 10
+
+interface fc4/13
+
+interface fc4/14
+  switchport description To BDS-DC02-MDS-DIR-A
+  channel-group 111 force
+  no shutdown
+
+interface fc4/15
+  switchport trunk allowed vsan 10
+
+interface fc4/16
+  switchport trunk allowed vsan 10
+
+interface Ethernet1/1
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 121 mode active
+
+interface Ethernet1/2
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 121 mode active
+
+interface Ethernet1/3
+  description VPC-peer-link
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-699,701-887,889-3967,4048-4093
+  channel-group 1001
+
+interface Ethernet1/4
+  description VPC-peer-link
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-699,701-887,889-3967,4048-4093
+  channel-group 1001
+
+interface Ethernet1/5
+  description to b22 left enclosure BDS-ENC-B-D2-B04-01, P1
+  switchport mode fex-fabric
+  fex associate 107
+  channel-group 107
+
+interface Ethernet1/6
+  description to b22 left enclosure BDS-ENC-B-D2-B04-01, P2
+  switchport mode fex-fabric
+  fex associate 107
+  channel-group 107
+
+interface Ethernet1/7
+  description to b22 left enclosure BDS-ENC-B-D2-B04-02, P1
+  switchport mode fex-fabric
+  fex associate 108
+  channel-group 108
+
+interface Ethernet1/8
+  description to b22 left enclosure BDS-ENC-B-D2-B04-02, P2
+  switchport mode fex-fabric
+  fex associate 108
+  channel-group 108
+
+interface Ethernet1/9
+  description to b22 left enclosure BDS-ENC-B-D2-B05-01, P1
+  switchport mode fex-fabric
+  fex associate 109
+  channel-group 109
+
+interface Ethernet1/10
+  description to b22 left enclosure BDS-ENC-B-D2-B05-01, P2
+  switchport mode fex-fabric
+  fex associate 109
+  channel-group 109
+
+interface Ethernet1/11
+  description to b22 left enclosure BDS-ENC-B-D2-B05-02
+  switchport mode fex-fabric
+  fex associate 110
+  channel-group 110
+
+interface Ethernet1/12
+  description to b22 left enclosure BDS-ENC-B-D2-B05-02
+  switchport mode fex-fabric
+  fex associate 110
+  channel-group 110
+
+interface Ethernet1/13
+  shutdown
+  switchport monitor
+  speed 1000
+
+interface Ethernet1/14
+  shutdown
+
+interface Ethernet1/15
+  shutdown
+
+interface Ethernet1/16
+  shutdown
+
+interface Ethernet1/17
+  shutdown
+
+interface Ethernet1/18
+  shutdown
+
+interface Ethernet1/19
+  shutdown
+
+interface Ethernet1/20
+  shutdown
+
+interface Ethernet1/21
+  description to b22 left enclosure BDS-ENC-B-D2-B03-01, P1
+  switchport mode fex-fabric
+  fex associate 105
+  channel-group 105
+
+interface Ethernet1/22
+  description to b22 left enclosure BDS-ENC-B-D2-B03-01, P2
+  switchport mode fex-fabric
+  fex associate 105
+  channel-group 105
+
+interface Ethernet1/23
+  description to b22 left enclosure BDS-ENC-B-D2-B03-02, P1
+  switchport mode fex-fabric
+  fex associate 106
+  channel-group 106
+
+interface Ethernet1/24
+  description to b22 left enclosure BDS-ENC-B-D2-B03-02, P2
+  switchport mode fex-fabric
+  fex associate 106
+  channel-group 106
+
+interface Ethernet1/25
+  description to b22 left enclosure BDS-ENC-B-D2-B02-01, P1
+  switchport mode fex-fabric
+  fex associate 103
+  channel-group 103
+
+interface Ethernet1/26
+  description to b22 left enclosure BDS-ENC-B-D2-B02-01, P2
+  switchport mode fex-fabric
+  fex associate 103
+  channel-group 103
+
+interface Ethernet1/27
+  description to b22 left enclosure BDS-ENC-B-D2-B01-01, P1
+  switchport mode fex-fabric
+  fex associate 101
+  channel-group 101
+
+interface Ethernet1/28
+  description to b22 left enclosure BDS-ENC-B-D2-B01-01, P2
+  switchport mode fex-fabric
+  fex associate 101
+  channel-group 101
+
+interface Ethernet1/29
+  shutdown
+
+interface Ethernet1/30
+  shutdown
+
+interface Ethernet1/31
+  shutdown
+
+interface Ethernet1/32
+  shutdown
+
+interface Ethernet1/33
+  shutdown
+
+interface Ethernet1/34
+  shutdown
+
+interface Ethernet1/35
+
+interface Ethernet1/36
+  description to b22 left enclosure BDS-ENC-B-D2-B01-02, P2
+  switchport mode fex-fabric
+  fex associate 102
+  channel-group 202
+
+interface Ethernet1/37
+  description BDS-VC-B-D2-B02-02-A X3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2,16,24,47,189,429-430,433-438,480,486,490,598,1010
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+  channel-group 300 mode active
+
+interface Ethernet1/38
+  description BDS-VC-B-D2-B02-02-B X2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2,16,24,47,189,429-430,433-438,480,486,490,598,1010
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+  channel-group 300 mode active
+
+interface Ethernet1/39
+  shutdown
+
+interface Ethernet1/40
+  shutdown
+
+interface Ethernet1/41
+  shutdown
+
+interface Ethernet1/42
+  shutdown
+
+interface Ethernet1/43
+  shutdown
+
+interface Ethernet1/44
+
+interface Ethernet2/1
+  description VPC-peer-keepalive-link
+  switchport mode trunk
+  switchport trunk allowed vlan 888
+  channel-group 888
+
+interface Ethernet2/2
+  shutdown
+
+interface Ethernet2/3
+  shutdown
+
+interface Ethernet2/4
+  shutdown
+
+interface Ethernet2/5
+  description to b22 left enclosure BDS-ENC-B-D2-B04-01, P3
+  switchport mode fex-fabric
+  fex associate 107
+  channel-group 107
+
+interface Ethernet2/6
+  description to b22 left enclosure BDS-ENC-B-D2-B04-01, P4
+  switchport mode fex-fabric
+  fex associate 107
+  channel-group 107
+
+interface Ethernet2/7
+  description to b22 left enclosure BDS-ENC-B-D2-B04-02, P3
+  switchport mode fex-fabric
+  fex associate 108
+  channel-group 108
+
+interface Ethernet2/8
+  description to b22 left enclosure BDS-ENC-B-D2-B04-02, P4
+  switchport mode fex-fabric
+  fex associate 108
+  channel-group 108
+
+interface Ethernet2/9
+  description to b22 left enclosure BDS-ENC-B-D2-B05-01, P3
+  switchport mode fex-fabric
+  fex associate 109
+  channel-group 109
+
+interface Ethernet2/10
+  description to b22 left enclosure BDS-ENC-B-D2-B05-01, P4
+  switchport mode fex-fabric
+  fex associate 109
+  channel-group 109
+
+interface Ethernet2/11
+  description to b22 left enclosure BDS-ENC-B-D2-B05-02
+  switchport mode fex-fabric
+  fex associate 110
+  channel-group 110
+
+interface Ethernet2/12
+  description to b22 left enclosure BDS-ENC-B-D2-B05-02
+  switchport mode fex-fabric
+  fex associate 110
+  channel-group 110
+
+interface Ethernet3/1
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 121 mode active
+
+interface Ethernet3/2
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-600,832-833,1000-1999,2001-3967,4048-4093
+  spanning-tree port type network
+  storm-control broadcast level 5.00
+  channel-group 121 mode active
+
+interface Ethernet3/3
+  description VPC-peer-link
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-699,701-887,889-3967,4048-4093
+  channel-group 1001
+
+interface Ethernet3/4
+  description VPC-peer-link
+  switchport mode trunk
+  switchport trunk allowed vlan 1-99,101-699,701-887,889-3967,4048-4093
+  channel-group 1001
+
+interface Ethernet3/5
+  description to b22 left enclosure BDS-ENC-B-D2-B03-01, P3
+  switchport mode fex-fabric
+  fex associate 105
+  channel-group 105
+
+interface Ethernet3/6
+  description to b22 left enclosure BDS-ENC-B-D2-B03-01, P4
+  switchport mode fex-fabric
+  fex associate 105
+  channel-group 105
+
+interface Ethernet3/7
+  description to b22 left enclosure BDS-ENC-B-D2-B03-02, P3
+  switchport mode fex-fabric
+  fex associate 106
+  channel-group 106
+
+interface Ethernet3/8
+  description to b22 left enclosure BDS-ENC-B-D2-B03-02, P4
+  switchport mode fex-fabric
+  fex associate 106
+  channel-group 106
+
+interface Ethernet3/9
+  description to b22 left enclosure BDS-ENC-B-D2-B02-01, P3
+  switchport mode fex-fabric
+  fex associate 103
+  channel-group 103
+
+interface Ethernet3/10
+  description to b22 left enclosure BDS-ENC-B-D2-B02-01, P4
+  switchport mode fex-fabric
+  fex associate 103
+  channel-group 103
+
+interface Ethernet3/11
+  description to b22 left enclosure BDS-ENC-B-D2-B01-01, P3
+  switchport mode fex-fabric
+  fex associate 101
+  channel-group 101
+
+interface Ethernet3/12
+  description to b22 left enclosure BDS-ENC-B-D2-B01-01, P4
+  switchport mode fex-fabric
+  fex associate 101
+  channel-group 101
+
+interface Ethernet4/1
+  description to nexus B keeplaive
+  switchport mode trunk
+  switchport trunk allowed vlan 888
+  channel-group 888
+
+interface Ethernet4/2
+  shutdown
+
+interface Ethernet4/3
+  description to b22 left enclosure BDS-ENC-B-D2-B01-02, P3
+  switchport mode fex-fabric
+  fex associate 102
+  channel-group 202
+
+interface Ethernet4/4
+  description to b22 left enclosure BDS-ENC-B-D2-B01-02, P4
+  switchport mode fex-fabric
+  fex associate 102
+  channel-group 202
+
+interface Ethernet4/5
+  description BDS-VC-B-D2-B02-02-B X3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2,16,24,47,189,429-430,433-438,480,486,490,598,1010
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+  channel-group 300 mode active
+
+interface Ethernet4/6
+  description BDS-VC-B-D2-B02-02-B X4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2,16,24,47,189,429-430,433-438,480,486,490,598,1010
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+  channel-group 300 mode active
+
+interface Ethernet4/7
+  shutdown
+
+interface Ethernet4/8
+  shutdown
+
+interface Ethernet4/9
+  shutdown
+
+interface Ethernet4/10
+  shutdown
+
+interface Ethernet4/11
+  shutdown
+
+interface Ethernet4/12
+  shutdown
+
+interface mgmt0
+  vrf member management
+  ip address 10.130.194.148/24
+
+interface Ethernet101/1/1
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 1, dfs-esx-b-d2-b01-01-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/2
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 2, dfs-esx-b-d2-b01-01-02, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/3
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 3, dfs-esx-b-d2-b01-01-03, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/4
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 4, dfs-esx-b-d2-b01-01-04, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/5
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 5, dfs-esx-b-d2-b01-01-05, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/6
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 6, dfs-esx-b-d2-b01-01-06, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/7
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 7, dfs-esx-b-d2-b01-01-07, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/8
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 8, dfs-esx-b-d2-b01-01-08, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/9
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 1, dfs-esx-b-d2-b01-01-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/10
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 2, dfs-esx-b-d2-b01-01-02, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/11
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 3, dfs-esx-b-d2-b01-01-03, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/12
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 4, dfs-esx-b-d2-b01-01-04, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/13
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 5, dfs-esx-b-d2-b01-01-05, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/14
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 6, dfs-esx-b-d2-b01-01-06, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/15
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 7, dfs-esx-b-d2-b01-01-07, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet101/1/16
+  description Bldg B DC02, BDS-ENC-B-D2-B01-01 Slot 8, dfs-esx-b-d2-b01-01-08, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/1
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 1, dfs-esx-b-d2-b01-02-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/2
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 2, dfs-esx-b-d2-b01-02-02, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/3
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 3, dfs-esx-b-d2-b01-02-03, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/4
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 4, dfs-esx-b-d2-b01-02-04, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/5
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 5, dfs-esx-b-d2-b01-02-05, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/6
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 6, dfs-esx-b-d2-b01-02-06, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/7
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 7, dfs-esx-b-d2-b01-02-07, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/8
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 8, dfs-esx-b-d2-b01-02-08, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/9
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 1, dfs-esx-b-d2-b01-02-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/10
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 2, dfs-esx-b-d2-b01-02-02, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/11
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 3, dfs-esx-b-d2-b01-02-03, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/12
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 4, dfs-esx-b-d2-b01-02-04, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/13
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 5, dfs-esx-b-d2-b01-02-05, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/14
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 6, dfs-esx-b-d2-b01-02-06, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/15
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 7, dfs-esx-b-d2-b01-02-07, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet102/1/16
+  description Bldg B DC02, BDS-ENC-B-D2-B01-02 Slot 8, dfs-esx-b-d2-b01-02-08, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,832-833,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/1
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 1, dfs-esx-b-d2-b02-01-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/2
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 2, dfs-esx-b-d2-b02-01-02, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/3
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 3, dfs-esx-b-d2-b02-01-03, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/4
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 4, dfs-esx-b-d2-b02-01-04, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/5
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 5, dfs-esx-b-d2-b02-01-05, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/6
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 6, dfs-esx-b-d2-b02-01-06, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/7
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 7, dfs-esx-b-d2-b02-01-07, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/8
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 8, dfs-esx-b-d2-b02-01-08, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/9
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 1, dfs-esx-b-d2-b02-01-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/10
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 2, dfs-esx-b-d2-b02-01-02, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/11
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 3, dfs-esx-b-d2-b02-01-03, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/12
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 4, dfs-esx-b-d2-b02-01-04, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/13
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 5, dfs-esx-b-d2-b02-01-05, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/14
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 6, dfs-esx-b-d2-b02-01-06, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/15
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 7, dfs-esx-b-d2-b02-01-07, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet103/1/16
+  description Bldg B DC02, BDS-ENC-B-D2-B02-01 Slot 8, dfs-esx-b-d2-b02-01-08, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/1
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 1, dfs-esx-b-d2-b03-01-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/2
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 2, dfs-esx-b-d2-b03-01-02, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/3
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 3, dfs-esx-b-d2-b03-01-03, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/4
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 4, dfs-esx-b-d2-b03-01-04, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/5
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 5, dfs-esx-b-d2-b03-01-05, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/6
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 6, dfs-esx-b-d2-b03-01-06, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/7
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 7, dfs-esx-b-d2-b03-01-07, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/8
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 8, dfs-esx-b-d2-b03-01-08, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/9
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 1, dfs-esx-b-d2-b03-01-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/10
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 2, dfs-esx-b-d2-b03-01-02, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/11
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 3, dfs-esx-b-d2-b03-01-03, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/12
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 4, dfs-esx-b-d2-b03-01-04, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/13
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 5, dfs-esx-b-d2-b03-01-05, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/14
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 6, dfs-esx-b-d2-b03-01-06, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/15
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 7, dfs-esx-b-d2-b03-01-07, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/16
+  description Bldg B DC02, BDS-ENC-B-D2-B03-01 Slot 8, dfs-esx-b-d2-b03-01-08, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/1
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 1, dfs-esx-b-d2-b03-02-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/2
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 2, dfs-esx-b-d2-b03-02-02, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/3
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 3, dfs-esx-b-d2-b03-02-03, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/4
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 4, dfs-esx-b-d2-b03-02-04, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/5
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 5, dfs-esx-b-d2-b03-02-05, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/6
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 6, dfs-esx-b-d2-b03-02-06, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/7
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 7, dfs-esx-b-d2-b03-02-07, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/8
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 8, dfs-esx-b-d2-b03-02-08, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/9
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 1, dfs-esx-b-d2-b03-02-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/10
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 2, dfs-esx-b-d2-b03-02-02, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/11
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 3, dfs-esx-b-d2-b03-02-03, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/12
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 4, dfs-esx-b-d2-b03-02-04, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/13
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 5, dfs-esx-b-d2-b03-02-05, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/14
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 6, dfs-esx-b-d2-b03-02-06, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/15
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 7, dfs-esx-b-d2-b03-02-07, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/16
+  description Bldg B DC02, BDS-ENC-B-D2-B03-02 Slot 8, dfs-esx-b-d2-b03-02-08, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/1
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 1, dfs-esx-b-d2-b04-01-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/2
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 2, dfs-esx-b-d2-b04-01-02, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/3
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 3, dfs-esx-b-d2-b04-01-03, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/4
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 4, dfs-esx-b-d2-b04-01-04, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/5
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 5, dfs-esx-b-d2-b04-01-05, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/6
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 6, dfs-esx-b-d2-b04-01-06, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/7
+  shutdown
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/8
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 8, dfs-esx-b-d2-b04-01-08, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/9
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 1, dfs-esx-b-d2-b04-01-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/10
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 2, dfs-esx-b-d2-b04-01-02, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/11
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 3, dfs-esx-b-d2-b04-01-03, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/12
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 4, dfs-esx-b-d2-b04-01-04, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/13
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 5, dfs-esx-b-d2-b04-01-05, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/14
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 6, dfs-esx-b-d2-b04-01-06, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/15
+  shutdown
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/16
+  description Bldg B DC02, BDS-ENC-B-D2-B04-01 Slot 8, dfs-esx-b-d2-b04-01-08, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/1
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 1, dfs-esx-B-D2-B04-02-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/2
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 2, dfs-esx-B-D2-B04-02-02, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/3
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 3, dfs-esx-B-D2-B04-02-03, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/4
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 4, dfs-esx-B-D2-B04-02-04, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/5
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 5, dfs-esx-B-D2-B04-02-05, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/6
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 6, dfs-esx-B-D2-B04-02-06, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/7
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 7, dfs-esx-B-D2-B04-02-07, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/8
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 8, dfs-esx-B-D2-B04-02-08, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/9
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 1, dfs-esx-B-D2-B04-02-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/10
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 2, dfs-esx-B-D2-B04-02-02, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/11
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 3, dfs-esx-B-D2-B04-02-03, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/12
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 4, dfs-esx-B-D2-B04-02-04, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/13
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 5, dfs-esx-B-D2-B04-02-05, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/14
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 6, dfs-esx-B-D2-B04-02-06, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/15
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 7, dfs-esx-B-D2-B04-02-07, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/16
+  description Bldg B DC02, BDS-ENC-B-D2-B04-02 Slot 8, dfs-esx-B-D2-B04-02-08, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/1
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 1, dfs-esx-B-D2-B05-01-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/2
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 2, dfs-esx-B-D2-B05-01-02, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/3
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 3, dfs-esx-B-D2-B05-01-03, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/4
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 4, dfs-esx-B-D2-B05-01-04, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/5
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 5, dfs-esx-B-D2-B05-01-05, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/6
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 6, dfs-esx-B-D2-B05-01-06, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/7
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 7, dfs-esx-B-D2-B05-01-07, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/8
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 8, dfs-esx-B-D2-B05-01-08, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/9
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 1, dfs-esx-B-D2-B05-01-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/10
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 2, dfs-esx-B-D2-B05-01-02, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/11
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 3, dfs-esx-B-D2-B05-01-03, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/12
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 4, dfs-esx-B-D2-B05-01-04, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/13
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 5, dfs-esx-B-D2-B05-01-05, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/14
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 6, dfs-esx-B-D2-B05-01-06, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/15
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 7, dfs-esx-B-D2-B05-01-07, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/16
+  description Bldg B DC02, BDS-ENC-B-D2-B05-01 Slot 8, dfs-esx-B-D2-B05-01-0, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/1
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/2
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/3
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/4
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/5
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/6
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/7
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 7, dfs-esx-B-D2-B05-02-07, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/8
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 8, dfs-esx-B-D2-B05-02-08, P1
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/9
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/10
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/11
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/12
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/13
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/14
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 1, dfs-esx-B-D2-B05-02-01, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/15
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 7, dfs-esx-B-D2-B05-02-07, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet110/1/16
+  description Bldg B DC02, BDS-ENC-B-D2-B05-02 Slot 8, dfs-esx-B-D2-B05-02-08, P3
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-600,666,901-903,1000-1999,2001-3967,4048-4093
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+clock timezone CET 1 0
+clock summer-time CEST 5 sunday march 02:00 5 sunday october 03:00 60
+cli alias name wr copy run start
+line console
+line vty
+boot kickstart bootflash:/n5000-uk9-kickstart.7.3.3.N1.1.bin
+boot system bootflash:/n5000-uk9.7.3.3.N1.1.bin
+monitor session 1 
+  description san-issue
+  source interface Ethernet109/1/6 both
+  destination interface Ethernet1/13
+  no shut
+interface fc1/46
+interface fc1/47
+interface fc1/48
+interface fc2/13
+interface fc2/14
+interface fc2/15
+interface fc2/16
+interface fc3/13
+interface fc3/14
+interface fc3/15
+interface fc3/16
+interface fc4/14
+interface fc4/15
+interface fc4/16
+interface fc1/45
+  switchport mode NP
+interface fc1/46
+  switchport mode NP
+interface fc1/47
+  switchport mode NP
+interface fc1/48
+  switchport mode NP
+interface fc2/13
+  switchport mode NP
+interface fc2/14
+  switchport mode NP
+interface fc2/15
+  switchport mode NP
+interface fc2/16
+  switchport mode NP
+interface fc3/13
+  switchport mode NP
+interface fc3/14
+  switchport mode NP
+interface fc3/15
+  switchport mode NP
+interface fc3/16
+  switchport mode NP
+interface fc4/13
+  switchport mode NP
+interface fc4/14
+  switchport mode NP
+interface fc4/15
+  switchport mode NP
+interface fc4/16
+  switchport mode NP
+logging server 10.130.94.60 5 use-vrf management

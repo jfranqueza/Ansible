@@ -1,0 +1,232 @@
+!Command: show running-config
+!Time: Thu Nov 14 09:34:41 2019
+
+version 6.1(2)
+feature-set fex
+hostname bds-dc02-agg-b-oob
+
+feature telnet
+feature tacacs+
+feature lacp
+
+username admin password 5 $1$KjMZfD2Y$cmgMS8I0H2t.kCNGCs9vW0  role vdc-admin
+no password strength-check
+ip domain-lookup
+tacacs-server key 7 "GY_G261_l1m1so"
+ip tacacs source-interface mgmt0
+tacacs-server deadtime 5
+tacacs-server host 10.130.94.191 
+tacacs-server host 10.130.222.52 
+aaa group server tacacs+ GSC-TACACS 
+    server 10.130.222.52 
+    server 10.130.94.191 
+    use-vrf management
+    source-interface mgmt0
+ip access-list 20
+  10 permit ip 10.130.94.20/32 any 
+  20 permit ip 10.130.94.22/32 any 
+  30 permit ip 10.130.94.60/32 any 
+  40 permit ip 10.130.222.7/32 any 
+ip access-list 22
+  10 permit ip 10.130.222.17/32 any 
+fex 102
+  pinning max-links 1
+  description "n2000_rack_b04"
+fex 104
+  pinning max-links 1
+  description "n2000_rack_b09"
+fex 106
+  pinning max-links 1
+  description "n2000-san-rackdd2"
+snmp-server source-interface trap mgmt0
+snmp-server source-interface inform mgmt0
+snmp-server user admin vdc-admin auth md5 0x4b3ec726ad99ce2327ee7d4d2adcd122 priv 0x4b3ec726ad99ce2327ee7d4d2adcd122 localizedkey
+snmp-server host 10.130.222.7 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.20 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR! 
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server community C1D3C03xt group vdc-operator
+snmp-server community Df5-b0rd3rR! group vdc-operator
+snmp-server community C1D3C03xt use-acl 22
+snmp-server community Df5-b0rd3rR! use-acl 20
+aaa authentication login default group GSC-TACACS 
+aaa accounting default group GSC-TACACS 
+aaa authentication login error-enable 
+
+vrf context management
+  ip route 0.0.0.0/0 10.130.194.1
+vlan 1,4-5,8,23,26-27,32,145,224-227,332,1062
+vlan 4
+  name oob
+vlan 5
+  name esxmgmt
+vlan 8
+  name 08-bacjend-dmz
+vlan 23
+  name SAN
+vlan 27
+  name B261_Devices_217
+vlan 32
+  name management_32
+vlan 145
+  name rpa
+vlan 224
+  name ATS_Management
+vlan 225
+  name CMC_Management
+vlan 226
+  name PDU_Management
+vlan 227
+  name SAN_Management
+vlan 332
+  name FWM-MANAGEMENT
+vlan 1062
+  name TETRA-ILO_V1062
+
+
+interface port-channel102
+  switchport
+  switchport mode fex-fabric
+  fex associate 102
+
+interface port-channel104
+  switchport
+  switchport mode fex-fabric
+  fex associate 104
+
+interface port-channel105
+  switchport
+  switchport mode fex-fabric
+
+interface port-channel106
+  switchport
+  switchport mode fex-fabric
+  fex associate 106
+
+interface port-channel1010
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 4
+  port-channel port hash-distribution adaptive
+
+interface Ethernet1/1
+  switchport
+  switchport mode fex-fabric
+  fex associate 104
+  channel-group 104
+  no shutdown
+
+interface Ethernet1/2
+  switchport
+  switchport mode fex-fabric
+  fex associate 102
+  channel-group 102
+
+interface Ethernet1/3
+  switchport
+  switchport mode fex-fabric
+  fex associate 106
+  channel-group 106
+  no shutdown
+
+interface Ethernet1/4
+  switchport
+  switchport mode fex-fabric
+
+interface Ethernet1/5
+  switchport
+  switchport mode fex-fabric
+  no shutdown
+
+interface Ethernet1/6
+  no shutdown
+
+interface Ethernet1/7
+  description n7kmgmt
+  switchport
+  switchport access vlan 4
+  no shutdown
+
+interface Ethernet1/8
+  description to VDC-dc02-eth1-30
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 4-5,23,26-27,32,145,224-227,332
+  switchport trunk allowed vlan add 1062
+  no shutdown
+
+interface Ethernet3/1
+  switchport
+  switchport mode fex-fabric
+  fex associate 104
+  channel-group 104
+  no shutdown
+
+interface Ethernet3/2
+  switchport
+  switchport mode fex-fabric
+  fex associate 102
+  channel-group 102
+
+interface Ethernet3/3
+  switchport
+  switchport mode fex-fabric
+  fex associate 106
+  channel-group 106
+  no shutdown
+
+interface Ethernet3/4
+  switchport
+  switchport mode fex-fabric
+
+interface Ethernet3/5
+  description connection to N5k 5020 BDS-DC02-OOB-B 
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 4-5,23,27,32,145,159,224-227,332
+  switchport trunk allowed vlan add 1062
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet3/6
+  description description to->BDS-DC2-FWB_Management0/0
+  switchport
+  switchport access vlan 332
+  no shutdown
+
+interface Ethernet3/7
+  description n7kmgmt
+  switchport
+  switchport access vlan 4
+  switchport trunk allowed vlan 4-5,23,27,332
+  no shutdown
+
+interface Ethernet3/8
+  switchport
+  switchport mode trunk
+  no shutdown
+
+interface Ethernet3/9
+  description NetScaler Pre-production (ns-pre-bds-dc02-b) LOM
+  switchport
+  switchport access vlan 5
+  no shutdown
+
+interface Ethernet3/10
+
+interface Ethernet3/11
+  description NetScaler Production (ns-prd-bds-DC02-b) LOM
+  switchport
+  switchport access vlan 5
+  no shutdown
+
+interface Ethernet3/12
+
+interface mgmt0
+  ip address 10.130.194.155/24
+logging server 10.130.94.60 5 use-vrf management
+line vty

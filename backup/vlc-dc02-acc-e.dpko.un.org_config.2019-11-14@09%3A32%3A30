@@ -1,0 +1,1185 @@
+!Command: show running-config
+!Time: Thu Nov 14 09:32:29 2019
+
+version 7.3(3)N1(1)
+feature fcoe
+
+hostname VLC-DC02-ACC-E
+
+feature telnet
+feature tacacs+
+cfs ipv4 distribute
+cfs eth distribute
+feature private-vlan
+feature udld
+feature interface-vlan
+feature lacp
+feature vpc
+feature lldp
+feature fex
+
+logging level pltfm_config 4
+username admin password 5 $1$P/7AqqCl$Qdzfs6yg0gvTjoqn.rwpj0  role network-admin
+username dpko password 5 $1$KPoQeW3t$AVuS066BjkYSNEeBRkp1Z.  role network-operator
+username dpko role network-admin
+username dpko passphrase  lifetime 99999 warntime 14 gracetime 3
+username dcnm-neg password 5 $1$VrSVC2Z5$32IYl0v8rnbUlbp6u5Ldg0  role network-admin
+username dcnm-neg passphrase  lifetime 99999 warntime 14 gracetime 3
+
+banner motd ^
+*****************************************************************************
+                          Acceptable Use Notification
+
+          Unauthorized access to this United Nations Computer System
+                          is prohibited by ST/SGB/2004/15
+
+    "Use of information and communication technology resources and data"
+                            of 29 November 2004
+
+                 Authorized users shall ensure that their use
+                   of Information and August 2018 (6 of 8)
+
+         Access Control for the United Nations Secretariat systems
+            ICT Technical Procedure Communication Technology (ICT)
+ resources and ICT data is consistent with their obligations as staff members
+                or such other obligations as may apply to them
+
+       All use of ICT resources and ICT data is subject to monitoring and
+                 investigation as set forth in ST/SGB/2004/15
+
+         Use of this system by any user, authorized or unauthorized
+       constitutes consent to the applicable UN regulations and rules
+*****************************************************************************
+^
+
+ip domain-lookup
+ip domain-name unsbv.dpko.un.org
+ip name-server 10.130.207.96 10.130.207.97 10.130.79.11 10.130.79.12
+tacacs-server key 7 "xjwgntvhsfc12"
+ip tacacs source-interface mgmt0
+tacacs-server deadtime 5
+tacacs-server host 10.130.94.191
+tacacs-server host 10.130.222.52
+aaa group server tacacs+ TACACS
+  server 10.130.94.191
+  server 10.130.222.52
+crypto key param rsa label D2E02_new.unsbv.dpko.un.org modulus 2048
+logging event link-status default
+logging level ethpm link-down error
+ip access-list 20
+  statistics per-entry
+  10 permit ip 10.130.94.20/32 any
+  20 permit ip 10.130.94.22/32 any
+  30 permit ip 10.130.94.60/32 any
+  40 permit ip 10.130.222.7/32 any
+  50 permit ip 10.130.111.80/32 any
+  60 permit ip 10.130.222.130/32 any
+ip access-list 22
+  10 permit ip 10.130.222.17/32 any
+ip access-list 23
+  10 permit ip 10.130.239.138/32 any
+ip access-list VTY
+  statistics per-entry
+  10 permit tcp 10.0.0.0/8 any eq 22
+  20 permit ip 10.130.249.0/24 any
+fex 127
+  pinning max-links 1
+  description "DC02-F02-N2K-01"
+slot 1
+slot 2
+  port 1-8 type fc
+slot 3
+  port 1-8 type fc
+snmp-server location HUB|VL|DC02|E02|ACC
+snmp-server source-interface traps mgmt0
+snmp-server source-interface informs mgmt0
+snmp-server user dpko network-admin
+snmp-server user admin network-admin auth md5 0xd5d1a52aac451366650867a35bc02caa priv 0xd5d1a52aac451366650867a35bc02caa localizedkey
+snmp-server host 10.130.222.83 traps version 2c public udp-port 2162
+snmp-server host 10.130.94.242 traps version 2c public udp-port 2162
+snmp-server host 10.130.222.7 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.94.20 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.222.130 traps version 2c Df5-b0rd3rR!
+snmp-server community C1D3C03xt group network-operator
+snmp-server community O10S4uDiT group network-operator
+snmp-server community Df5-b0rd3rR! group network-operator
+snmp-server community C1D3C03xt use-acl 22
+snmp-server community O10S4uDiT use-acl 23
+snmp-server community Df5-b0rd3rR! use-acl 20
+ntp server 10.131.8.17 use-vrf management
+ntp server 10.131.72.17 prefer use-vrf management
+ntp source-interface mgmt0
+aaa authentication login default group TACACS
+aaa authentication login console group TACACS
+aaa authorization commands default group TACACS local
+policy-map type network-qos jumbo
+  class type network-qos class-fcoe
+    pause no-drop
+    mtu 2158
+  class type network-qos class-default
+    mtu 9216
+system qos
+  service-policy type queuing input fcoe-default-in-policy
+  service-policy type queuing output fcoe-default-out-policy
+  service-policy type qos input fcoe-default-in-policy
+  service-policy type network-qos jumbo
+
+vlan 1
+vlan 2
+  name IN-ESX-HOSTS-64-0-24
+vlan 3
+  name IN-vMOTION-65-0-24
+vlan 4
+  name IN-ILO-SERVERS-66-0-24
+vlan 5
+  name IN-ESX-HOSTS-30-0-26
+vlan 6
+  name IN-WEB-VIP-68-0-24
+vlan 7
+  name DFS-MSG-MGMT_V7
+vlan 8
+  name EXCH-MGMT_V8
+vlan 9
+  name ILO2_V9
+vlan 10
+  name IN-HOSTED-BE-72-0-24
+vlan 11
+  name IN-HOSTED-SERV-73-0-24
+vlan 12
+  name IN-WEBMAIL-FE-74-0-24
+vlan 13
+  name IN-ILO-SERVERS-30-64-26
+vlan 14
+  name IN-DRBC-76-0-25
+vlan 15
+  name DFS-MSG_V15
+vlan 16
+  name IN-DFS-APPS-78-0-24
+vlan 17
+  name IN-DFS-SERV-79-0-24
+vlan 18
+  name IN-vCLOUD-INFRASTRUCT-80-32-27
+vlan 19
+  name IN-KERNEL-vMOTION-80-64-29
+vlan 20
+  name IN-QA-DMZ-82-0-24
+vlan 21
+  name EXCH-TEMP-TEST_V21
+vlan 22
+  name IN-WEBMAIL-BE-DMZ-84-0-24
+vlan 23
+  name IN-SAN-BE-DMZ-85-0-24
+vlan 24
+  name IN-GALILEO-BE-DMZ-86-0-24
+vlan 25
+  name IN-ONCOURSE-DMZ-87-0-24
+vlan 26
+  name IN-DC02-DEVICES-88-0-25
+vlan 27
+  name IN-OICT-EXCHANGE-14-0-26
+vlan 28
+  name APPLICATIONS-90
+vlan 29
+  name IN-APPS-91-0-24
+vlan 30
+  name PRE-PRODUCTION-DMZ_V30
+vlan 31
+  name PRE-PRODUCTION-VIP_V31
+vlan 32
+  name IN-NETWORK-MANAGEMENT-94-0-24
+vlan 34
+  name NetScaler-Heartbeat
+vlan 35
+  name IN-VCLOUD-80-80-28
+vlan 36
+  name IN-CUST-FE-UNRWA
+vlan 37
+  name PRD-VCLOUD-Mgmt_Cluster_Mgmt
+vlan 38
+  name IN-CUST-APPLICATIONS-UNRWA
+vlan 39
+  name UNMEER-COSMOS-PROD
+vlan 40
+  name IN-CUST-BE-UNRWA
+vlan 41
+  name EXCH-BKUP_V41
+vlan 42
+  name MISSION_CP_MGMT_V42
+vlan 43
+  name MISSION_CP_MGMT_V43
+vlan 44
+  name NS-HearBeat-UNRWA
+vlan 46
+  name PRD-VCLOUD-Mgmt-vMotion
+vlan 47
+  name IN-VDI-MISSION-USERS-109-0-25
+vlan 48
+  name PRE-UMOJA-HANA-MGMT
+vlan 49
+  name PRE_UNMEER-COSMOS_V49
+vlan 50
+  name LYNC-EDGE-PRIV_V50
+vlan 53
+  name PRD-UMOJA-SAP-MGMT
+vlan 54
+  name PRD-UMOJA-HANA-MGMT
+vlan 55
+  name PRE-UMOJA-SAP-MGMT
+vlan 56
+  name EVAULT-REPLI_V56
+vlan 57
+  name PRD-UMOJA-EXT-MGMT
+vlan 59
+  name OICT-ACC-VIP-2
+vlan 61
+  name VSPHERE_REP_SRVC
+vlan 62
+  name VSPHERE_REP_NFC
+vlan 64
+  name IN-WEB-VIP-126-0-24
+vlan 65
+  name EVAULT-PASSIVE_V65
+vlan 66
+  name PRD-FE-Airwatch_V66
+vlan 67
+  name PRD-BE-Airwatch_V66
+vlan 68
+  name PRD_EXC-EVT_V68
+vlan 69
+  name PRD_EXC-EVT_REP_V69
+vlan 70
+  name PRE-UMOJA-HANA-DB
+vlan 71
+  name PRE-UMOJA-HANA-APP
+vlan 72
+  name PRD-UMOJA-HANA-DB
+vlan 73
+  name PRD-UMOJA-HANA-APP
+vlan 75
+  name EVAULT-DR_V75
+vlan 76
+  name EXTERNAL-SERVICES
+vlan 77
+  name PRE-UMOJA-SAP-DB
+vlan 78
+  name PRE-UMOJA-SAP-APP
+vlan 79
+  name PRD-UMOJA-SAP-DB
+vlan 80
+  name PRD-UMOJA-SAP-APP
+vlan 89
+  name GEO-CLUSTERS-HB
+vlan 90
+  name IN-DFS-ENT-APP-81-0-25
+vlan 91
+  name NEG-SERVICES
+vlan 95
+  name EVAULT-ACTIVE_V95
+vlan 101
+  name IN-DC1-OICT-INT-FE-1-0-24
+vlan 102
+  name IN-DC1-OICT-INT-FE-2-0-24
+vlan 103
+  name IN-DC1-OICT-INT-APPS-3-0-24
+vlan 104
+  name IN-DC1-OICT-INT-BE-4-0-24
+vlan 105
+  name IN-DC1-OICT-INT-SUPP-SERV-5-0-24
+vlan 106
+  name IN-DC1-OICT-INT-CITRIX-6-0-24
+vlan 107
+  name IN-DC1-OICT-INT-CITRIX-7-0-24
+vlan 108
+  name IN-DC1-OICT-FW-MGMT-8-0-24
+vlan 109
+  name IN-DC1-OICT-SERVER-MGMT-9-0-24
+vlan 110
+  name BE-SERVERS_V110
+vlan 111
+  name IN-DC1-OICT-VMOTION-11-0-24
+vlan 112
+  name IN-DC1-OICT-INT-XenApp-12-0-24
+vlan 113
+  name IN-DC1-OICT-BAM
+vlan 114
+  name IN-DC1-OICT-NET-MONITOR-10-0-24
+vlan 117
+  name IN-DC1-OICT-SAN-MGMT-17-0-25
+vlan 124
+  name NSX-Mgmt-Edge-Uplink1
+vlan 125
+  name NSX-Mgmt-Edge-Uplink2
+vlan 126
+  name NSX-Compute-Edge-Uplink1
+vlan 127
+  name NSX-Compute-Edge-Uplink2
+vlan 139
+  name MSG-SRVS_V139
+vlan 141
+  name IN-SMTP-76-128-25
+vlan 142
+  name OICT_ADFS_PROXY
+vlan 143
+  name OICT_ADFS_FARM-14-128-27
+vlan 144
+  name IN-DC1-OICT-RPA-16-0-28
+vlan 145
+  name IN-DC1-DFS-SAN-MGMT-17-128-27
+vlan 150
+  name DC01-OICT-GRT-27-192-28
+vlan 158
+  name IN-ILO-SERVERS-31-0-24
+vlan 165
+  name IN-OICT-SEC-APP
+vlan 166
+  name IN-OICT-SAN-MGMT
+vlan 171
+  name DEVELOPMENT-BACKEND
+vlan 173
+  name DEVELOPMENT-ACCESS
+vlan 177
+  name OICT_FILETRANSFER
+vlan 180
+  name IN-RPA-DD-WAN-80-0-27
+vlan 181
+  name PRD-VCLOUD-Mgmt_Cluster_NFS
+vlan 182
+  name PRD-VCLOUD-Edge_Cluster_NFS
+vlan 188
+  name NSX_VDI
+vlan 191
+  name EDC-FW-NET-0-0-29
+vlan 192
+  name EDC-FW-NET-0-8-29
+vlan 193
+  name EDC-FW-NET-0-16-29
+vlan 194
+  name EDC-FW-NET-0-24-29
+vlan 202
+  name IN-SECURITY-83-128-25
+vlan 228
+  name PRE-FE-FIM_V228
+vlan 229
+  name PRE-FE-SYNC_V229
+vlan 230
+  name PRE-FE-SYSTEMS-105-0-25
+vlan 231
+  name PRE-FE-EXC_DMZ_231
+vlan 289
+  name PRE-GEO-CLUSTER-HB_V289
+vlan 312
+  name QA-VIP_V312
+vlan 332
+  name MGMT-DC2FW-90-248-29
+vlan 350
+  name DC01-OICT-VRF-27-192-28
+vlan 364
+  name IN-CUST-FE-INEED
+vlan 365
+  name IN-CUST-PROD-FE-INEED
+vlan 366
+  name IN-CUST-FE-OCHA
+vlan 384
+  name IN-CUST-APP-INEED-100-128-27
+vlan 385
+  name CUST-PRD-APPS-INEED_V385
+vlan 386
+  name IN-CUST-APPS-OCHA-100-192-27
+vlan 404
+  name IN-CUST-BE-INEED-102-128-27
+vlan 405
+  name IN-CUST-PROD-BE-INEED-102-160-27
+vlan 406
+  name IN-CUST-BE-OCHA-102-192-27
+vlan 429
+  name PRD_VDI-DFS_V429
+vlan 430
+  name PRD_VDI-DFS_V430
+vlan 438
+  name PRD_VDI-UNHQ_V438
+vlan 440
+  name IN-CUST-DMZ-106-0-27
+vlan 460
+  name IN-HSEC-PROD-FE-108-0-27
+vlan 461
+  name PRE-FE-V461
+vlan 462
+  name IN-HSEC-PROD-APPS-FE-108-64-27
+vlan 463
+  name HIGHSEC-PRE-PROD-APPS-108-96-27
+vlan 464
+  name IN-HSEC-PROD-BE-108-128-27
+vlan 465
+  name IN-HSEC-PRE-PROD-BE-108-160-27
+vlan 466
+  name IN-PRE-PROD-backend-103-164-27
+vlan 472
+  name IN-VDI-MISSION-MGMT-109-128-26
+vlan 473
+  name IN-VDI-MSN-VCENTER-109-192-27
+vlan 474
+  name IN-VDI-MSN-ESX-109-224-27
+vlan 475
+  name IN-VDI-97-0-25
+vlan 476
+  name VDI-OSA-PROJECT
+vlan 477
+  name VDI-OSA-i2
+vlan 480
+  name IN-VDI-110-0-24
+vlan 481
+  name VDI-INFRASTRUCTURE-101-128-26
+vlan 482
+  name VDI-MINUSMA
+vlan 483
+  name VDI-UNMEER
+vlan 484
+  name VDI-RMS
+vlan 485
+  name PRD_VDI-BNUB_V485
+vlan 486
+  name PRD-VDI-OPCW
+vlan 487
+  name PRD_VDI-UNMC_V487-127-0-25
+vlan 488
+  name PRD-VDI-UNMC_V488
+vlan 490
+  name IN-VDI-NSU-111-0-26
+vlan 591
+  name MS-CLUSTER-HEARTBEAT
+vlan 598
+  name ESX-VMOTION
+vlan 599
+  name ESX-FAULT-TOLERANCE
+vlan 600
+  name IN-DC1-OICT-RPA_EXT-VLAN600
+vlan 601
+  name OUT-MGMT-96-0-29
+vlan 602
+  name OUT-DC02-INFRA-96-8-29
+vlan 603
+  name OUT-ESX-96-16-29
+vlan 604
+  name OUT-CUST-FE-96-24-29
+vlan 605
+  name OUT-MAIL-96-32-29
+vlan 606
+  name OUT-DRBC-96-40-29
+vlan 607
+  name OUT-HOSTED-APPS-96-48-29
+vlan 608
+  name OUT-HOSTED-SERV-96-56-29
+vlan 609
+  name OUT-CUST-DMZ-96-64-29
+vlan 610
+  name OUT-VCLOUD-96-72-29
+vlan 611
+  name OUT-DFS-ENT-APP-96-80-29
+vlan 612
+  name OUT-DFS-ENT-BE-96-88-29
+vlan 613
+  name OUT-HSEC-FE-96-96-29
+vlan 614
+  name OUT-HSEC-PROD-APPS-FE-96-104-29
+vlan 615
+  name OUT-HIGHSEC-BE-96-112-29
+vlan 616
+  name OUT-ADMIN-96-120-29
+vlan 617
+  name OUT-APPS-OUT-96-128-29
+vlan 618
+  name OUT-BE-DMZ-96-136-29
+vlan 619
+  name OUT-CUST-BE-96-144-29
+vlan 620
+  name OUT-CUST-APPS-96-152-29
+vlan 621
+  name OUT-PUBLIC-WEB-LB-SVR-96-160-29
+vlan 622
+  name OUT-FE-96-168-29
+vlan 623
+  name OUT-HOSTED-FE-96-176-29
+vlan 624
+  name OUT-HOSTED-BE-96-184-29
+vlan 625
+  name OUT-VDI-96-192-29
+vlan 626
+  name OUT-UNRWA-NONPROD-96-208-29
+vlan 627
+  name OUT-UNRWA-PROD-96-216-29
+vlan 628
+  name OUT-UNRWA-MANAGEMENT-96-224-29
+vlan 629
+  name OUT-UNRWA-USER-96-232-29
+vlan 631
+  name OUT-SECURITY-96-248-29
+vlan 632
+  name OUT-ADMIN-B
+vlan 633
+  name OUT-SPT-FE-17-192-29
+vlan 634
+  name OUT-OICT-SERVICES
+vlan 635
+  name OUT-ESX-17-168-29
+vlan 636
+  name OUT-UMOJA-DFS-17-176-29
+vlan 637
+  name OUT-UMOJA-SAP-17-184-29
+vlan 641
+  name OUT-DC01-UMOJA
+vlan 643
+  name OUT-DC02-PRD-BE
+vlan 644
+  name OUT-DC02-PRD-FE
+vlan 645
+  name OUT-DC02-PRD-APP
+vlan 646
+  name OUT-PRD-BE_V646
+vlan 647
+  name OUT-DC02-PRE-FE
+vlan 648
+  name OUT-DC02-PRE-APP
+vlan 649
+  name OUT-DC02-PRE-BE
+vlan 650
+  name OUT-DC02-NEG-SERVICES
+vlan 651
+  name OUT-DC02-TISS
+vlan 652
+  name OUT-DC02-MGMT
+vlan 653
+  name OUT-DC02-UNRWA
+vlan 654
+  name OUT-DC02-VCLOUD
+vlan 655
+  name OUT-DC02-DRBC
+vlan 656
+  name OUT-DC02-VDI
+vlan 657
+  name OUT-DC02-MSG
+vlan 658
+  name OUT-PRD-VCLOUD-Mgmt_Cluster_VTEP
+vlan 659
+  name OUT-PRD-VCLOUD-Compute_VTEP
+vlan 666
+  name DC-SERVICES-46-248-29
+vlan 670
+  name OUT-CUST-VCLOUD-96-200-29
+vlan 671
+  name DRUPAL-Backend
+vlan 672
+  name OUT-DC02-EXTERNAL-SERVICES
+vlan 674
+  name OUT-DC02-DEV-BE
+vlan 676
+  name OUT-TETRA
+vlan 686
+  name OUT-OICT-PREPRODUCTION
+vlan 687
+  name OUT-OICT-ACCESS
+vlan 688
+  name OUT-OICT-APP
+vlan 689
+  name OUT-OICT-BACKEND
+vlan 690
+  name OUT-INFRASTRUCTURE
+vlan 691
+  name OUT-SAN
+vlan 701
+  name OUT-DEV01-43-192-29
+vlan 702
+  name OUT-DEV02-43-200-29
+vlan 703
+  name OUT-DEV03-43-208-29
+vlan 704
+  name OUT-DEV04-43-216-29
+vlan 705
+  name OUT-DEV05-43-224-29
+vlan 706
+  name OUT-DEV06-43-232-29
+vlan 707
+  name OUT-DEV07-43-240-29
+vlan 708
+  name OUT-DEV-SAPQA-43-248-29
+vlan 710
+  name IN-DC01-DEV01-40-0-28
+vlan 711
+  name IN-DC01-DEV01-40-16-28
+vlan 712
+  name IN-DC01-DEV01-40-32-29
+vlan 713
+  name IN-DC01-DEV01-40-40-29
+vlan 714
+  name IN-DC01-DEV01-40-48-29
+vlan 715
+  name IN-DC01-DEV01-40-56-29
+vlan 716
+  name IN-DC01-DEV01-40-64-29
+vlan 718
+  name IN-DC01-DEV01-98-240-28
+vlan 719
+  name IN-DC01-DEV01-VLAN719
+vlan 720
+  name IN-DC01-DEV01-40-96-27
+vlan 721
+  name IN-DC01-DEV01-40-128-27
+vlan 722
+  name IN-DC01-DEV01-41-0-25
+vlan 723
+  name IN-DC01-DEV01-41-1
+vlan 724
+  name vMotion_no_routable
+vlan 730
+  name IN-DEV01-43-0-27
+vlan 731
+  name IN-DEV02-43-32-27
+vlan 732
+  name IN-DEV03-43-64-27
+vlan 733
+  name IN-DEV04-43-96-27
+vlan 734
+  name IN-DEV05-43-128-27
+vlan 735
+  name IN-DEV07-43-176-28
+vlan 736
+  name IN-DEV5-44-192-27
+vlan 737
+  name IN-DEV02-44-224-27
+vlan 744
+  name DC02-DEVELOPMENT
+vlan 745
+  name DC02-DEV-HB
+vlan 790
+  name OUT-DC1-DEVELOPMENT
+vlan 801
+  name OUT-DEV-VCLOUD-42-240-29
+vlan 802
+  name IN-MISSION-VCLOUD-02-UNFISIP
+vlan 803
+  name IN-MISSION-VCLOUD-03-UNFISIP
+vlan 805
+  name iORA-COSMOS-vWAAS
+vlan 811
+  name IN-DEV-VCLOUD-GUESTS-42-0-25
+vlan 812
+  name IN-DEV-VCLOUD-EXT-FE-42-128-27
+vlan 813
+  name IN-DEV-VCLOUD-APPS-42-192-28
+vlan 814
+  name IN-DEV-VCLOUD-BE-42-224-28
+vlan 820
+  name IN-DEV-VCLOUD-VC-NI-42-248-29
+vlan 821
+  name IN-DEV-VCLOUD-INT-APP-42-160-28
+vlan 822
+  name IN-DEV-VCLOUD-INT-BE-42-176-28
+vlan 831
+  name IPC-VDI
+vlan 832
+  name IN-PRD-VCLOUD-Mgmt_Cluster_VTEP
+vlan 833
+  name PRD-VCLOUD-Edge_Cluster_VTEP
+vlan 888
+  name FWSM-FAILOVERLINK
+vlan 959
+  name OICT_Mail_Backend_E4
+vlan 971
+  name internal-heartbeat
+vlan 999
+  name FWSM-STATELINK
+spanning-tree port type edge bpduguard default
+vrf context management
+  ip route 0.0.0.0/0 10.130.88.1
+vpc domain 4
+  peer-switch
+  peer-keepalive destination 10.130.88.78 source 10.130.88.77
+  delay restore 150
+  auto-recovery reload-delay 600
+
+
+interface Vlan1
+
+interface port-channel1
+  description UPLINK_N7K_AGG_DC02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 17,23,180-181,744
+
+interface port-channel127
+  switchport mode fex-fabric
+  fex associate 127
+
+interface port-channel1001
+  description VPC-PEER-LINK
+  switchport mode trunk
+  switchport trunk allowed vlan 17,23,180-181,744
+  spanning-tree port type network
+  vpc peer-link
+feature npv
+feature npiv
+
+
+interface fc2/1
+
+interface fc2/2
+
+interface fc2/3
+
+interface fc2/4
+
+interface fc2/5
+
+interface fc2/6
+
+interface fc2/7
+
+interface fc2/8
+
+interface fc3/1
+
+interface fc3/2
+
+interface fc3/3
+
+interface fc3/4
+
+interface fc3/5
+
+interface fc3/6
+
+interface fc3/7
+
+interface fc3/8
+
+interface Ethernet1/1
+  description UPLINK_N7K_AGG_DC02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 17,23,180-181,744
+  channel-group 1 mode active
+
+interface Ethernet1/2
+  description UPLINK_N7K_AGG_DC02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 17,23,180-181,744
+  channel-group 1 mode active
+
+interface Ethernet1/3
+  description UPLINK_N7K_AGG_DC02
+  switchport mode trunk
+  switchport trunk allowed vlan 17,23,180-181,744
+
+interface Ethernet1/4
+  description UPLINK_N7K_AGG_DC02
+  switchport mode trunk
+  switchport trunk allowed vlan 17,23,180-181,744
+
+interface Ethernet1/5
+  description VPC-PEER-LINK
+  switchport mode trunk
+  switchport trunk allowed vlan 17,23,180-181,744
+  channel-group 1001 mode active
+
+interface Ethernet1/6
+  description VPC-PEER-LINK
+  switchport mode trunk
+  switchport trunk allowed vlan 17,23,180-181,744
+  channel-group 1001 mode active
+
+interface Ethernet1/7
+  description VPC-PEER-LINK
+  switchport mode trunk
+  switchport trunk allowed vlan 17,23,180-181,744
+  channel-group 1001 mode active
+
+interface Ethernet1/8
+  description VPC-PEER-LINK
+  switchport mode trunk
+  switchport trunk allowed vlan 17,23,180-181,744
+  channel-group 1001 mode active
+
+interface Ethernet1/9
+  description FEX_127
+  switchport mode fex-fabric
+  fex associate 127
+  channel-group 127
+
+interface Ethernet1/10
+  description FEX_127
+  shutdown
+  switchport mode fex-fabric
+  fex associate 127
+  channel-group 127
+
+interface Ethernet1/11
+
+interface Ethernet1/12
+
+interface Ethernet1/13
+
+interface Ethernet1/14
+
+interface Ethernet1/15
+
+interface Ethernet1/16
+
+interface Ethernet1/17
+
+interface Ethernet1/18
+
+interface Ethernet1/19
+
+interface Ethernet1/20
+
+interface Ethernet1/21
+
+interface Ethernet1/22
+
+interface Ethernet1/23
+
+interface Ethernet1/24
+
+interface Ethernet1/25
+
+interface Ethernet1/26
+
+interface Ethernet1/27
+
+interface Ethernet1/28
+
+interface Ethernet1/29
+
+interface Ethernet1/30
+
+interface Ethernet1/31
+
+interface Ethernet1/32
+
+interface Ethernet1/33
+
+interface Ethernet1/34
+
+interface Ethernet1/35
+
+interface Ethernet1/36
+
+interface Ethernet1/37
+
+interface Ethernet1/38
+
+interface Ethernet1/39
+
+interface Ethernet1/40
+
+interface Ethernet1/41
+
+interface Ethernet1/42
+
+interface Ethernet1/43
+
+interface Ethernet1/44
+
+interface Ethernet1/45
+
+interface Ethernet1/46
+
+interface Ethernet1/47
+
+interface Ethernet1/48
+
+interface Ethernet1/49
+
+interface Ethernet1/50
+
+interface Ethernet1/51
+
+interface Ethernet1/52
+
+interface Ethernet2/9
+  description FEX_127
+  switchport mode fex-fabric
+  fex associate 127
+  channel-group 127
+
+interface Ethernet2/10
+  description FEX_127
+  shutdown
+  switchport mode fex-fabric
+  fex associate 127
+  channel-group 127
+
+interface Ethernet2/11
+
+interface Ethernet2/12
+
+interface Ethernet2/13
+
+interface Ethernet2/14
+
+interface Ethernet2/15
+
+interface Ethernet2/16
+
+interface Ethernet2/17
+
+interface Ethernet2/18
+
+interface Ethernet2/19
+
+interface Ethernet2/20
+
+interface Ethernet2/21
+
+interface Ethernet2/22
+
+interface Ethernet2/23
+
+interface Ethernet2/24
+
+interface Ethernet2/25
+
+interface Ethernet2/26
+
+interface Ethernet3/9
+  description UPLINK_N7K_AGG_test
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 17,23,180-181,744
+  channel-group 1 mode active
+
+interface Ethernet3/10
+  description UPLINK_N7K_AGG_test
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 17,23,180-181,744
+  channel-group 1 mode active
+
+interface Ethernet3/11
+
+interface Ethernet3/12
+
+interface Ethernet3/13
+
+interface Ethernet3/14
+
+interface Ethernet3/15
+
+interface Ethernet3/16
+
+interface Ethernet3/17
+
+interface Ethernet3/18
+
+interface Ethernet3/19
+
+interface Ethernet3/20
+
+interface Ethernet3/21
+
+interface Ethernet3/22
+
+interface Ethernet3/23
+
+interface Ethernet3/24
+
+interface Ethernet3/25
+
+interface Ethernet3/26
+
+interface mgmt0
+  vrf member management
+  ip address 10.130.88.77/25
+
+interface Ethernet127/1/1
+  description RPA4-MGMT-D2F01 RFS-1-3989061750
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/2
+  description CL2-RPA1-MGMT-conn patch-E04-F02p1 RFS-1-1944832460
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/3
+  description RPA4-MGMT-D2F01 RFS-1-3989061750
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/4
+  description CL2-RPA2-MGMT-conn patch-E04-F02p2 RFS-1-1944832460
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/5
+  description RPA4-MGMT-D2F01 RFS-1-3989061750
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/6
+  description CL2-RPA3-MGMT-conn patch-E04-F02p3 RFS-1-1944832460
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/7
+  description RPA4-WAN-D2F01 RFS-1-3989061750
+  switchport access vlan 180
+  spanning-tree port type edge
+
+interface Ethernet127/1/8
+  description CL3-RPA1-MGMT-conn patch-E04-F02p4 RFS-1-1944832460
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/9
+  description RPA4-WAN-D2F01 RFS-1-3989061750
+  switchport access vlan 180
+  spanning-tree port type edge
+
+interface Ethernet127/1/10
+  description CL3-RPA2-MGMT-conn patch-E04-F02p5 RFS-1-1944832460
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/11
+  description RPA4-WAN-D2F01 RFS-1-3989061750
+  switchport access vlan 180
+  spanning-tree port type edge
+
+interface Ethernet127/1/12
+  description CL3-RPA3-MGMT-conn patch-E04-F02p6 RFS-1-1944832460
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/13
+  description ISILON_MGMT&PROD
+  switchport mode trunk
+  switchport trunk allowed vlan 23,181,744
+  spanning-tree port type edge
+  no logging event port link-status
+
+interface Ethernet127/1/14
+  description DATADOMAIN-WAN
+  switchport access vlan 180
+  spanning-tree port type edge
+
+interface Ethernet127/1/15
+
+interface Ethernet127/1/16
+  description DATA-DOMAIN-LAN D2E09 Eth1
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/17
+
+interface Ethernet127/1/18
+  description Data Domain DD-DC02-03
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/19
+
+interface Ethernet127/1/20
+  description Data Domain DD-DC02-03
+  switchport access vlan 23
+  spanning-tree port type edge
+
+interface Ethernet127/1/21
+
+interface Ethernet127/1/22
+  description DataDomain DC02-03 in D2E17
+  switchport access vlan 17
+  spanning-tree port type edge
+
+interface Ethernet127/1/23
+
+interface Ethernet127/1/24
+
+interface Ethernet127/1/25
+
+interface Ethernet127/1/26
+
+interface Ethernet127/1/27
+
+interface Ethernet127/1/28
+
+interface Ethernet127/1/29
+
+interface Ethernet127/1/30
+
+interface Ethernet127/1/31
+
+interface Ethernet127/1/32
+
+interface Ethernet127/1/33
+
+interface Ethernet127/1/34
+
+interface Ethernet127/1/35
+
+interface Ethernet127/1/36
+
+interface Ethernet127/1/37
+
+interface Ethernet127/1/38
+
+interface Ethernet127/1/39
+
+interface Ethernet127/1/40
+
+interface Ethernet127/1/41
+
+interface Ethernet127/1/42
+
+interface Ethernet127/1/43
+
+interface Ethernet127/1/44
+
+interface Ethernet127/1/45
+
+interface Ethernet127/1/46
+
+interface Ethernet127/1/47
+
+interface Ethernet127/1/48
+clock timezone CET 1 0
+clock summer-time CEST 5 sunday march 02:00 5 sunday october 03:00 60
+cli alias name wr copy running-config startup-config
+line console
+line vty
+boot kickstart bootflash:/n6000-uk9-kickstart.7.3.3.N1.1.bin
+boot system bootflash:/n6000-uk9.7.3.3.N1.1.bin
+interface fc2/1
+  switchport mode NP
+interface fc2/2
+  switchport mode NP
+interface fc2/3
+  switchport mode NP
+interface fc2/4
+  switchport mode NP
+interface fc2/5
+  switchport mode NP
+interface fc2/6
+  switchport mode NP
+interface fc2/7
+  switchport mode NP
+interface fc2/8
+  switchport mode NP
+interface fc3/1
+  switchport mode NP
+interface fc3/2
+  switchport mode NP
+interface fc3/3
+  switchport mode NP
+interface fc3/4
+  switchport mode NP
+interface fc3/5
+  switchport mode NP
+interface fc3/6
+  switchport mode NP
+interface fc3/7
+  switchport mode NP
+interface fc3/8
+  switchport mode NP
+logging server 10.130.94.60 5 use-vrf management

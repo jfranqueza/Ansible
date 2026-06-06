@@ -1,0 +1,41 @@
+---
+- name: PARSED VLAN BRIEF
+  hosts: BACK_DC
+  gather_facts: no
+  # roles:
+  # - ansible-network.network-engine
+  vars:
+    ansible_network_os : ios
+
+  tasks:
+  - name: IMPORT ROLE
+    import_role:
+      name: ansible-network.network-engine
+
+  - name: SHOW VLAN BRIEF COMMAND
+    ios_command:
+      commands:
+        - show vlan brief
+    register: output
+
+    #  - name: Display the output
+    #    debug: var=output.stdout
+
+  - name: Parse the output
+    command_parser:
+      file: "./parsers/parser_vlan.yaml"
+      content: "{{ output.stdout[0] }}"
+
+    #  - name: Display the data
+    #    debug: var=vlan_brief_facts
+
+
+  - name: Delete 'vlan_brief_facts-[inventory_hostname].json'
+    file:
+      path: "./configurations/vlan_brief_facts-{{ inventory_hostname }}.json"
+      state: absent
+
+  - name: Write interfaces_facts to 'vlan_brief_facts-[inventory_hostname].json'
+    copy:
+      content: "{{ vlan_brief_facts | to_nice_json }}"
+      dest: "./configurations/vlan_brief_facts-{{ inventory_hostname }}.json"

@@ -1,0 +1,42 @@
+---
+- name: parser meta data
+  parser_metadata:
+    version: 1.0
+    command: show crypto pki certificates sdn-network-infra-iwan
+    network_os: ios
+
+- name: match sections
+  pattern_match:
+    regex: "^Certificate"
+    match_all: true
+    match_greedy: true
+  register: section
+
+- name: match hostname
+  pattern_group:
+    - name: match hostname
+      pattern_match:
+        regex: "hostname=(.+.org)"
+        content: "{{ item }}"
+      register: name
+
+    - name: match end date
+      pattern_match:
+        regex: "end\\s+date:\\s+\\d{2}:\\d{2}:\\d{2}\\s+CE.+(\\w{3}\\s+\\d+\\s+\\d+)"
+        content: "{{ item }}"
+      register: end_date
+
+  loop: "{{ section }}"
+  register: certificate
+
+- name: generate json data structure
+  json_template:
+    template:
+      - key: "{{ item.name.matches.0 }}"
+        object:
+          - key: end_date
+            value: "{{ item.end_date.matches.0 }}"
+  loop: "{{ certificate }}"
+  export: true
+  export_as: dict
+  register: certificate_facts

@@ -1,0 +1,2898 @@
+!Command: show running-config
+!Time: Thu Nov 14 10:33:27 2019
+
+version 7.3(3)N1(1)
+feature fcoe
+
+hostname VLC-DC02-ACC-D
+
+feature telnet
+feature tacacs+
+cfs ipv4 distribute
+cfs eth distribute
+feature private-vlan
+feature udld
+feature interface-vlan
+feature lacp
+feature vpc
+feature lldp
+feature fex
+
+logging level feature-mgr 0
+logging level pltfm_config 4
+logging level xmlma 7
+username admin password 5 $1$kSzFN3bJ$/3k3P7CmDSGqh3ylCUFGO.  role network-admin
+username dcnm-neg password 5 $1$XtzvZ3O2$gBrTDYW6bUGHArKncuRyZ.  role network-admin
+username dcnm-neg passphrase  lifetime 99999 warntime 14 gracetime 3
+username dpko password 5 $5$ZTyKO30a$rKngYPVhWbvHuetVVfL5anXuoromMon8dO2CXTA24N0  role network-admin
+username dpko role network-operator
+username dpko passphrase  lifetime 99999 warntime 14 gracetime 3
+
+banner motd "
+
+
+*******************************************************************************
+
+                                United Nations
+                                     DPKO
+
+          This system is for specifically authorized personnel from the
+         United Nations, any unauthorized use of this system is unlawful
+            and may be subject to civil and/or criminal penalties.
+        Any use of this system may be logged or monitored without further
+          notice, and resulting logs may be used as evidence in court.
+ Should you require access please request authorization by contacting your ICTD
+     office, or the ICTD office at the United Nations Logistics Base (UNLB).
+         email:ncc@unlb.org VSAT:158 6222 International:+39 0831 446222
+
+*******************************************************************************
+ $(hostname)
+
+"
+
+ip domain-lookup
+ip domain-name unsbv.dpko.un.org
+ip name-server 10.130.207.96 10.130.207.97
+tacacs-server key 7 "xjwgntvhsfc12"
+ip tacacs source-interface mgmt0
+tacacs-server deadtime 5
+tacacs-server host 10.130.94.191
+tacacs-server host 10.130.222.52
+aaa group server tacacs+ TACACS
+  server 10.130.94.191
+  server 10.130.222.52
+logging level ethpm link-down error
+system private-vlan fex trunk
+ip access-list 20
+  statistics per-entry
+  10 permit ip 10.130.94.20/32 any
+  20 permit ip 10.130.94.22/32 any
+  30 permit ip 10.130.94.60/32 any
+  40 permit ip 10.130.222.7/32 any
+  50 permit ip 10.130.111.80/32 any
+  60 permit ip 10.130.222.130/32 any
+ip access-list 22
+  10 permit ip 10.130.222.17/32 any
+ip access-list 23
+  10 permit ip 10.130.239.138/32 any
+fex 105
+  pinning max-links 1
+  description "DC02-D09-B22-01"
+fex 106
+  pinning max-links 1
+  description "DC02-D10-B22-02"
+fex 107
+  pinning max-links 1
+  description "DC02-D11-B22-02"
+fex 108
+  pinning max-links 1
+  description "DC02-D14-B22-01"
+fex 109
+  pinning max-links 1
+  description "DC02-D15-B22-02"
+fex 112
+  pinning max-links 1
+  description "DC02-D12-B22-02"
+fex 113
+  pinning max-links 1
+  description "DC02-D13-B22-02"
+fex 124
+  pinning max-links 1
+  description "FEX0124-D2D08"
+slot 1
+  port 45-48 type fc
+slot 2
+  port 13-16 type fc
+slot 3
+  port 13-16 type fc
+slot 4
+  port 13-16 type fc
+snmp-server contact United Nations Support Base Valencia (UNSBV)
+snmp-server location HUB|VL|DC02|D08|ACC
+snmp-server source-interface traps mgmt0
+snmp-server source-interface informs mgmt0
+snmp-server user dpko network-operator auth md5 0x2b208f0d1733fa14f6a10b498aee43cc priv 0x2b208f0d1733fa14f6a10b498aee43cc localizedkey
+snmp-server user dpko network-admin
+snmp-server user admin network-admin auth md5 0x2165b0d4d463a54efe78461138d71556 priv 0x2165b0d4d463a54efe78461138d71556 localizedkey
+snmp-server user dcnm-neg network-admin auth md5 0xac42ecc3776b3a5e6021e0600e8444a5 priv 0xac42ecc3776b3a5e6021e0600e8444a5 localizedkey
+snmp-server host 10.130.222.83 traps version 2c public udp-port 2162
+snmp-server host 10.130.239.37 traps version 2c public udp-port 1163
+snmp-server host 10.130.94.242 traps version 2c public udp-port 2162
+snmp-server host 10.130.222.7 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.94.20 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR!
+snmp-server host 10.130.222.130 traps version 2c Df5-b0rd3rR!
+rmon event 1 log description FATAL(1) owner PMON@FATAL
+rmon event 2 log description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log description ERROR(3) owner PMON@ERROR
+rmon event 4 log description WARNING(4) owner PMON@WARNING
+rmon event 5 log description INFORMATION(5) owner PMON@INFO
+snmp-server community O10S4uDiT group network-operator
+snmp-server community C1D3C03xt group network-operator
+snmp-server community Df5-b0rd3rR! group network-operator
+snmp-server community dcnm group network-admin
+snmp-server community O10S4uDiT use-acl 23
+snmp-server community C1D3C03xt use-acl 22
+snmp-server community Df5-b0rd3rR! use-acl 20
+callhome
+  contract-id UNSBV(to-be-changed-according-to-PO)
+  customer-id UNSBV(to-be-changed-according-to-PO)
+  site-id UNSBV-D2C13
+  email-contact naingoo@un.org
+  phone-contact +3493462264748
+  streetaddress AVDA COMARQUES DEL PAS - QUART DE POBLET 46930 - Spain
+  destination-profile UNSBV-CALLHOME
+  destination-profile UNSBV-CALLHOME format full-txt
+  destination-profile UNSBV-CALLHOME message-level 2
+  destination-profile UNSBV-CALLHOME email-addr naingoo@un.org
+  destination-profile UNSBV-CALLHOME email-addr ncc@un.org
+  destination-profile UNSBV-CALLHOME alert-group Diagnostic
+  destination-profile UNSBV-CALLHOME alert-group EEM
+  destination-profile UNSBV-CALLHOME alert-group Configuration
+  destination-profile UNSBV-CALLHOME alert-group Environmental
+  destination-profile UNSBV-CALLHOME alert-group Inventory
+  destination-profile UNSBV-CALLHOME alert-group License
+  destination-profile UNSBV-CALLHOME alert-group Linecard-Hardware
+  destination-profile UNSBV-CALLHOME alert-group Supervisor-Hardware
+  destination-profile UNSBV-CALLHOME alert-group Syslog-group-port
+  destination-profile UNSBV-CALLHOME alert-group System
+  destination-profile UNSBV-CALLHOME alert-group Test
+  transport email smtp-server 10.130.202.125 port 25
+  transport email from D2C13-N5K-01@unsbv.dpko.un.org
+  transport email reply-to nobody@un.org
+  enable
+  periodic-inventory notification timeofday 07:30
+ntp server 10.130.88.249 use-vrf management
+ntp server 88.147.254.228
+ntp server 91.226.136.136
+ntp server 150.214.94.5
+ntp server 193.204.114.232
+ntp source-interface mgmt0
+aaa authentication login default group TACACS
+aaa authentication login console local
+aaa authorization commands default group TACACS local
+aaa accounting default group TACACS
+aaa authentication login error-enable
+policy-map type network-qos jumbo
+  class type network-qos class-fcoe
+    pause no-drop
+    mtu 2158
+  class type network-qos class-default
+    mtu 9216
+    multicast-optimize
+system qos
+  service-policy type queuing input fcoe-default-in-policy
+  service-policy type queuing output fcoe-default-out-policy
+  service-policy type qos input fcoe-default-in-policy
+  service-policy type network-qos jumbo
+
+ip route 0.0.0.0/0 10.130.88.1
+vlan 1
+vlan 2
+  name IN-ESX-HOSTS-64-0-24
+vlan 3
+  name IN-vMOTION-65-0-24
+vlan 4
+  name IN-ILO-SERVERS-66-0-24
+vlan 6
+  name IN-WEB-VIP-68-0-24
+vlan 7
+  name IN-DFS-ENT-WWW-69-0-24
+vlan 8
+  name IN-HOSTED-FE-70-0-24
+vlan 10
+  name IN-HOSTED-BE-72-0-24
+vlan 11
+  name IN-HOSTED-SERV-73-0-24
+vlan 12
+  name IN-WEBMAIL-FE-74-0-24
+vlan 14
+  name IN-DRBC-76-0-25
+vlan 15
+  name IN-HOSTED-APPS-77-0-24
+vlan 16
+  name IN-DFS-APPS-78-0-24
+vlan 17
+  name IN-DFS-SERV-79-0-24
+vlan 18
+  name IN-vCLOUD-INFRASTRUCT-80-32-27
+vlan 20
+  name IN-QA-DMZ-82-0-24
+vlan 21
+  name IN-EXCH-SRVRS-71-128-27
+vlan 22
+  name IN-WEBMAIL-BE-DMZ-84-0-24
+vlan 23
+  name IN-SAN-BE-DMZ-85-0-24
+vlan 24
+  name IN-GALILEO-BE-DMZ-86-0-24
+vlan 25
+  name IN-ONCOURSE-DMZ-87-0-24
+vlan 26
+  name IN-DC02-DEVICES-88-0-25
+vlan 27
+  name IN-DC02-DEVICES-89-0-24
+vlan 28
+  name APPLICATIONS-90
+vlan 29
+  name IN-APPS-91-0-24
+vlan 30
+  name IN-PRE-PRODUCTION-DMZ-92-0-24
+vlan 31
+  name IN-PRE-PRODUCTION-VIP-93-0-26
+vlan 32
+  name IN-NETWORK-MANAGEMENT-94-0-24
+vlan 33
+  name IN-DC02-KVM-CMC-UPS-95-0-24
+vlan 36
+  name IN-CUST-FE-UNRWA
+vlan 38
+  name IN-CUST-APPLICATIONS-UNRWA
+vlan 39
+vlan 40
+  name IN-CUST-BE-UNRWA
+vlan 41
+  name IN-EXCH-BKUP-71-192-27
+vlan 42
+  name MISSION_CP_MGMT_V42
+vlan 43
+  name CP-MGMT-MISSIONS
+vlan 47
+  name IN-VDI-MISSION-USERS-109-0-25
+vlan 49
+  name UNMEER-COSMOS-PREPROD
+vlan 50
+  name IN-LYNC-EDGE-PRIV-71-160-27
+vlan 56
+  name EVAULT-REPLI
+vlan 60
+vlan 64
+  name IN-WEB-VIP-126-0-24
+vlan 65
+  name EVAULT-PASSIVE
+vlan 66
+  name PRD-FE-Airwatch_V66
+vlan 67
+  name PRD-BE-Airwatch_V66
+vlan 68
+  name PRD_EXC-EVT_V68
+vlan 69
+  name PRD_EXC-EVT_REP_V69
+vlan 75
+  name EVAULT-DR
+vlan 76
+  name EXTERNAL-SERVICES
+vlan 89
+  name GEO-CLUSTERS-HB
+vlan 90
+  name IN-DFS-ENT-APP-81-0-25
+vlan 95
+vlan 110
+  name IN-DFS-ENT-BE-83-0-25
+vlan 139
+  name IN-MSG-SRVRS-71-64-26
+vlan 141
+  name IN-SMTP-76-128-25
+vlan 180
+  name IN-RPA-WAN-80-0-27
+vlan 181
+  name PRD-VCLOUD-Mgmt_Cluster_NFS
+vlan 202
+  name IN-SECURITY-83-128-25
+vlan 228
+  name PRE-FE-FIM_V228
+vlan 229
+  name PRE-FE-SYNC_V229
+vlan 230
+  name PRE-FE-SYSTEMS-105-0-25
+vlan 231
+  name PRE-FE-EXC_DMZ_231
+vlan 289
+  name PRE-GEO-CLUSTER-HB_V289
+vlan 312
+  name IN-QA-VIP-93-128-26
+vlan 364
+  name IN-CUST-FE-INEED
+vlan 365
+  name IN-CUST-PROD-FE-INEED
+vlan 366
+  name IN-CUST-FE-OCHA
+vlan 384
+  name IN-CUST-APP-INEED-100-128-27
+vlan 385
+  name CUST-PROD-APPS-INEED-100-160-27
+vlan 386
+  name IN-CUST-APPS-OCHA-100-192-27
+vlan 404
+  name IN-CUST-BE-INEED-102-128-27
+vlan 405
+  name IN-CUST-PROD-BE-INEED-102-160-27
+vlan 406
+  name IN-CUST-BE-OCHA-102-192-27
+vlan 440
+  name IN-CUST-DMZ-106-0-27
+vlan 460
+  name IN-HSEC-PROD-FE-108-0-27
+vlan 461
+  name IN-HSEC-PRE-PROD-FE-108-32-27
+vlan 462
+  name IN-HSEC-PROD-APPS-FE-108-64-27
+vlan 463
+  name HIGHSEC-PRE-PROD-APPS-108-96-27
+vlan 464
+  name IN-HSEC-PROD-BE-108-128-27
+vlan 465
+  name IN-HSEC-PRE-PROD-BE-108-160-27
+vlan 466
+  name IN-PRE-PROD-backend-103-164-27
+vlan 472
+  name IN-VDI-MISSION-MGMT-109-128-26
+vlan 473
+  name IN-VDI-MSN-VCENTER-109-192-27
+vlan 474
+  name IN-VDI-MISSION-ESX-109-224-27
+vlan 480
+  name IN-VDI-110-0-24
+vlan 490
+  name IN-VDI-NSU-111-0-6
+vlan 500
+  name DMZ-IN-WEBSENSE
+vlan 591
+  name MS-CLUSTER-HEARTBEAT
+vlan 598
+  name ESX-VMOTION
+vlan 599
+  name ESX-FAULT-TOLERANCE
+vlan 701
+  name OUT-DEV01-43-192-29
+vlan 731
+  name IN-DEV02-43-32-27
+vlan 733
+  name IN-DEV04-43-96-27
+vlan 734
+  name IN-DEV05-43-128-27
+vlan 736
+  name IN-DEV5-44-192-27
+vlan 737
+  name IN-DEV02-44-224-27
+vlan 744
+  name DC02-DEVELOPMENT
+vlan 745
+  name DC02-DEV-HB
+vlan 811
+  name IN-DEV-VCLOUD-GUESTS-42-0-25
+vlan 813
+  name IN-DEV-VCLOUD-APPS-42-192-28
+vlan 1020
+  fcoe vsan 20
+  name fabricB
+vlan 1060
+  name TETRA-APP_V1060
+vlan 1061
+  name TETRA-MGT_V1061
+vlan 1063
+  name TETRA-ESX_V1063
+vlan 1498-1501, 2032
+vlan 2039
+  name IN-CUST-APP-UNDSS-100-96-28
+vlan 2044
+  name IN-CUST-FE-UNDSS-98-96-28
+vlan 2045
+  name IN-CUST-FE-DESA-98-224-28
+vlan 2046
+  name IN-CUST-BE-UNDSS-102-96-28
+vlan 2050
+  name IN-UNRWA-NONPROD-105-0-27
+vlan 2051
+  name IN-UNRWA-PROD-105-32-27
+vlan 2052
+  name IN-UNRWA-MANAGEMENT-105-64-28
+vlan 2053
+  name IN-UNRWA-USER-105-96-27
+vlan 2090
+  name IN-BE-DMZ-107-0-24
+vlan 2234
+  name VCLOUD_OSEGY
+vlan 2250
+  name VCLOUD-OPCW-JM_V2250
+vlan 2366
+  name IN-FE-OCHA-98-192-27
+vlan 2369
+  name IN-CUST-FE-INSPIRA-PRO
+vlan 2370
+  name IN-CUST-FE-INSPIRA-PRE
+vlan 2371
+  name IN-CUST-BE-INSPIRA-PRO
+vlan 2372
+  name IN-CUST-BE-INSPIR-PRE
+vlan 2373
+  name IN-INSPIRA-MGMT
+vlan 2500-2501, 2700
+vlan 2801
+  name BE_Active_Directory
+vlan 3030
+vlan 3131
+  name PRD-BCKND_V3131
+vlan 3132
+  name PRD-BCKND_V3132
+vlan 3133
+  name PRD-BCKND_V3133
+
+spanning-tree port type edge bpduguard default
+vrf context management
+  ip route 0.0.0.0/0 10.130.88.1
+vpc domain 4
+  peer-switch
+  peer-keepalive destination 10.130.88.75 source 10.130.88.76
+  peer-gateway
+  auto-recovery reload-delay 600
+
+vsan database
+  vsan 20 name "Fabric_B"
+
+
+interface Vlan1
+
+interface san-port-channel 220
+  channel mode active
+  switchport mode NP
+  switchport trunk allowed vsan 20
+  switchport description To SAN
+
+interface port-channel44
+  description CHECKPOINT SMART EVENT
+  switchport access vlan 32
+  spanning-tree port type edge
+  vpc 44
+
+interface port-channel45
+  description CHECKPOINT MLM
+  switchport access vlan 32
+  spanning-tree port type edge
+  vpc 45
+
+interface port-channel46
+  description CheckPoint SMART-1 5150 
+  switchport access vlan 32
+  spanning-tree port type edge
+  vpc 46
+
+interface port-channel54
+  description NetScaler Development (VLC-DC2-NS-DEV-A) Frontend
+  switchport mode trunk
+  switchport trunk allowed vlan 20
+  speed 1000
+
+interface port-channel55
+  description NetScaler Development (VLC-DC2-NS-DEV-A)  Backend
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 30,32,230,731,733,736-737
+  speed 1000
+
+interface port-channel105
+  description DC02-D09-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 105
+
+interface port-channel106
+  description DC02-D10-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 106
+
+interface port-channel107
+  description DC02-D11-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 107
+
+interface port-channel108
+  description DC02-D14-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 108
+  storm-control broadcast level 5.00
+
+interface port-channel109
+  description DC02-D15-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 109
+  storm-control broadcast level 5.00
+
+interface port-channel112
+  description DC02-D12-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 112
+  storm-control broadcast level 5.00
+
+interface port-channel113
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 113
+  storm-control broadcast level 5.00
+
+interface port-channel124
+  description N2K-FEX124-D2D08
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 124
+
+interface port-channel510
+  description DC02-N7K
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  spanning-tree guard loop
+
+interface port-channel1001
+  description VPC-PEER-LINK-to-VLC-DC02-
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  spanning-tree port type network
+  speed 10000
+  vpc peer-link
+
+interface vfc501
+  bind interface Ethernet105/1/1
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc502
+  bind interface Ethernet105/1/2
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc503
+  bind interface Ethernet105/1/3
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc504
+  bind interface Ethernet105/1/4
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc505
+  bind interface Ethernet105/1/5
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc506
+  bind interface Ethernet105/1/6
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc507
+  bind interface Ethernet105/1/7
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc508
+  bind interface Ethernet105/1/8
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc509
+  bind interface Ethernet105/1/9
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc510
+  bind interface Ethernet105/1/10
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc511
+  bind interface Ethernet105/1/11
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc512
+  bind interface Ethernet105/1/12
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc513
+  bind interface Ethernet105/1/13
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc514
+  bind interface Ethernet105/1/14
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc515
+  bind interface Ethernet105/1/15
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc516
+  bind interface Ethernet105/1/16
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc601
+  bind interface Ethernet106/1/1
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc602
+  bind interface Ethernet106/1/2
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc603
+  bind interface Ethernet106/1/3
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc604
+  bind interface Ethernet106/1/4
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc605
+  bind interface Ethernet106/1/5
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc606
+  bind interface Ethernet106/1/6
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc607
+  bind interface Ethernet106/1/7
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc608
+  bind interface Ethernet106/1/8
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc609
+  bind interface Ethernet106/1/9
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc610
+  bind interface Ethernet106/1/10
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc611
+  bind interface Ethernet106/1/11
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc612
+  bind interface Ethernet106/1/12
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc613
+  bind interface Ethernet106/1/13
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc614
+  bind interface Ethernet106/1/14
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc615
+  bind interface Ethernet106/1/15
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc616
+  bind interface Ethernet106/1/16
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc701
+  bind interface Ethernet107/1/1
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc702
+  bind interface Ethernet107/1/2
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc703
+  bind interface Ethernet107/1/3
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc704
+  bind interface Ethernet107/1/4
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc705
+  bind interface Ethernet107/1/5
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc706
+  bind interface Ethernet107/1/6
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc707
+  bind interface Ethernet107/1/7
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc708
+  bind interface Ethernet107/1/8
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc709
+  bind interface Ethernet107/1/9
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc710
+  bind interface Ethernet107/1/10
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc711
+  bind interface Ethernet107/1/11
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc712
+  bind interface Ethernet107/1/12
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc713
+  bind interface Ethernet107/1/13
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc714
+  bind interface Ethernet107/1/14
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc715
+  bind interface Ethernet107/1/15
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc716
+  bind interface Ethernet107/1/16
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc801
+  bind interface Ethernet108/1/1
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc802
+  bind interface Ethernet108/1/2
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc803
+  bind interface Ethernet108/1/3
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc804
+  bind interface Ethernet108/1/4
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc805
+  bind interface Ethernet108/1/5
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc806
+  bind interface Ethernet108/1/6
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc807
+  bind interface Ethernet108/1/7
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc808
+  bind interface Ethernet108/1/8
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc809
+  bind interface Ethernet108/1/9
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc810
+  bind interface Ethernet108/1/10
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc811
+  bind interface Ethernet108/1/11
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc812
+  bind interface Ethernet108/1/12
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc813
+  bind interface Ethernet108/1/13
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc814
+  bind interface Ethernet108/1/14
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc815
+  bind interface Ethernet108/1/15
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc816
+  bind interface Ethernet108/1/16
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc901
+  bind interface Ethernet109/1/1
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc902
+  bind interface Ethernet109/1/2
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc903
+  bind interface Ethernet109/1/3
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc904
+  bind interface Ethernet109/1/4
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc905
+  bind interface Ethernet109/1/5
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc906
+  bind interface Ethernet109/1/6
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc907
+  bind interface Ethernet109/1/7
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc908
+  bind interface Ethernet109/1/8
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc909
+  bind interface Ethernet109/1/9
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc910
+  bind interface Ethernet109/1/10
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc911
+  bind interface Ethernet109/1/11
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc912
+  bind interface Ethernet109/1/12
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc913
+  bind interface Ethernet109/1/13
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc914
+  bind interface Ethernet109/1/14
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc915
+  bind interface Ethernet109/1/15
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc916
+  bind interface Ethernet109/1/16
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1201
+  bind interface Ethernet112/1/1
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1202
+  bind interface Ethernet112/1/2
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1203
+  bind interface Ethernet112/1/3
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1204
+  bind interface Ethernet112/1/4
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1205
+  bind interface Ethernet112/1/5
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1206
+  bind interface Ethernet112/1/6
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1207
+  bind interface Ethernet112/1/7
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1208
+  bind interface Ethernet112/1/8
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1209
+  bind interface Ethernet112/1/9
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1210
+  bind interface Ethernet112/1/10
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1211
+  bind interface Ethernet112/1/11
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1212
+  bind interface Ethernet112/1/12
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1213
+  bind interface Ethernet112/1/13
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1214
+  bind interface Ethernet112/1/14
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1215
+  bind interface Ethernet112/1/15
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1216
+  bind interface Ethernet112/1/16
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1301
+  bind interface Ethernet113/1/1
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1302
+  bind interface Ethernet113/1/2
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1303
+  bind interface Ethernet113/1/3
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1304
+  bind interface Ethernet113/1/4
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1305
+  bind interface Ethernet113/1/5
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1306
+  bind interface Ethernet113/1/6
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1307
+  bind interface Ethernet113/1/7
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1308
+  bind interface Ethernet113/1/8
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1309
+  bind interface Ethernet113/1/9
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1310
+  bind interface Ethernet113/1/10
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1311
+  bind interface Ethernet113/1/11
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1312
+  bind interface Ethernet113/1/12
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1313
+  bind interface Ethernet113/1/13
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1314
+  bind interface Ethernet113/1/14
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1315
+  bind interface Ethernet113/1/15
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface vfc1316
+  bind interface Ethernet113/1/16
+  switchport trunk allowed vsan 20
+  no shutdown
+vsan database
+  vsan 20 interface vfc501
+  vsan 20 interface vfc502
+  vsan 20 interface vfc503
+  vsan 20 interface vfc504
+  vsan 20 interface vfc505
+  vsan 20 interface vfc506
+  vsan 20 interface vfc507
+  vsan 20 interface vfc508
+  vsan 20 interface vfc509
+  vsan 20 interface vfc510
+  vsan 20 interface vfc511
+  vsan 20 interface vfc512
+  vsan 20 interface vfc513
+  vsan 20 interface vfc514
+  vsan 20 interface vfc515
+  vsan 20 interface vfc516
+  vsan 20 interface vfc601
+  vsan 20 interface vfc602
+  vsan 20 interface vfc603
+  vsan 20 interface vfc604
+  vsan 20 interface vfc605
+  vsan 20 interface vfc606
+  vsan 20 interface vfc607
+  vsan 20 interface vfc608
+  vsan 20 interface vfc609
+  vsan 20 interface vfc610
+  vsan 20 interface vfc611
+  vsan 20 interface vfc612
+  vsan 20 interface vfc613
+  vsan 20 interface vfc614
+  vsan 20 interface vfc615
+  vsan 20 interface vfc616
+  vsan 20 interface vfc701
+  vsan 20 interface vfc702
+  vsan 20 interface vfc703
+  vsan 20 interface vfc704
+  vsan 20 interface vfc705
+  vsan 20 interface vfc706
+  vsan 20 interface vfc707
+  vsan 20 interface vfc708
+  vsan 20 interface vfc709
+  vsan 20 interface vfc710
+  vsan 20 interface vfc711
+  vsan 20 interface vfc712
+  vsan 20 interface vfc713
+  vsan 20 interface vfc714
+  vsan 20 interface vfc715
+  vsan 20 interface vfc716
+  vsan 20 interface vfc801
+  vsan 20 interface vfc802
+  vsan 20 interface vfc803
+  vsan 20 interface vfc804
+  vsan 20 interface vfc805
+  vsan 20 interface vfc806
+  vsan 20 interface vfc807
+  vsan 20 interface vfc808
+  vsan 20 interface vfc809
+  vsan 20 interface vfc810
+  vsan 20 interface vfc811
+  vsan 20 interface vfc812
+  vsan 20 interface vfc813
+  vsan 20 interface vfc814
+  vsan 20 interface vfc815
+  vsan 20 interface vfc816
+  vsan 20 interface vfc901
+  vsan 20 interface vfc902
+  vsan 20 interface vfc903
+  vsan 20 interface vfc904
+  vsan 20 interface vfc905
+  vsan 20 interface vfc906
+  vsan 20 interface vfc907
+  vsan 20 interface vfc908
+  vsan 20 interface vfc909
+  vsan 20 interface vfc910
+  vsan 20 interface vfc911
+  vsan 20 interface vfc912
+  vsan 20 interface vfc913
+  vsan 20 interface vfc914
+  vsan 20 interface vfc915
+  vsan 20 interface vfc916
+  vsan 20 interface vfc1201
+  vsan 20 interface vfc1202
+  vsan 20 interface vfc1203
+  vsan 20 interface vfc1204
+  vsan 20 interface vfc1205
+  vsan 20 interface vfc1206
+  vsan 20 interface vfc1207
+  vsan 20 interface vfc1208
+  vsan 20 interface vfc1209
+  vsan 20 interface vfc1210
+  vsan 20 interface vfc1211
+  vsan 20 interface vfc1212
+  vsan 20 interface vfc1213
+  vsan 20 interface vfc1214
+  vsan 20 interface vfc1215
+  vsan 20 interface vfc1216
+  vsan 20 interface vfc1301
+  vsan 20 interface vfc1302
+  vsan 20 interface vfc1303
+  vsan 20 interface vfc1304
+  vsan 20 interface vfc1305
+  vsan 20 interface vfc1306
+  vsan 20 interface vfc1307
+  vsan 20 interface vfc1308
+  vsan 20 interface vfc1309
+  vsan 20 interface vfc1310
+  vsan 20 interface vfc1311
+  vsan 20 interface vfc1312
+  vsan 20 interface vfc1313
+  vsan 20 interface vfc1314
+  vsan 20 interface vfc1315
+  vsan 20 interface vfc1316
+  vsan 20 interface san-port-channel 220
+feature npv
+feature npiv
+
+
+interface fc1/45
+  no shutdown
+
+interface fc1/46
+  switchport trunk allowed vsan 20
+  no shutdown
+
+interface fc1/47
+  switchport description to SAN
+  channel-group 220 force
+  no shutdown
+
+interface fc1/48
+  switchport description to SAN
+  channel-group 220 force
+  no shutdown
+
+interface fc2/13
+  no shutdown
+
+interface fc2/14
+  no shutdown
+
+interface fc2/15
+  switchport description to SAN
+  channel-group 220 force
+  no shutdown
+
+interface fc2/16
+  switchport description to SAN
+  channel-group 220 force
+  no shutdown
+
+interface fc3/13
+  no shutdown
+
+interface fc3/14
+  no shutdown
+
+interface fc3/15
+  switchport description to SAN
+  channel-group 220 force
+  no shutdown
+
+interface fc3/16
+  switchport description to SAN
+  channel-group 220 force
+  no shutdown
+
+interface fc4/13
+  no shutdown
+
+interface fc4/14
+  no shutdown
+
+interface fc4/15
+  switchport description to SAN
+  channel-group 220 force
+  no shutdown
+
+interface fc4/16
+  switchport description to SAN
+  channel-group 220 force
+  no shutdown
+
+interface Ethernet1/1
+  description DC02-A-D2E06-N7K
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  spanning-tree guard loop
+  channel-group 510 mode active
+
+interface Ethernet1/2
+  description DC02-B-D2E05-N7K
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  spanning-tree guard loop
+  channel-group 510 mode active
+
+interface Ethernet1/3
+  description VPC-PEER-LINK-to-DC02-N5k-D2C12
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  channel-group 1001 mode active
+
+interface Ethernet1/4
+  description VPC-PEER-LINK-to-DC02-N5k-D2C12
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  channel-group 1001 mode active
+
+interface Ethernet1/5
+  description N2K-FEX124-D2D08
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 124
+  channel-group 124
+
+interface Ethernet1/6
+  description N2K-FEX124-D2D08
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 124
+  channel-group 124
+
+interface Ethernet1/7
+  description DC02-D09-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 105
+  channel-group 105
+
+interface Ethernet1/8
+  description DC02-D09-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 105
+  channel-group 105
+
+interface Ethernet1/9
+  description DC02-D10-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 106
+  channel-group 106
+
+interface Ethernet1/10
+  description DC02-D10-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 106
+  channel-group 106
+
+interface Ethernet1/11
+  description DC02-D11-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 107
+  channel-group 107
+
+interface Ethernet1/12
+  description DC02-D11-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 107
+  channel-group 107
+
+interface Ethernet1/13
+  storm-control broadcast level 5.00
+
+interface Ethernet1/14
+  storm-control broadcast level 5.00
+
+interface Ethernet1/15
+  storm-control broadcast level 5.00
+
+interface Ethernet1/16
+  storm-control broadcast level 5.00
+
+interface Ethernet1/17
+  storm-control broadcast level 5.00
+
+interface Ethernet1/18
+  storm-control broadcast level 5.00
+
+interface Ethernet1/19
+  description DC02-D12-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 112
+  storm-control broadcast level 5.00
+  channel-group 112
+
+interface Ethernet1/20
+  description DC02-D12-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 112
+  storm-control broadcast level 5.00
+  channel-group 112
+
+interface Ethernet1/21
+  description DC02-D13-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 113
+  storm-control broadcast level 5.00
+  channel-group 113
+
+interface Ethernet1/22
+  description DC02-D13-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 113
+  storm-control broadcast level 5.00
+  channel-group 113
+
+interface Ethernet1/23
+  description DC02-D14-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 108
+  storm-control broadcast level 5.00
+  channel-group 108
+
+interface Ethernet1/24
+  description DC02-D14-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 108
+  storm-control broadcast level 5.00
+  channel-group 108
+
+interface Ethernet1/25
+  description DC02-D15-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 109
+  storm-control broadcast level 5.00
+  channel-group 109
+
+interface Ethernet1/26
+  description DC02-D15-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 109
+  storm-control broadcast level 5.00
+  channel-group 109
+
+interface Ethernet1/27
+  storm-control broadcast level 5.00
+
+interface Ethernet1/28
+  storm-control broadcast level 5.00
+
+interface Ethernet1/29
+  storm-control broadcast level 5.00
+
+interface Ethernet1/30
+  storm-control broadcast level 5.00
+
+interface Ethernet1/31
+  storm-control broadcast level 5.00
+
+interface Ethernet1/32
+  storm-control broadcast level 5.00
+
+interface Ethernet1/33
+  storm-control broadcast level 5.00
+
+interface Ethernet1/34
+  storm-control broadcast level 5.00
+
+interface Ethernet1/35
+  storm-control broadcast level 5.00
+
+interface Ethernet1/36
+  storm-control broadcast level 5.00
+
+interface Ethernet1/37
+  storm-control broadcast level 5.00
+
+interface Ethernet1/38
+  storm-control broadcast level 5.00
+
+interface Ethernet1/39
+  storm-control broadcast level 5.00
+
+interface Ethernet1/40
+  storm-control broadcast level 5.00
+
+interface Ethernet1/41
+  storm-control broadcast level 5.00
+
+interface Ethernet1/42
+  storm-control broadcast level 5.00
+
+interface Ethernet1/43
+  storm-control broadcast level 5.00
+
+interface Ethernet1/44
+  storm-control broadcast level 5.00
+
+interface Ethernet2/1
+  storm-control broadcast level 5.00
+
+interface Ethernet2/2
+  storm-control broadcast level 5.00
+
+interface Ethernet2/3
+  description VPC-PEER-LINK-to-DC02-N5k-D2C12
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  channel-group 1001 mode active
+
+interface Ethernet2/4
+  description VPC-PEER-LINK-to-DC02-N5k-D2C12
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  channel-group 1001 mode active
+
+interface Ethernet2/5
+  description N2K-FEX124-D2D08
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 124
+  channel-group 124
+
+interface Ethernet2/6
+  description N2K-FEX124-D2D08
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 124
+  channel-group 124
+
+interface Ethernet2/7
+  description DC02-D09-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 105
+  channel-group 105
+
+interface Ethernet2/8
+  description DC02-D09-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 105
+  channel-group 105
+
+interface Ethernet2/9
+  description DC02-D10-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 106
+  channel-group 106
+
+interface Ethernet2/10
+  description DC02-D10-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 106
+  channel-group 106
+
+interface Ethernet2/11
+  description DC02-D11-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 107
+  channel-group 107
+
+interface Ethernet2/12
+  description DC02-D11-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 107
+  channel-group 107
+
+interface Ethernet3/1
+  description DC02-A-D2E06-N7K
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  spanning-tree guard loop
+  channel-group 510 mode active
+
+interface Ethernet3/2
+  description DC02-B-D2E05-N7K
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,718,723,731,733-734,736-737,744-745,811,832-833,1060-1063,1498-1501,2037,2039,2041-2046,2050-2053,2070-2071,2081,2090,2366,2369-2373,2500-2501,2700,2801,3016,3030,3131-3133
+  spanning-tree guard loop
+  channel-group 510 mode active
+
+interface Ethernet3/3
+  description DC02-D12-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 112
+  storm-control broadcast level 5.00
+  channel-group 112
+
+interface Ethernet3/4
+  description DC02-D12-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 112
+  storm-control broadcast level 5.00
+  channel-group 112
+
+interface Ethernet3/5
+  description DC02-D13-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 113
+  storm-control broadcast level 5.00
+  channel-group 113
+
+interface Ethernet3/6
+  description DC02-D13-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 113
+  storm-control broadcast level 5.00
+  channel-group 113
+
+interface Ethernet3/7
+  description DC02-D14-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 108
+  storm-control broadcast level 5.00
+  channel-group 108
+
+interface Ethernet3/8
+  description DC02-D14-B22-01
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 108
+  storm-control broadcast level 5.00
+  channel-group 108
+
+interface Ethernet3/9
+  description DC02-D15-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 109
+  storm-control broadcast level 5.00
+  channel-group 109
+
+interface Ethernet3/10
+  description DC02-D15-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  fex associate 109
+  storm-control broadcast level 5.00
+  channel-group 109
+
+interface Ethernet3/11
+  description DC02-D13-B22-02
+  switchport mode fex-fabric
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,2046,2801
+  fex associate 113
+  storm-control broadcast level 5.00
+  channel-group 113
+
+interface Ethernet3/12
+  storm-control broadcast level 5.00
+
+interface Ethernet4/1
+  description D2C05-VirtualConnect-02 X6
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,744-745,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  spanning-tree guard loop
+  storm-control broadcast level 5.00
+  udld aggressive
+
+interface Ethernet4/2
+  description D2C06-VirtualConnect-02 X5
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,744-745,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  spanning-tree guard loop
+  storm-control broadcast level 5.00
+  udld aggressive
+
+interface Ethernet4/3
+  description D2C02-VirtualConnect-02 X6
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,733-734,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  spanning-tree guard loop
+  storm-control broadcast level 5.00
+  udld aggressive
+
+interface Ethernet4/4
+  description D2C03-VirtualConnect-02 X5
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,733-734,2039,2044-2046,2050-2053,2090,2366,2369-2373,2801
+  spanning-tree guard loop
+  storm-control broadcast level 5.00
+  udld aggressive
+
+interface Ethernet4/5
+  description SAN Data Domain DD7200 DD-DC02-02
+  switchport access vlan 23
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  spanning-tree guard loop
+  storm-control broadcast level 5.00
+  udld aggressive
+
+interface Ethernet4/6
+  description SAN Data Domain DD7200 DD-DC02-02
+  switchport access vlan 23
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  spanning-tree guard loop
+  storm-control broadcast level 5.00
+  udld aggressive
+
+interface Ethernet4/7
+  storm-control broadcast level 5.00
+
+interface Ethernet4/8
+  storm-control broadcast level 5.00
+
+interface Ethernet4/9
+  storm-control broadcast level 5.00
+
+interface Ethernet4/10
+  storm-control broadcast level 5.00
+
+interface Ethernet4/11
+  storm-control broadcast level 5.00
+
+interface Ethernet4/12
+  storm-control broadcast level 5.00
+
+interface mgmt0
+  vrf member management
+  ip address 10.130.88.76/25
+
+interface Ethernet105/1/1
+  description dfs-esx-v-d2-d09-01-01, vmnic2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/2
+  description dfs-esx-v-d2-d09-01-02, vmnic2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/3
+  description dfs-esx-v-d2-d09-01-03, vmnic2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/4
+  description dfs-esx-v-d2-d09-01-04, vmnic2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/5
+  description dfs-esx-v-d2-d09-01-05, vmnic2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2045-2046,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/6
+  description dfs-esx-v-d2-d09-01-06, vmnic2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/7
+  shutdown
+
+interface Ethernet105/1/8
+  description dfs-esx-v-d2-d09-01-08, vmnic2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/9
+  description dfs-esx-v-d2-d09-01-01, vmnic0
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/10
+  description dfs-esx-v-d2-d09-01-02, vmnic0
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/11
+  description dfs-esx-v-d2-d09-01-03, vmnic0
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/12
+  description dfs-esx-v-d2-d09-01-04, vmnic0
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/13
+  description dfs-esx-v-d2-d09-01-05, vmnic0
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2045-2046,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/14
+  description dfs-esx-v-d2-d09-01-06, vmnic0
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet105/1/15
+  shutdown
+
+interface Ethernet105/1/16
+  description dfs-esx-v-d2-d09-01-08, vmnic0
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/1
+  description dfs-esx-v-d2-d10-01-01.dpko.un.org
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/2
+  description dfs-esx-v-d2-d10-01-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/3
+  description dfs-esx-v-d2-d10-01-03
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/4
+  description dfs-esx-v-d2-d10-01-04.dpko.un.org
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/5
+  description DC02-D10-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/6
+  description DC02-D10-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/7
+  description dfs-esx-v-d2-d10-01-07.dpko.un.org P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/8
+  description dfs-esx-v-d2-d10-01-08.dpko.un.org P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2046,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/9
+  description dfs-esx-v-d2-d10-01-01.dpko.un.org 
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/10
+  description dfs-esx-v-d2-d10-01-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/11
+  description dfs-esx-v-d2-d10-01-03
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/12
+  description dfs-esx-v-d2-d10-01-04.dpko.un.org 
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/13
+  description DC02-D10-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/14
+  description DC02-D10-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/15
+  description dfs-esx-v-d2-d10-01-07.dpko.un.org P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet106/1/16
+  description dfs-esx-v-d2-d10-01-08.dpko.
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2046,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+
+interface Ethernet107/1/1
+  description dfs-esx-v-d2-d11-01-01.dpko.un.org P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/2
+  description dfs-esx-v-d2-d11-01-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/3
+  description dfs-esx-v-d2-d11-01-03
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/4
+  description dfs-esx-v-d2-d11-01-04.dpko.un.org
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/5
+  description DC02-D11-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2046,2366,2500-2501,2700,2801,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/6
+  description dfs-esx-v-d2-d11-01-06
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/7
+  description dfs-esx-v-d2-d11-01-07.dpko.un.org P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2046,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/8
+  description dfs-esx-v-d2-d11-01-08.dpko.un.org P1
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/9
+  description dfs-esx-v-d2-d11-01-01.dpko.un.org P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/10
+  description dfs-esx-v-d2-d11-01-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/11
+  description dfs-esx-v-d2-d11-01-03
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/12
+  description dfs-esx-v-d2-d11-01-04.dpko.un.org
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/13
+  description DC02-D11-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2046,2366,2500-2501,2700,2801,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/14
+  description dfs-esx-v-d2-d11-01-06
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/15
+  description dfs-esx-v-d2-d11-01-07.dpko.un.org P3
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2046,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet107/1/16
+  description dfs-esx-v-d2-d11-01-08.dpko.un.or
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/1
+  description dfs-esx-v-d2-d14-01-01, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/2
+  description dfs-esx-v-d2-d14-01-02, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/3
+  description dfs-esx-v-d2-d14-01-03, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/4
+  description dfs-esx-v-d2-d14-01-04, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/5
+  description dfs-esx-v-d2-d14-01-05, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/6
+  description dfs-esx-v-d2-d14-01-06, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/7
+  description dfs-esx-v-d2-d14-01-07, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/8
+  description dfs-esx-v-d2-d14-01-08, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2500-2501,2700,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/9
+  description dfs-esx-v-d2-d14-01-01, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/10
+  description dfs-esx-v-d2-d14-01-02, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/11
+  description dfs-esx-v-d2-d14-01-03, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/12
+  description dfs-esx-v-d2-d14-01-04, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/13
+  description dfs-esx-v-d2-d14-01-05, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/14
+  description dfs-esx-v-d2-d14-01-06, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/15
+  description dfs-esx-v-d2-d14-01-07, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet108/1/16
+  description dfs-esx-v-d2-d14-01-08, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+
+interface Ethernet109/1/1
+  description dfs-esx-v-d2-d15-01-01, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/2
+  description dfs-esx-v-d2-d15-01-02, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/3
+  description dfs-esx-v-d2-d15-01-03, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/4
+  description dfs-esx-v-d2-d15-01-04, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/5
+  description dfs-esx-v-d2-d15-01-05, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/6
+  description dfs-esx-v-d2-d15-01-06, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/7
+  description dfs-esx-v-d2-d15-01-07, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1010,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/8
+  description dfs-esx-v-d2-d15-01-08, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1010,1020,1498-1501,2500-2501,2700,3131-3133
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/9
+  description dfs-esx-v-d2-d15-01-01, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/10
+  description dfs-esx-v-d2-d15-01-02, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/11
+  description dfs-esx-v-d2-d15-01-03, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/12
+  description dfs-esx-v-d2-d15-01-04, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/13
+  description dfs-esx-v-d2-d15-01-05, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/14
+  description dfs-esx-v-d2-d15-01-06, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/15
+  description dfs-esx-v-d2-d15-01-07, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet109/1/16
+  description dfs-esx-v-d2-d15-01-08, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2500-2501,2700,3131-3133
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/1
+  description dfs-esx-v-d2-d12-01-01.dpko.un.org, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/2
+  description NOT-IN-USE
+  shutdown
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/3
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/4
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/5
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/6
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/7
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/8
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/9
+  description dfs-esx-v-d2-d12-01-01.dpko.un.org, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/10
+  description NOT-IN-USE
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/11
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/12
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/13
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/14
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/15
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet112/1/16
+  description DC02-D12-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/1
+  description dfs-esx-v-d2-d13-01-01.dpko.un.org, P2
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/2
+  description NOT-IN-USE
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/3
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/4
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/5
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/6
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/7
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/8
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/9
+  description dfs-esx-v-d2-d13-01-01.dpko.un.org, P4
+  switchport mode trunk
+  switchport trunk native vlan 2
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2032,2039,2044-2046,2052,2090,2365-2366,2371,2373,2500-2501,2700,3016,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/10
+  description NOT-IN-USE
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/11
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/12
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/13
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/14
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/15
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+  spanning-tree port type edge trunk
+  storm-control broadcast level 5.00
+
+interface Ethernet113/1/16
+  description DC02-D13-B22-02
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,1020,1498-1501,2090,2366,2500-2501,2700,3030,3131-3133
+
+interface Ethernet124/1/1
+  description DC2D2 TETRA-ESX-01, P0
+  switchport mode trunk
+  switchport trunk native vlan 1063
+  switchport trunk allowed vlan 1063
+  spanning-tree port type edge trunk
+  speed 1000
+  storm-control broadcast level 20.00
+
+interface Ethernet124/1/2
+  description DC2D2 TETRA-IMW-01, P2
+  switchport mode trunk
+  switchport trunk allowed vlan 1060-1062
+  spanning-tree port type edge trunk
+  speed 1000
+  storm-control broadcast level 20.00
+
+interface Ethernet124/1/3
+  description DC2D2 TETRA-ESX-02, P0
+  switchport mode trunk
+  switchport trunk native vlan 1063
+  switchport trunk allowed vlan 1063
+  spanning-tree port type edge trunk
+  speed 1000
+  storm-control broadcast level 20.00
+
+interface Ethernet124/1/4
+  description DC2D2 TETRA-IMW-02, P2
+  switchport mode trunk
+  switchport trunk allowed vlan 1060-1062
+  spanning-tree port type edge trunk
+  speed 1000
+  storm-control broadcast level 20.00
+
+interface Ethernet124/1/5
+  description DC2D2 TETRA-ESX-03, P0
+  switchport mode trunk
+  switchport trunk native vlan 1063
+  switchport trunk allowed vlan 1063
+  spanning-tree port type edge trunk
+  speed 1000
+  storm-control broadcast level 20.00
+
+interface Ethernet124/1/6
+  description DC2D2 TETRA-IMW-03, P2
+  switchport mode trunk
+  switchport trunk allowed vlan 1060-1062
+  spanning-tree port type edge trunk
+  speed 1000
+  storm-control broadcast level 20.00
+
+interface Ethernet124/1/7
+
+interface Ethernet124/1/8
+
+interface Ethernet124/1/9
+  description CHECKPOINT MLM
+  switchport access vlan 32
+  spanning-tree port type edge
+  speed 1000
+  channel-group 45 mode active
+
+interface Ethernet124/1/10
+  description CHECKPOINT SMART EVENT
+  switchport access vlan 32
+  spanning-tree port type edge
+  speed 1000
+  channel-group 44 mode active
+
+interface Ethernet124/1/11
+  description ILO CHECKPOINT SmEVENT
+  switchport access vlan 32
+  spanning-tree port type edge
+  speed 1000
+
+interface Ethernet124/1/12
+  description NetScaler Development (VLC-DC2-NS-DEV-A) Int1/1: Frontend
+  switchport mode trunk
+  switchport trunk allowed vlan 20
+  speed 1000
+  channel-group 54 mode active
+
+interface Ethernet124/1/13
+  description NetScaler Development (VLC-DC2-NS-DEV-A) Int1/1: Frontend
+  switchport mode trunk
+  switchport trunk allowed vlan 20
+  speed 1000
+  channel-group 54 mode active
+
+interface Ethernet124/1/14
+  description NetScaler Development (VLC-DC2-NS-DEV-A) Int1/3: Backend
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 30,32,230,731,733,736-737
+  speed 1000
+  channel-group 55 mode active
+
+interface Ethernet124/1/15
+  description NetScaler Development (VLC-DC2-NS-DEV-A) Int1/4: Backend
+  switchport mode trunk
+  switchport trunk native vlan 32
+  switchport trunk allowed vlan 30,32,230,731,733,736-737
+  speed 1000
+  channel-group 55 mode active
+
+interface Ethernet124/1/16
+  description dfs-acs-52 PROD_1
+  switchport access vlan 32
+  spanning-tree port type edge
+  spanning-tree guard loop
+  speed 1000
+  storm-control broadcast level 20.00
+
+interface Ethernet124/1/17
+
+interface Ethernet124/1/18
+
+interface Ethernet124/1/19
+
+interface Ethernet124/1/20
+
+interface Ethernet124/1/21
+
+interface Ethernet124/1/22
+
+interface Ethernet124/1/23
+
+interface Ethernet124/1/24
+
+interface Ethernet124/1/25
+
+interface Ethernet124/1/26
+
+interface Ethernet124/1/27
+
+interface Ethernet124/1/28
+
+interface Ethernet124/1/29
+
+interface Ethernet124/1/30
+
+interface Ethernet124/1/31
+
+interface Ethernet124/1/32
+
+interface Ethernet124/1/33
+
+interface Ethernet124/1/34
+
+interface Ethernet124/1/35
+
+interface Ethernet124/1/36
+
+interface Ethernet124/1/37
+
+interface Ethernet124/1/38
+
+interface Ethernet124/1/39
+
+interface Ethernet124/1/40
+
+interface Ethernet124/1/41
+
+interface Ethernet124/1/42
+
+interface Ethernet124/1/43
+
+interface Ethernet124/1/44
+
+interface Ethernet124/1/45
+
+interface Ethernet124/1/46
+
+interface Ethernet124/1/47
+
+interface Ethernet124/1/48
+  description CheckPoint SMART_5150 int 2
+  switchport access vlan 32
+  channel-group 46 mode active
+clock timezone CET 2 0
+cli alias name wr copy running-config startup-config
+line console
+line vty
+boot kickstart bootflash:/n5000-uk9-kickstart.7.3.3.N1.1.bin
+boot system bootflash:/n5000-uk9.7.3.3.N1.1.bin
+interface fc1/47
+interface fc1/48
+interface fc2/15
+interface fc2/16
+interface fc3/15
+interface fc3/16
+interface fc4/15
+interface fc4/16
+interface fc1/45
+  switchport mode NP
+interface fc1/46
+  switchport mode NP
+interface fc1/47
+  switchport mode NP
+interface fc1/48
+  switchport mode NP
+interface fc2/13
+  switchport mode NP
+interface fc2/14
+  switchport mode NP
+interface fc2/15
+  switchport mode NP
+interface fc2/16
+  switchport mode NP
+interface fc3/13
+  switchport mode NP
+interface fc3/14
+  switchport mode NP
+interface fc3/15
+  switchport mode NP
+interface fc3/16
+  switchport mode NP
+interface fc4/13
+  switchport mode NP
+interface fc4/14
+  switchport mode NP
+interface fc4/15
+  switchport mode NP
+interface fc4/16
+  switchport mode NP
+logging server 10.130.94.60 5 use-vrf management
+logging monitor 7
+logging history 7

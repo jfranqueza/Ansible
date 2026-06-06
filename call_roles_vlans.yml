@@ -1,0 +1,5 @@
+- name: TEST DE VLANS
+  hosts: bds-dc02-oob-a
+  gather_facts: no
+  roles:
+    - vlans

@@ -1,0 +1,31 @@
+ansible_network_os: nxos
+interfaces:
+- Ethernet3/10
+- Ethernet3/12
+- Ethernet3/13
+- Ethernet3/25
+- Ethernet3/26
+- Ethernet3/33
+- Ethernet3/40
+- Ethernet4/10
+- Ethernet4/12
+- Ethernet4/14
+- Ethernet4/15
+- Ethernet4/18
+- Ethernet4/19
+- Ethernet4/20
+- Ethernet4/23
+- Ethernet4/34
+- Ethernet4/35
+- Ethernet4/43
+- Ethernet4/44
+- Ethernet4/45
+
+uplinks:
+#  - port-channel808  # VPC peer-link
+#  - port-channel121   # N7K DC0 VPC 
+
+
+portis:
+- port-channel508
+  

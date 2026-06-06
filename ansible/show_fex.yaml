@@ -1,0 +1,18 @@
+---
+- name: show FEX numbers 
+  hosts: N5KDC02_VLC
+  gather_facts: false
+
+  tasks: 
+    
+    - name: SEND SHOW FEX COMMANDS 
+      ios_command:
+        commands: show fex
+      register: fex
+
+    # - name: DEBUG FEXES
+    #   debug:
+    #     var: fex.stdout_lines
+
+
+

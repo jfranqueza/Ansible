@@ -1,0 +1,14 @@
+- hosts: lab
+  connection: network_cli
+  gather_facts: no
+  roles:
+    - ansible-pyats
+  tasks:
+    - include_role:
+        name: ansible-pyats
+        tasks_from: snapshot_command
+      vars:
+        command: show running-config
+        file: "{{ inventory_hostname }}_running.json"
+
+    

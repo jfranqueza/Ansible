@@ -1,0 +1,36 @@
+- name: Crypto Certificate Expiration Check
+  hosts: bdr01-unmogip-glt
+  gather_facts: false
+  roles:
+    - ansible-network.network-engine
+  
+  tasks:
+    
+    - name: GATHER INFO
+      ios_facts:
+        gather_subset:
+          - config
+               
+    - name: RUN CHECKS
+      ios_command:
+        commands:
+           - show crypto pki certificates sdn-network-infra-iwan 
+      register: crypto
+
+    - name: SET FACT
+      set_fact:
+        cert: "{{ crypto.stdout[0] }}" 
+
+    - name: PARSE THE RAW OUTPUT
+      command_parser:
+        file: "/home/reponeg/nexus/franquezaj/parsers/cert_exp.yaml"
+        content: "{{ cert }}"     
+   
+    - name: DISPLAY INFO
+      debug: 
+         msg: "{{ certificate_facts }}"
+    
+    # - name: STORE INFO
+    #   copy:
+    #     dest: "/home/reponeg/nexus/pcataleta/PKI_Certificates/{{ ansible_net_hostname }}.txt"
+    #     content: "{{ certificate_facts }}"

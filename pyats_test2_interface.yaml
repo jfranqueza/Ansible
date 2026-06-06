@@ -1,0 +1,26 @@
+- hosts: lab
+  connection: network_cli
+  gather_facts: no
+
+
+  roles:
+    - ansible-pyats
+    
+  tasks:
+
+    - name: RUN command
+      cli_command:
+        command: show interface {{item}}
+      loop: 
+        - GigabitEthernet0/0/0
+        - GigabitEthernet0/0/1
+      register: cli_output
+
+
+
+
+    # - name: PARSING output
+    #   set_fact: 
+    #     parsed_output: "{{cli_output.stdout | pyats_parser('show interfaces', 'iosxe') }}"
+
+

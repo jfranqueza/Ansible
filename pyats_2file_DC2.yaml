@@ -1,0 +1,16 @@
+- hosts: N5KDC02_VLC
+  connection: network_cli
+  gather_facts: no
+  roles:
+    - ansible-pyats
+
+
+  tasks:
+    - include_role:
+        name: ansible-pyats
+        tasks_from: snapshot_command
+
+      vars:
+        command: show interface
+        file: "{{ inventory_hostname }}_interfaces.json" 
+        

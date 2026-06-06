@@ -1,0 +1,8 @@
+- name: VLANS KREATOR
+  nxos_vlans:
+    config:
+      - vlan_id: "{{ item.id }}"
+        name: "{{ item.name }}"
+  loop: "{{ vlans }}"
+
+    

@@ -1,0 +1,80 @@
+---
+- name: CONFIGURE PORT-CHANNELS N7K
+  hosts: VLC-DC02-AGG-A.dpko.un.org, VLC-DC02-AGG-B.dpko.un.org
+  gather_facts: no
+  
+  
+  tasks:
+
+    - name: SET ETHERNET INTERFACES TO SWITCPORT
+      nxos_interfaces:
+        config:
+          - name: "{{item}}"
+            mode: layer2
+            enabled: no
+      loop: "{{if_l2}}"
+
+    - name: PORT-CHANNEL L2 CONFIGURATION   #SET PORT-CHANNELS IN N7K TO SWITCPORT TOO
+      nxos_interfaces:
+         config:
+           - name: port-channel524
+             description: TO VLC-DC02-ACC-A_B VPC524
+             mode: layer2
+           - name: port-channel525
+             description: TO VLC-DC02-ACC-C_D VPC525
+             mode: layer2
+           - name: port-channel526
+             description: TO VLC-DC02-ACC-E_F VPC525
+             mode: layer2
+
+
+    - name: CONFIGURE VPC 524  # TO VLC-DC02-ACC-A_B VPC524
+      nxos_config:
+        lines: 
+          - vpc 524
+        parents: interface port-channel524 
+
+    - name: CONFIGURE VPC 525
+      nxos_config:
+        lines: 
+          - vpc 525
+        parents: interface port-channel525  #TO VLC-DC02-ACC-C_D VPC525
+
+    - name: CONFIGURE VPC 526
+      nxos_config:
+        lines: 
+          - vpc 526
+        parents: interface port-channel526 #TO VLC-DC02-ACC-E_F VPC526
+
+
+    - name: CONFIGURE THE PORT-CHANNEL
+      nxos_lag_interfaces:
+         config:
+         # TO VLC-DC02-ACC-A_B VPC524
+           - name: port-channel524    
+             members:
+               - member: Ethernet10/1
+               - member: Ethernet10/3
+               - member: Ethernet2/1
+               - member: Ethernet2/3
+         #TO VLC-DC02-ACC-C_D VPC525
+           - name: port-channel525   
+             members: 
+               - member: Ethernet10/5
+               - member: Ethernet10/7
+               - member: Ethernet2/5
+               - member: Ethernet2/7
+          #TO VLC-DC02-ACC-E_F VPC526
+           - name: port-channel526    
+             members:
+               - member: Ethernet10/11
+               - member: Ethernet10/9
+               - member: Ethernet2/11
+               - member: Ethernet2/9
+
+    - name: WRITE MEMORY
+      nxos_config:
+        lines: 
+          - wr
+
+

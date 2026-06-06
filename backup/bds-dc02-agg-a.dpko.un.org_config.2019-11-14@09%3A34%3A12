@@ -1,0 +1,169 @@
+!Command: show running-config
+!Time: Thu Nov 14 09:34:30 2019
+
+version 6.1(2)
+hostname BDS-DC02-AGG-A
+system admin-vdc
+install feature-set fex
+vdc BDS-DC02-AGG-A id 1
+  cpu-share 5
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource monitor-session minimum 0 maximum 2
+  limit-resource monitor-session-erspan-dst minimum 0 maximum 23
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 768
+  limit-resource u4route-mem minimum 96 maximum 96
+  limit-resource u6route-mem minimum 24 maximum 24
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+  limit-resource monitor-session-inband-src minimum 0 maximum 1
+vdc bds-dc02-agg-a-oob id 2
+  limit-resource module-type f2 
+  allow feature-set fex
+  cpu-share 5
+  allocate interface Ethernet1/1-8
+  allocate interface Ethernet3/1-12
+  boot-order 1
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource monitor-session minimum 0 maximum 2
+  limit-resource monitor-session-erspan-dst minimum 0 maximum 23
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 768
+  limit-resource u4route-mem minimum 8 maximum 8
+  limit-resource u6route-mem minimum 4 maximum 4
+  limit-resource m4route-mem minimum 8 maximum 8
+  limit-resource m6route-mem minimum 5 maximum 5
+  limit-resource monitor-session-inband-src minimum 0 maximum 1
+vdc DC02-BDS id 3
+  limit-resource module-type f2 
+  allow feature-set fex
+  cpu-share 5
+  allocate interface Ethernet1/13-48
+  allocate interface Ethernet3/13-48
+  boot-order 1
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource monitor-session minimum 0 maximum 2
+  limit-resource monitor-session-erspan-dst minimum 0 maximum 23
+  limit-resource vrf minimum 2 maximum 4096
+  limit-resource port-channel minimum 0 maximum 768
+  limit-resource u4route-mem minimum 8 maximum 8
+  limit-resource u6route-mem minimum 4 maximum 4
+  limit-resource m4route-mem minimum 8 maximum 8
+  limit-resource m6route-mem minimum 5 maximum 5
+  limit-resource monitor-session-inband-src minimum 0 maximum 1
+vdc DC01-BDS id 4
+  limit-resource module-type f2 
+  allow feature-set fex
+  cpu-share 5
+  allocate interface Ethernet2/1-48
+  allocate interface Ethernet4/1-48
+  boot-order 4
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource monitor-session minimum 0 maximum 2
+  limit-resource monitor-session-erspan-dst minimum 0 maximum 23
+  limit-resource vrf minimum 2 maximum 1000
+  limit-resource port-channel minimum 0 maximum 768
+  limit-resource u4route-mem minimum 8 maximum 8
+  limit-resource u6route-mem minimum 4 maximum 4
+  limit-resource m4route-mem minimum 8 maximum 8
+  limit-resource m6route-mem minimum 5 maximum 5
+  limit-resource monitor-session-inband-src minimum 0 maximum 1
+
+feature telnet
+feature tacacs+
+
+username admin password 5 $1$aq3/RZLm$xO3t5cdsNaBn2idWTloWb.  role network-admin
+username dpko password 5 $1$fvw7UomO$giYf7vqf3i6j5Kn4LrB2c1  role network-admin
+
+banner motd Z
+********************************************************************************
+                               United Nations
+                                    DPKO
+
+
+          This system is for specifically authorized personnel from the
+        United Nations, any unauthorized use of this system is unlawful
+             and may be subject to civil and/or criminal penalties.
+
+      Any use of this system may be logged or monitored without further
+         notice, and resulting logs may be used as evidence in court.
+
+Should you require access please request authorization by contacting your CITS
+  office, or the CITS office at the United Nations Logistics Base (UNLB).
+
+         email:ncc@unlb.org VSAT:158 6222 International:+39 0831 056222
+********************************************************************************
+> Z
+
+ip domain-lookup
+tacacs-server key 7 "GY_G261_l1m1so"
+ip tacacs source-interface mgmt0
+tacacs-server deadtime 5
+tacacs-server host 10.130.94.191 
+tacacs-server host 10.130.222.52 
+aaa group server tacacs+ GSC-TACACS 
+    server 10.130.222.52 
+    server 10.130.94.191 
+    use-vrf management
+    source-interface mgmt0
+ip access-list 20
+  10 permit ip 10.130.94.20/32 any 
+  20 permit ip 10.130.94.22/32 any 
+  30 permit ip 10.130.94.60/32 any 
+  40 permit ip 10.130.222.7/32 any 
+  50 permit ip 10.130.239.133/32 any 
+  60 permit ip 10.130.222.130/32 any 
+ip access-list 22
+  10 permit ip 10.130.222.17/32 any 
+ip access-list 23
+  10 permit ip 10.130.239.138/32 any 
+diagnostic monitor interval module 5 test SpineControlBus hour 00 min 00 second 31
+copp profile strict
+snmp-server location  HUB|BR|DC02|C06|AGG
+snmp-server user dpko network-admin auth md5 0x7ee42d6e7622ed7cd7a0ad75b5b4fe86 priv 0x7ee42d6e7622ed7cd7a0ad75b5b4fe86 localizedkey
+snmp-server user admin network-admin auth md5 0x7ee42d6e7622ed7cd7a0ad75b5b4fe86 priv 0x7ee42d6e7622ed7cd7a0ad75b5b4fe86 localizedkey
+snmp-server host 10.130.222.130 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.222.7 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.20 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR! 
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server community Df5-b0rd3rR! group network-operator
+snmp-server community O10S4uDiT group network-operator
+snmp-server community C1D3C03xt group network-operator
+snmp-server community Df5-b0rd3rR! use-acl 20
+snmp-server community O10S4uDiT use-acl 23
+snmp-server community C1D3C03xt use-acl 22
+ntp distribute
+ntp server 10.130.216.253 prefer use-vrf management
+ntp server 10.130.216.254 use-vrf management
+ntp commit 
+aaa authentication login default group GSC-TACACS 
+aaa accounting default group GSC-TACACS 
+aaa authentication login error-enable 
+
+vrf context management
+  ip route 0.0.0.0/0 10.1.1.1
+  ip route 0.0.0.0/0 10.130.194.1
+vlan 1
+
+
+interface mgmt0
+  ip address 10.130.194.146/24
+clock timezone CET 1 0
+clock summer-time CEST 5 Sun Mar 02:00 5 Sun Oct 03:00 60
+cli alias name dc1 switchto vdc DC01-BDS
+cli alias name wr copy running-config startup-config
+cli alias name dc2 switchto vdc DC02-BDS
+cli alias name oob switchto vdc bds-dc02-agg-a-oob 
+line console
+line vty
+boot kickstart bootflash:/n7000-s2-kickstart.6.1.2.bin sup-1
+boot system bootflash:/n7000-s2-dk9.6.1.2.bin sup-1
+boot kickstart bootflash:/n7000-s2-kickstart.6.1.2.bin sup-2
+boot system bootflash:/n7000-s2-dk9.6.1.2.bin sup-2
+logging logfile my_log 6
+logging server 10.130.94.60 5 use-vrf management

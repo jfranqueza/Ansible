@@ -1,0 +1,28 @@
+---
+- name: PARSED VLAN BRIEF
+  hosts: bdr01-ungsc-vlc
+  gather_facts: no
+   
+  vars:
+    ansible_network_os : ios
+
+
+
+  tasks:
+    - name: IMPORT ROLE
+      import_role:
+        name: ansible-network.network-engine
+
+    - name: CAPTURE SHOW VERSION 
+      ios_command:
+        commands: show interfaces
+      register: interfacts
+
+    - name: SET FACT
+      set_fact:
+        interf: "{{ interfacts.stdout[0] }}"
+
+    - name: PARSE THE RAW OUTPUT
+      command_parser:
+        file: "/root/.ansible/roles/ansible-network.network-engine/tests/command_parser/command_parser/parser_templates/ios/show_interfaces.yaml"  
+        content: "{{ interf }}"  

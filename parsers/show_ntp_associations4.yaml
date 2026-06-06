@@ -1,0 +1,39 @@
+vars:
+  ntp:
+    key: "{{ item.ip }}"
+    values: 
+      id: "{{ item.ip }}"
+      name: "{{ item.authentication }}"
+      master: "{{ item.master }}"
+      sanity: "{{ item.sanity }}"
+      validation: "{{ item.valid }}"
+      stratum: "{{ item.stratum }}"
+    
+
+keys:
+  ntps:
+    value: "{{ ntp }}"
+    items: "^(?P<ip>\\d+\\.\\d+\\.\\d+\\.\\d+).+(?P<authentication>authenticated).\\s+(?P<master>our_master).\\s+(?P<sanity>sane|insane).\\s+(?P<valid>valid|invalid).\\s+\\D+\\s(?P<stratum>\\d+)?"
+
+#"^(\\d+\\.\\d+\\.\\d+\\.\\d+).+(authenticated).\\s+(our_master).\\s+(sane|insane).\\s+(valid|invalid).\\s+\\D+\\s(\\d+)"
+
+
+ ## items: "^(?P<vlan_id>\\d+)\\s+(?P<name>\\w+)\\s+(?P<state>active|act/lshut|suspended)"
+
+
+# ## ---
+# vars:
+#   vlan:
+#     key: "{{ item.vlan_id }}"
+#     values:
+#       vlan_id: "{{ item.vlan_id }}"
+#       name: "{{ item.name }}"
+#       enabled: "{{ item.state != 'act/lshut' }}"
+#       state: "{{ item.state }}"
+
+# keys:
+#   vlans:
+#     value: "{{ vlan }}"
+#     items: "^(?P<vlan_id>\\d+)\\s+(?P<name>\\w+)\\s+(?P<state>active|act/lshut|suspended)"
+#   state_static:
+#     value: present

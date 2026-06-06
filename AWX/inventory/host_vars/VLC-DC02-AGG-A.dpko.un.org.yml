@@ -1,0 +1,52 @@
+ansible_network_os: nxos
+
+
+# if_l2:
+  # - Ethernet10/1
+  # - Ethernet10/3 
+  # - Ethernet10/5
+  # - Ethernet10/7
+  # - Ethernet10/11
+  # - Ethernet10/9
+  # - Ethernet2/1
+  # - Ethernet2/3
+  # - Ethernet2/5
+  # - Ethernet2/7
+  # - Ethernet2/9
+  # - Ethernet2/11   
+  # - Ethernet2/17
+  # - Ethernet10/17 
+  # - Ethernet2/19 
+  # - Ethernet10/19 
+
+
+# portchannels:
+#   port-channel524:
+#     - description: Port channel to DC02-ACC-A/B
+#     - vlans: 2-599,719,730-739,744-745,801-803,805,811-814,821-822,831,1498-1501,2037,2039,2041-2046,2050-2054,2070-2071,2090,2200-2260,2366,2369-2373,2500-2501,2700,2801,3007,3016,3030
+
+
+portchannel524:
+   - Ethernet2/1
+   - Ethernet2/3
+   - Ethernet10/1
+   - Ethernet10/3
+
+portchannel525:
+   - Ethernet10/5
+   - Ethernet10/7
+   - Ethernet2/5
+   - Ethernet2/7
+
+portchannel526:
+   - Ethernet10/11
+   - Ethernet10/9
+   - Ethernet2/9
+   - Ethernet2/11     
+
+portchannel527: 
+   - Ethernet10/19
+   - Ethernet10/17
+   - Ethernet2/17
+   - Ethernet2/19
+

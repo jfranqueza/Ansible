@@ -1,0 +1,24 @@
+ansible_network_os: nxos
+
+port_uplink: port-channel122
+
+
+interfaces:
+- Ethernet111/1/9
+- Ethernet111/1/1
+- Ethernet112/1/9
+- Ethernet112/1/1
+- Ethernet112/1/10
+- Ethernet112/1/2
+- Ethernet114/1/9
+- Ethernet114/1/1
+- Ethernet114/1/10
+- Ethernet114/1/2
+- Ethernet116/1/9
+- Ethernet116/1/1
+- Ethernet116/1/10
+- Ethernet116/1/2
+
+uplinks:
+ - port-channel888  # VPC peer-link
+ - port-channel122   # N7K DC0 VPC 

@@ -1,0 +1,3 @@
+ansible_network_os: nxos
+
+port_uplink: port-channel123

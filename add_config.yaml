@@ -1,0 +1,41 @@
+---
+- name: A COMMON SCRIPT TO ADD ANY CONFIG
+  hosts: N7KDC02_VLC_new
+  gather_facts: no
+  vars:
+    interfaces1:
+      - interface Port-channel524
+      - interface Port-channel525
+      - interface Port-channel527
+    interfaces2:
+      - interface Port-channel524
+      - interface Port-channel525
+      - interface Port-channel526
+    interfaces3:
+      - interface Port-channel527 
+
+
+  tasks: 
+ 
+    - name: ADD WHATEVER CONFIG
+      nxos_config:
+        lines: 
+          - spanning-tree guard loop
+        parents: "{{item}}"
+      loop: "{{interfaces1}}"
+
+    - name: ADD WHATEVER CONFIG2
+      nxos_config:
+        lines: 
+          - mtu 9216
+        parents: "{{item}}"
+      loop: "{{interfaces2}}"
+
+ 
+    - name: ADD WHATEVER CONFIG3
+      nxos_config:
+        lines: 
+          - spanning-tree port type normal
+        parents: "{{item}}"
+      loop: "{{interfaces3}}"
+

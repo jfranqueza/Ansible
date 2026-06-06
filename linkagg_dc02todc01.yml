@@ -1,0 +1,48 @@
+---
+- name: CONFIGURE PORT-CHANNELS N7K
+  hosts: VLC-DC02-AGG-A.dpko.un.org, VLC-DC02-AGG-B.dpko.un.org
+  gather_facts: no
+  
+  
+  tasks:
+
+    - name: SET ETHERNET INTERFACES TO SWITCPORT
+      nxos_interfaces:
+        config:
+          - name: "{{item}}"
+            mode: layer2
+            enabled: no
+      loop: "{{if_l2}}"
+
+    - name: PORT-CHANNEL L2 CONFIGURATION   #SET PORT-CHANNELS IN N7K TO SWITCPORT TOO
+      nxos_interfaces:
+         config:
+           - name: port-channel527
+             description: TO VLC-DC01-ACC-E_F VPC527
+             mode: layer2
+
+
+    - name: CONFIGURE VPC 527  # TO VLC-DC02-ACC-A_B VPC524
+      nxos_config:
+        lines: 
+          - vpc 527
+        parents: interface port-channel527 
+
+
+    - name: CONFIGURE THE PORT-CHANNEL
+      nxos_lag_interfaces:
+         config:
+         # TO VLC-DC02-ACC-A_B VPC524
+           - name: port-channel527    
+             members:
+               - member: Ethernet2/17
+               - member: Ethernet10/17
+               - member: Ethernet2/19
+               - member: Ethernet10/19
+
+    - name: WRITE MEMORY
+      nxos_config:
+        lines: 
+          - wr
+
+

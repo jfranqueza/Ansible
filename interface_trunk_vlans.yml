@@ -1,0 +1,73 @@
+- name: ADD VLANS TO ADD
+  hosts: GROUP_AB, GROUP_EF, GROUP_D1, GROUP_D2
+  gather_facts: no
+
+  
+  tasks:
+
+
+
+## CONFIGURATION ON NEXUS 5K  DC01 
+
+
+
+    - name: TRUNK VLANS ALL IN VLC-DC01-ACC-A & VLC-DC01-ACC-B
+      nxos_l2_interfaces:
+        config:
+          - name: port-channe1
+            trunk: 
+              allowed_vlans: 2-9000
+          - name: port-channel509
+            trunk: 
+              allowed_vlans: 2-2030
+        state: deleted
+      when: "'GROUP_AB' in {{group_names}}" 
+
+
+    - name: TRUNK VLANS ALL IN VLC-DC01-ACC-E & VLC-DC01-ACC-F
+      nxos_l2_interfaces:
+        config:
+          - name: port-channel508
+            trunk: 
+              allowed_vlans: 2-2400
+          - name: port-channel1
+            trunk: 
+              allowed_vlans: 2-230
+        state: deleted
+      when: "'GROUP_EF' in {{group_names}}" 
+
+
+### CONFIGURATION ON NEXUS 7K 
+
+    - name: ADD VLANS TO N7K DC01
+      nxos_l2_interface:
+        aggregate:
+          - { name: "port-channel508", trunk_allowed_vlans: "633-637,671,686-691,790,2005,2020-2029" }
+          - { name: "port-channel509", trunk_allowed_vlans: "2006" }
+        mode: trunk 
+      when: "'GROUP_D1' in {{group_names}}"       
+
+    - name: ADD VLANS TO NK7 DC02
+      nxos_l2_interface:
+        aggregate:
+          - { name: "port-channel527", trunk_allowed_vlans: "2005,2020-2029,2239,2241-2242,2246,2249,2367-2368" }
+          - { name: "port-channel528", trunk_allowed_vlans: "2-600,910-913,920-923,930-933,940-943,952,959,962,971,2006,2011-2015,2020,2023-2024,2026,2028-2029" }
+        mode: trunk 
+      when: "'GROUP_D2' in {{group_names}}"       
+
+
+
+
+
+    - name: WRITE MEMORY
+      nxos_config:
+        lines: 
+          - wr
+
+
+
+
+
+
+
+

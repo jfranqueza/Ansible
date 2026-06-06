@@ -1,0 +1,20 @@
+- name: TEST DE VLANS
+  hosts: bds-dc02-oob-a
+  gather_facts: no
+  vars:
+     vlans:
+       - id: '555'
+         name: 'test1'
+       - id: '556'
+         name: 'test2' 
+      
+  
+  tasks:
+    - name: create VLANS
+      nxos_vlans:
+        config:
+          - vlan_id: "{{ item.id }}"
+            name: "{{ item.name }}"
+      loop: "{{vlans}}"
+
+

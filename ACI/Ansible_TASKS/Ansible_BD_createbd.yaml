@@ -1,0 +1,32 @@
+####Create BD script
+---
+- name: Create Bridge Domain
+  hosts: sandbox
+  connection: local
+  gather_facts: no
+
+  vars:
+    BridgeDomain:
+       - { Tenant_name: UNGSC_VLC_DC, bd_name: DC_PRO_v180_10_130_208_0_27_BD, vrf_name: VLC_DC_VRF, bd_type: ethernet, l2_unknown_unicast: flood }    
+       - { Tenant_name: UNGSC_VLC_DC, bd_name: DC_PRO_v181_10_129_0_0_24_BD, vrf_name: VLC_DC_VRF, bd_type: ethernet,   l2_unknown_unicast: flood }    
+
+    
+  tasks:
+    - name: Add Bridge Domain
+      cisco.aci.aci_bd:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: "{{ item.Tenant_name }}"
+        bd: "{{ item.bd_name }}"
+        vrf: "{{ item.vrf_name }}"
+        bd_type: "{{ item.bd_type }}"
+        l2_unknown_unicast: "{{ item.l2_unknown_unicast }}"
+        arp_flooding: yes
+        enable_routing: no
+        state: present
+      loop: "{{ BridgeDomain }}"  
+      loop_control:
+        pause: "{{ loop_control_pause | default(0) }}"      
+      delegate_to: localhost

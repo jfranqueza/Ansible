@@ -1,0 +1,779 @@
+{
+    "1": {
+        "data": {
+            "name": "default",
+            "status": "active",
+            "vlan": "1"
+        }
+    },
+    "10": {
+        "data": {
+            "name": "IN-HOSTED-BE-72-0-24",
+            "status": "active",
+            "vlan": "10"
+        }
+    },
+    "101": {
+        "data": {
+            "name": "IN-DC1-OICT-INT-FE-1-0-24",
+            "status": "active",
+            "vlan": "101"
+        }
+    },
+    "102": {
+        "data": {
+            "name": "IN-DC1-OICT-INT-FE-2-0-24",
+            "status": "active",
+            "vlan": "102"
+        }
+    },
+    "103": {
+        "data": {
+            "name": "IN-DC1-OICT-INT-APPS-3-0-24",
+            "status": "active",
+            "vlan": "103"
+        }
+    },
+    "104": {
+        "data": {
+            "name": "IN-DC1-OICT-INT-BE-4-0-24",
+            "status": "active",
+            "vlan": "104"
+        }
+    },
+    "105": {
+        "data": {
+            "name": "IN-DC1-OICT-INT-SUPP-SERV-5-0-24",
+            "status": "active",
+            "vlan": "105"
+        }
+    },
+    "106": {
+        "data": {
+            "name": "IN-DC1-OICT-INT-CITRIX-6-0-24",
+            "status": "active",
+            "vlan": "106"
+        }
+    },
+    "107": {
+        "data": {
+            "name": "IN-DC1-OICT-INT-CITRIX-7-0-24",
+            "status": "active",
+            "vlan": "107"
+        }
+    },
+    "108": {
+        "data": {
+            "name": "IN-DC1-OICT-FW-MGMT-8-0-24",
+            "status": "active",
+            "vlan": "108"
+        }
+    },
+    "109": {
+        "data": {
+            "name": "IN-DC1-OICT-SERVER-MGMT-9-0-24",
+            "status": "active",
+            "vlan": "109"
+        }
+    },
+    "11": {
+        "data": {
+            "name": "IN-HOSTED-SERV-73-0-24",
+            "status": "active",
+            "vlan": "11"
+        }
+    },
+    "111": {
+        "data": {
+            "name": "IN-DC1-OICT-VMOTION-11-0-24",
+            "status": "active",
+            "vlan": "111"
+        }
+    },
+    "112": {
+        "data": {
+            "name": "IN-DC1-OICT-INT-XenApp-12-0-24",
+            "status": "active",
+            "vlan": "112"
+        }
+    },
+    "113": {
+        "data": {
+            "name": "IN-DC1-OICT-BAM",
+            "status": "active",
+            "vlan": "113"
+        }
+    },
+    "114": {
+        "data": {
+            "name": "IN-DC1-OICT-NET-MONITOR-10-0-24",
+            "status": "active",
+            "vlan": "114"
+        }
+    },
+    "117": {
+        "data": {
+            "name": "IN-DC1-OICT-SAN-MGMT-17-0-25",
+            "status": "active",
+            "vlan": "117"
+        }
+    },
+    "12": {
+        "data": {
+            "name": "IN-WEBMAIL-FE-74-0-24",
+            "status": "active",
+            "vlan": "12"
+        }
+    },
+    "120": {
+        "data": {
+            "name": "EDC-PUBLIC-IPS-85-159-207-96-27",
+            "status": "active",
+            "vlan": "120"
+        }
+    },
+    "13": {
+        "data": {
+            "name": "IN-ILO-SERVERS-30-64-26",
+            "status": "active",
+            "vlan": "13"
+        }
+    },
+    "141": {
+        "data": {
+            "name": "IN-SMTP-76-128-25",
+            "status": "active",
+            "vlan": "141"
+        }
+    },
+    "142": {
+        "data": {
+            "name": "OICT_ADFS_PROXY",
+            "status": "active",
+            "vlan": "142"
+        }
+    },
+    "143": {
+        "data": {
+            "name": "OICT_ADFS_FARM-14-128-27",
+            "status": "active",
+            "vlan": "143"
+        }
+    },
+    "145": {
+        "data": {
+            "name": "IN-DC1-DFS-SAN-MGMT-17-128-27",
+            "status": "active",
+            "vlan": "145"
+        }
+    },
+    "15": {
+        "data": {
+            "name": "IN-HOSTED-APPS-77-0-24",
+            "status": "active",
+            "vlan": "15"
+        }
+    },
+    "158": {
+        "data": {
+            "name": "IN-ILO-SERVERS-31-0-24",
+            "status": "active",
+            "vlan": "158"
+        }
+    },
+    "16": {
+        "data": {
+            "name": "IN-DFS-APPS-78-0-24",
+            "status": "active",
+            "vlan": "16"
+        }
+    },
+    "165": {
+        "data": {
+            "name": "OICT-SEC-APP-30-32-28",
+            "status": "active",
+            "vlan": "165"
+        }
+    },
+    "166": {
+        "data": {
+            "name": "OICT-SAN-MGT",
+            "status": "active",
+            "vlan": "166"
+        }
+    },
+    "17": {
+        "data": {
+            "name": "IN-DFS-SERV-79-0-24",
+            "status": "active",
+            "vlan": "17"
+        }
+    },
+    "177": {
+        "data": {
+            "name": "OICT_FILETRANSFER",
+            "status": "active",
+            "vlan": "177"
+        }
+    },
+    "180": {
+        "data": {
+            "name": "IN-RPA-WAN-80-0-27",
+            "status": "active",
+            "vlan": "180"
+        }
+    },
+    "190": {
+        "data": {
+            "name": "EDC-FW-SYNC",
+            "status": "active",
+            "vlan": "190"
+        }
+    },
+    "191": {
+        "data": {
+            "name": "EDC-FW-NET-1-0-29",
+            "status": "active",
+            "vlan": "191"
+        }
+    },
+    "192": {
+        "data": {
+            "name": "EDC-FW-NET-1-8-29",
+            "status": "active",
+            "vlan": "192"
+        }
+    },
+    "193": {
+        "data": {
+            "name": "EDC-FW-NET-1-16-29",
+            "status": "active",
+            "vlan": "193"
+        }
+    },
+    "194": {
+        "data": {
+            "name": "EDC-FW-NET-0-24-29",
+            "status": "active",
+            "vlan": "194"
+        }
+    },
+    "20": {
+        "data": {
+            "name": "IN-QA-DMZ-82-0-24",
+            "status": "active",
+            "vlan": "20"
+        }
+    },
+    "2012": {
+        "data": {
+            "name": "PRD-UMOJA-V2012-FE",
+            "status": "active",
+            "vlan": "2012"
+        }
+    },
+    "2013": {
+        "data": {
+            "name": "PRE-UMOJA-V2013-FE",
+            "status": "active",
+            "vlan": "2013"
+        }
+    },
+    "2014": {
+        "data": {
+            "name": "PRD-UMOJA-V2014-BE",
+            "status": "active",
+            "vlan": "2014"
+        }
+    },
+    "2015": {
+        "data": {
+            "name": "PRE-UMOJA-V2015-BE",
+            "status": "active",
+            "vlan": "2015"
+        }
+    },
+    "202": {
+        "data": {
+            "name": "IN-SECURITY-83-128-25",
+            "status": "active",
+            "vlan": "202"
+        }
+    },
+    "2039": {
+        "data": {
+            "name": "IN-CUST-APP-UNDSS-100-96-28",
+            "status": "active",
+            "vlan": "2039"
+        }
+    },
+    "2044": {
+        "data": {
+            "name": "IN-CUST-FE-UNDSS-98-96-28",
+            "status": "active",
+            "vlan": "2044"
+        }
+    },
+    "2045": {
+        "data": {
+            "name": "IN-CUST-FE-DESA-98-224-28",
+            "status": "active",
+            "vlan": "2045"
+        }
+    },
+    "2046": {
+        "data": {
+            "name": "IN-CUST-BE-UNDSS-102-96-28",
+            "status": "active",
+            "vlan": "2046"
+        }
+    },
+    "2090": {
+        "data": {
+            "name": "IN-BE-DMZ-107-0-24",
+            "status": "active",
+            "vlan": "2090"
+        }
+    },
+    "22": {
+        "data": {
+            "name": "IN-WEBMAIL-BE-DMZ-84-0-24",
+            "status": "active",
+            "vlan": "22"
+        }
+    },
+    "24": {
+        "data": {
+            "name": "IN-GALILEO-BE-DMZ-86-0-24",
+            "status": "active",
+            "vlan": "24"
+        }
+    },
+    "25": {
+        "data": {
+            "name": "IN-ONCOURSE-DMZ-87-0-24",
+            "status": "active",
+            "vlan": "25"
+        }
+    },
+    "26": {
+        "data": {
+            "name": "IN-DC02-DEVICES-88-0-25",
+            "status": "active",
+            "vlan": "26"
+        }
+    },
+    "27": {
+        "data": {
+            "name": "IN-OICT-EXCHANGE-14-0-26",
+            "status": "active",
+            "vlan": "27"
+        }
+    },
+    "28": {
+        "data": {
+            "name": "APPLICATIONS-90",
+            "status": "active",
+            "vlan": "28"
+        }
+    },
+    "29": {
+        "data": {
+            "name": "IN-APPS-91-0-24",
+            "status": "active",
+            "vlan": "29"
+        }
+    },
+    "3": {
+        "data": {
+            "name": "IN-vMOTION-65-0-24",
+            "status": "active",
+            "vlan": "3"
+        }
+    },
+    "30": {
+        "data": {
+            "name": "IN-PRE-PRODUCTION-DMZ-92-0-24",
+            "status": "active",
+            "vlan": "30"
+        }
+    },
+    "31": {
+        "data": {
+            "name": "IN-PRE-PRODUCTION-VIP-93-0-26",
+            "status": "active",
+            "vlan": "31"
+        }
+    },
+    "312": {
+        "data": {
+            "name": "IN-QA-VIP-93-128-26",
+            "status": "active",
+            "vlan": "312"
+        }
+    },
+    "32": {
+        "data": {
+            "name": "IN-NETWORK-MANAGEMENT-94-0-24",
+            "status": "active",
+            "vlan": "32"
+        }
+    },
+    "36": {
+        "data": {
+            "name": "IN-CUST-FE-UNRWA",
+            "status": "active",
+            "vlan": "36"
+        }
+    },
+    "364": {
+        "data": {
+            "name": "IN-CUST-FE-INEED",
+            "status": "active",
+            "vlan": "364"
+        }
+    },
+    "365": {
+        "data": {
+            "name": "IN-CUST-PROD-FE-INEED",
+            "status": "active",
+            "vlan": "365"
+        }
+    },
+    "366": {
+        "data": {
+            "name": "IN-CUST-FE-OCHA",
+            "status": "active",
+            "vlan": "366"
+        }
+    },
+    "38": {
+        "data": {
+            "name": "IN-CUST-APPLICATIONS-UNRWA",
+            "status": "active",
+            "vlan": "38"
+        }
+    },
+    "384": {
+        "data": {
+            "name": "IN-CUST-APP-INEED-100-128-27",
+            "status": "active",
+            "vlan": "384"
+        }
+    },
+    "385": {
+        "data": {
+            "name": "CUST-PROD-APPS-INEED-100-160-27",
+            "status": "active",
+            "vlan": "385"
+        }
+    },
+    "386": {
+        "data": {
+            "name": "IN-CUST-APPS-OCHA-100-192-27",
+            "status": "active",
+            "vlan": "386"
+        }
+    },
+    "39": {
+        "data": {
+            "name": "UNMEER-COSMOS-PROD",
+            "status": "active",
+            "vlan": "39"
+        }
+    },
+    "40": {
+        "data": {
+            "name": "IN-CUST-BE-UNRWA",
+            "status": "active",
+            "vlan": "40"
+        }
+    },
+    "404": {
+        "data": {
+            "name": "IN-CUST-BE-INEED-102-128-27",
+            "status": "active",
+            "vlan": "404"
+        }
+    },
+    "405": {
+        "data": {
+            "name": "IN-CUST-PROD-BE-INEED-102-160-27",
+            "status": "active",
+            "vlan": "405"
+        }
+    },
+    "406": {
+        "data": {
+            "name": "IN-CUST-BE-OCHA-102-192-27",
+            "status": "active",
+            "vlan": "406"
+        }
+    },
+    "41": {
+        "data": {
+            "name": "IN-EXCH-BKUP-71-192-27",
+            "status": "active",
+            "vlan": "41"
+        }
+    },
+    "440": {
+        "data": {
+            "name": "IN-CUST-DMZ-106-0-27",
+            "status": "active",
+            "vlan": "440"
+        }
+    },
+    "460": {
+        "data": {
+            "name": "IN-HSEC-PROD-FE-108-0-27",
+            "status": "active",
+            "vlan": "460"
+        }
+    },
+    "461": {
+        "data": {
+            "name": "IN-HSEC-PRE-PROD-FE-108-32-27",
+            "status": "active",
+            "vlan": "461"
+        }
+    },
+    "462": {
+        "data": {
+            "name": "IN-HSEC-PROD-APPS-FE-108-64-27",
+            "status": "active",
+            "vlan": "462"
+        }
+    },
+    "463": {
+        "data": {
+            "name": "HIGHSEC-PRE-PROD-APPS-108-96-27",
+            "status": "active",
+            "vlan": "463"
+        }
+    },
+    "464": {
+        "data": {
+            "name": "IN-HSEC-PROD-BE-108-128-27",
+            "status": "active",
+            "vlan": "464"
+        }
+    },
+    "465": {
+        "data": {
+            "name": "IN-HSEC-PRE-PROD-BE-108-160-27",
+            "status": "active",
+            "vlan": "465"
+        }
+    },
+    "47": {
+        "data": {
+            "name": "IN-VDI-MISSION-USERS-109-0-25",
+            "status": "active",
+            "vlan": "47"
+        }
+    },
+    "472": {
+        "data": {
+            "name": "IN-VDI-MISSION-MGMT-109-128-26",
+            "status": "active",
+            "vlan": "472"
+        }
+    },
+    "473": {
+        "data": {
+            "name": "IN-VDI-MSN-VCENTER-109-192-27",
+            "status": "active",
+            "vlan": "473"
+        }
+    },
+    "474": {
+        "data": {
+            "name": "IN-VDI-MISSION-ESX-109-224-27",
+            "status": "active",
+            "vlan": "474"
+        }
+    },
+    "480": {
+        "data": {
+            "name": "IN-VDI-110-0-24",
+            "status": "active",
+            "vlan": "480"
+        }
+    },
+    "49": {
+        "data": {
+            "name": "UNMEER-COSMOS-PREPROD",
+            "status": "active",
+            "vlan": "49"
+        }
+    },
+    "490": {
+        "data": {
+            "name": "IN-VDI-NSU-111-0-6",
+            "status": "active",
+            "vlan": "490"
+        }
+    },
+    "5": {
+        "data": {
+            "name": "IN-ESX-HOSTS-30-0-26",
+            "status": "active",
+            "vlan": "5"
+        }
+    },
+    "50": {
+        "data": {
+            "name": "IN-LYNC-EDGE-PRIV-71-160-27",
+            "status": "active",
+            "vlan": "50"
+        }
+    },
+    "54": {
+        "data": {
+            "name": "PRD-UMOJA-HANA-MGMT",
+            "status": "active",
+            "vlan": "54"
+        }
+    },
+    "56": {
+        "data": {
+            "name": "EVAULT-REPLI",
+            "status": "active",
+            "vlan": "56"
+        }
+    },
+    "57": {
+        "data": {
+            "name": "PRD-UMOJA-EXT-MGMT",
+            "status": "active",
+            "vlan": "57"
+        }
+    },
+    "598": {
+        "data": {
+            "name": "ESX-VMOTION",
+            "status": "active",
+            "vlan": "598"
+        }
+    },
+    "599": {
+        "data": {
+            "name": "ESX-FAULT-TOLERANCE",
+            "status": "active",
+            "vlan": "599"
+        }
+    },
+    "6": {
+        "data": {
+            "name": "IN-WEB-VIP-68-0-24",
+            "status": "active",
+            "vlan": "6"
+        }
+    },
+    "60": {
+        "data": {
+            "name": "VLAN0060",
+            "status": "active",
+            "vlan": "60"
+        }
+    },
+    "600": {
+        "data": {
+            "name": "IN-DC1-OICT-RPA_EXT-VLAN600",
+            "status": "active",
+            "vlan": "600"
+        }
+    },
+    "64": {
+        "data": {
+            "name": "IN-WEB-VIP-126-0-24",
+            "status": "active",
+            "vlan": "64"
+        }
+    },
+    "65": {
+        "data": {
+            "name": "EVAULT-PASSIVE",
+            "status": "active",
+            "vlan": "65"
+        }
+    },
+    "68": {
+        "data": {
+            "name": "PRD_EXC-EVT_V68",
+            "status": "active",
+            "vlan": "68"
+        }
+    },
+    "69": {
+        "data": {
+            "name": "PRD_EXC-EVT_REP_V69",
+            "status": "active",
+            "vlan": "69"
+        }
+    },
+    "7": {
+        "data": {
+            "name": "IN-DFS-ENT-WWW-69-0-24",
+            "status": "active",
+            "vlan": "7"
+        }
+    },
+    "701": {
+        "data": {
+            "name": "OUT-DEV01-43-192-29",
+            "status": "active",
+            "vlan": "701"
+        }
+    },
+    "75": {
+        "data": {
+            "name": "EVAULT-DR",
+            "status": "active",
+            "vlan": "75"
+        }
+    },
+    "8": {
+        "data": {
+            "name": "IN-EXCH-MGMT-71-0-26",
+            "status": "active",
+            "vlan": "8"
+        }
+    },
+    "87": {
+        "data": {
+            "name": "EDC-PUBLIC-IPS-157-150-241-0-24",
+            "status": "active",
+            "vlan": "87"
+        }
+    },
+    "90": {
+        "data": {
+            "name": "IN-DFS-ENT-APP-81-0-25",
+            "status": "active",
+            "vlan": "90"
+        }
+    },
+    "95": {
+        "data": {
+            "name": "EVAULT-ACTIVE",
+            "status": "active",
+            "vlan": "95"
+        }
+    },
+    "959": {
+        "data": {
+            "name": "OICT_Mail_Backend_E4",
+            "status": "active",
+            "vlan": "959"
+        }
+    },
+    "971": {
+        "data": {
+            "name": "internal-heartbeat",
+            "status": "active",
+            "vlan": "971"
+        }
+    }
+}

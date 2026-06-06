@@ -1,0 +1,5 @@
+vlans:
+  - id: '53'
+    name: 'IN-PROD-UMOJA-MGMT'
+  # - id: '556'
+  #   name: 'test2' 

@@ -1,0 +1,65 @@
+---
+- name: CONFIGURE PORT-CHANNELS N7K TO DC02
+  hosts: N5KDC02_VLC_CONS2
+  gather_facts: no
+  
+  
+  tasks:
+
+    - name: SET ETHERNET INTERFACES TO N7K-A_NEW
+      nxos_interfaces:
+        config:
+          - name: "{{item}}"
+            mode: layer2
+            description: TO N7K AGG-A
+            enabled: no
+      loop: "{{if_uplink_A}}"
+
+
+    - name: SET ETHERNET INTERFACES TO N7K-B_NEW
+      nxos_interfaces:
+        config:
+          - name: "{{item}}"
+            mode: layer2
+            description: TO N7K AGG-B 
+            enabled: no
+      loop: "{{if_uplink_B}}"
+
+
+    - name: PORT-CHANNEL UPLINK CONFIGURATION
+      nxos_interfaces:
+         config:
+           - name: port-channel3
+             description: UPLINK TO AGG N7K
+             mode: layer2
+
+    - name: CONFIGURE BROADCAST STORM CONTROL IN IF
+      nxos_config:
+        lines: 
+          - storm-control broadcast level 20
+        parents: "{{item}}"
+      loop: "{{nameif_uplinks}}"
+
+    - name: CONFIGURE VPC TO N7K AGG DC02
+      nxos_config:
+        lines: 
+          - vpc 3
+          - storm-control broadcast level 20
+        parents: interface port-channel3
+
+
+    - name: CONFIGURE THE PORT-CHANNEL MEMBERS
+      nxos_lag_interfaces:
+         config:
+           - name: port-channel3 
+             members:
+               - member: "{{item}}"
+      loop: "{{if_uplinks}}"
+
+
+    - name: WRITE MEMORY
+      nxos_config:
+        lines: 
+         - wr
+
+

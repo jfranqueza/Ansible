@@ -1,0 +1,32 @@
+---
+- name: ADD STATIC INTERFACE BINDING TO EPG
+  hosts: bds
+  connection: local
+  gather_facts: no
+
+  ### MODIFY vars WITH YOUR REQUIRED VALUES  ####
+  vars:
+    EPGS:
+     - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, EPG_name: DC_PRO_v89_10_130_248_0_24_EPG, domain_name: UNGSC_PRO_PhysDom, domain_type: phys }
+    #  - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRO_AP, EPG_name: DC_PRO_v7_10_130_197_0_24_EPG, domain_name: UNGSC_PRO_PhysDom, domain_type: phys }
+    #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRO_AP, EPG_name: DC_PRO_v89_10_130_89_0_24_EPG, domain_name: UNGSC_PRO_PhysDom, domain_type: phys }
+    #  - { Tenant_name: UNGSC_VLC_DC, AppProfile_name: DC_VLC_PRE_AP, EPG_name: DC_PRE_v289_10_130_39_0_24_EPG, domain_name: UNGSC_PRE_PhysDom, domain_type: phys }
+
+  tasks:
+
+    - name: Add a new physical domain to EPG binding
+      aci_epg_to_domain:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: "{{ item.Tenant_name }}"
+        ap: "{{ item.AppProfile_name}}"
+        epg: "{{ item.EPG_name }}"
+        domain: "{{ item.domain_name }}"
+        domain_type: "{{ item.domain_type }}"
+        state: present
+      loop: "{{ EPGS }}"  
+      loop_control:
+        pause: "{{ loop_control_pause | default(0) }}"      
+      delegate_to: localhost

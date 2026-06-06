@@ -1,0 +1,12 @@
+---
+- name: CONFIGURE SMPV3 USER IN DC DEVICES
+  hosts: VLC_DC
+  gather_facts: no
+
+  tasks:
+
+    - name: Send SNMP V3 user
+      nxos_config:
+        lines: snmp-server user CISCO network-operator auth sha C1D3C03xt priv aes 128 C1D3C03xt
+        save_when: modified
+

@@ -1,0 +1,33 @@
+---
+- name: CONSOLIDATION INTERFACES COMPLIANCE
+  hosts: N7KDC02_VLC
+  gather_facts: no
+
+  tasks:
+
+  - name: RETRIEVE INTERFACE STATUS
+    nxos_command:
+      commands: 
+          - sh interface {{ item }} status
+    loop: "{{ interfaces }}"
+    register: estatus
+
+
+  - name: RETRIEVE MAC
+    nxos_command:
+      commands: 
+          - show mac address-table interface {{ item }}
+    loop: "{{ interfaces }}"
+    register: macer
+
+
+  - name: SHOW THE INFORMATION INTERFACE
+    debug:
+      msg: "{{ item.stdout_lines }}"
+    loop: "{{ estatus.results }}"  
+
+
+  - name: SHOW THE INFORMATION MAC
+    debug:
+      msg: "{{ item.stdout_lines }}"
+    loop: "{{ macer.results }}"  

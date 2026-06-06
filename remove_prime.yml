@@ -1,0 +1,34 @@
+---
+- name: REMOVE CDP NEIGHBORS
+  hosts: VLC_DC
+  gather_facts: no
+
+  tasks:
+
+  # - name: AMEND ACL
+  #   nxos_config:
+  #     lines: 
+  #         - no snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR!
+  #         - no logging server 10.130.94.60 5 use-vrf management
+
+
+  - name: REMOVE SERVERS
+    nxos_config:
+      lines:
+          - statistics per-entry
+          - permit ip 10.130.94.20/32 any
+          - permit ip 10.130.94.22/32 any
+          - permit ip 10.130.222.7/32 any
+          - permit ip 10.130.239.133/32 any
+          - permit ip 10.130.222.130/32 any
+          - permit ip 10.130.94.24/32 any
+      parents: ip access-list 20
+      before: no ip access-list 20
+      replace: block
+      save_when: always 
+      
+
+
+
+
+    

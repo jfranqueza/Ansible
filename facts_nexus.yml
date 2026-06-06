@@ -1,0 +1,27 @@
+---
+- name: TEST COMMANDS
+  hosts: vlc-dc02-acc-b
+  gather_facts: no
+  
+  
+  tasks:
+
+    - name: TEST
+      nxos_command:
+        commands: show inter Po508 | json
+      register: dictio.TABLE_interface
+
+    - name: SET FUCKT
+      set_fact:
+        interface_id: "{{ dictio.stdout.0.ROW_interface.eth_hw_desc() }}"
+      
+
+    - name: SHOW STUFF
+      debug:
+        var: dictio  
+   
+
+         
+
+
+        

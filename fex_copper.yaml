@@ -1,0 +1,35 @@
+---
+- name: CHECKS COPPER FEX
+  hosts: GROUP_EF,bds-dc02-oob-a,N5KDC02_VLC
+  gather_facts: no
+  
+  
+  tasks:
+    - name: CHECK INTERFACES FEX
+      nxos_command:
+        commands:
+          - show hostname
+          - show interface status  | i Eth{{item}} | i connected 
+      loop: "{{fex}}"
+      register: interfaces
+
+
+    # - name: DISPLAY THE OUTPUT
+    #   debug: 
+    #     msg: "{{|  map(attribute='stdout_lines'| list)}}"
+    #   with_dict: "{{interfaces}}"
+
+
+
+    # - name: COPY TO FILE
+    #   copy: content="{{ interfaces}}" dest="./configurations/fex/{{inventory_hostname}}_fex.txt"
+    
+
+
+    # - name: DEBUG DATA
+    #   debug:
+
+
+    #     var: section.stdout_lines
+     
+       

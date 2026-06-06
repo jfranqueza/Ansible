@@ -1,0 +1,53 @@
+---
+- name: ADD STATIC INTERFACE BINDING TO EPG
+  hosts: bds
+  connection: local
+  gather_facts: no
+
+  ### MODIFY vars WITH YOUR REQUIRED VALUES  ####
+  vars:
+    EPGS:
+      - { Tenant_name: UNGSC_BDS_DC, AppProfile_name: DC_BDS_PRE_AP, vlanID: 3477, mode: trunk, EPG_name: DC_PRE_v3477_10_130_221_208_28_EPG, static_binding: "{{ Bindings }}"  }
+
+    Bindings:
+      - { Switch_ID: 101, interface_type: switch_port, port: 1/17 }
+      - { Switch_ID: 102, interface_type: switch_port, port: 1/17 }
+      - { Switch_ID: 101, interface_type: switch_port, port: 1/22 }
+      - { Switch_ID: 102, interface_type: switch_port, port: 1/22 }
+      - { Switch_ID: 101, interface_type: switch_port, port: 1/25 }
+      - { Switch_ID: 102, interface_type: switch_port, port: 1/25 }
+      - { Switch_ID: 101, interface_type: switch_port, port: 1/26 }
+      - { Switch_ID: 102, interface_type: switch_port, port: 1/26 }
+      - { Switch_ID: 103, interface_type: switch_port, port: 1/16 }
+      - { Switch_ID: 104, interface_type: switch_port, port: 1/16 }
+      - { Switch_ID: 103, interface_type: switch_port, port: 1/20 }
+      - { Switch_ID: 104, interface_type: switch_port, port: 1/20 }
+      - { Switch_ID: 103, interface_type: switch_port, port: 1/27 }
+      - { Switch_ID: 104, interface_type: switch_port, port: 1/27 }
+
+
+      
+
+  tasks:
+
+    - name: Add Static Path binding for given EPG
+      aci_static_binding_to_epg:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: "{{ item.0.Tenant_name }}"
+        ap: "{{ item.0.AppProfile_name }}"
+        epg: "{{ item.0.EPG_name }}"
+        encap_id: "{{ item.0.vlanID }}"
+        interface_mode: "{{ item.0.mode }}"
+        interface_type: "{{ item.1.interface_type }}"
+        pod: 1
+        leafs: "{{ item.1.Switch_ID }}"
+        interface: '{{ item.1.port}}'
+        state: present
+      loop: "{{ EPGS|subelements('static_binding') }}"  
+      loop_control:
+        pause: "{{ loop_control_pause | default(0) }}"      
+      delegate_to: localhost
+

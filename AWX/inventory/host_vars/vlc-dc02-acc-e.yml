@@ -1,0 +1,52 @@
+ansible_network_os: nxos
+
+if_uplinks:
+- Ethernet1/3
+# - Ethernet1/1
+- Ethernet1/4
+# - Ethernet1/2
+
+
+old_uplinks:
+- Ethernet1/1
+- Ethernet1/2
+- Ethernet3/9
+- Ethernet3/10
+
+port_uplink: port-channel3
+
+port_uplink_old:
+- port-channe1
+
+fex:
+- 127
+- 126
+- 136
+
+
+
+
+
+
+# if_uplink_A:
+# - Ethernet1/3
+# # - Ethernet1/1
+
+# if_uplink_B:
+# - Ethernet1/4
+# # - Ethernet1/2
+
+# port_uplink:
+# - port-channel3
+
+# nameif_uplinks:
+# - interface Ethernet1/3
+# - interface Ethernet1/4
+# # - interface Ethernet1/2
+# # - interface  Ethernet1/1
+
+
+# uplinks_old:
+#  - port-channel1001  # VPC peer-link
+#  - port-channel1  # N7K DC0 VPC 
+ 

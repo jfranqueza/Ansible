@@ -1,0 +1,906 @@
+!Command: show running-config
+!Time: Mon Dec  2 11:58:06 2019
+
+version 5.2(4)
+feature-set fex
+hostname DC01-A-L2-AGG-VDC
+
+feature tacacs+
+cfs eth distribute
+feature private-vlan
+feature udld
+feature interface-vlan
+feature netflow
+feature lacp
+feature vpc
+
+logging level feature-mgr 0
+logging level private-vlan 3
+username admin password 5 $1$tNrW7wqr$DgLNVe2GEqSvrhTjh6ivL/  role vdc-admin
+username dpko password 5 $1$Szue1KgU$0B14hy/R5tmfdr5EG9/Hf0  role vdc-admin
+ip domain-lookup
+ip tacacs source-interface Vlan26
+tacacs-server host 10.130.222.52 key 7 "xjwgntvhsfc12" 
+tacacs-server host 10.130.94.191 key 7 "xjwgntvhsfc12" 
+aaa group server tacacs+ GSC-TACACS 
+    server 10.130.222.52 
+    server 10.130.94.191 
+    source-interface Vlan26
+ip access-list 20
+  10 permit ip 10.130.94.20/32 any 
+  20 permit ip 10.130.94.22/32 any 
+  30 permit ip 10.130.94.60/32 any 
+  40 permit ip 10.130.222.7/32 any 
+  50 permit ip 10.130.111.80/32 any 
+  60 permit ip 10.130.222.130/32 any 
+ip access-list 22
+  10 permit ip 10.130.222.17/32 any 
+ip access-list 23
+  10 permit ip 10.130.239.138/32 any 
+snmp-server location  HUB|VL|DC01|E05|L2
+snmp-server source-interface trap Vlan26
+snmp-server source-interface inform Vlan26
+snmp-server user dpko vdc-admin auth md5 0x66b492a46c4351a38f0894e8bacc9638 priv 0x66b492a46c4351a38f0894e8bacc9638 localizedkey
+snmp-server user admin auth md5 0xba888e52dd580b74f37168063fe3a48d priv 0xba888e52dd580b74f37168063fe3a48d localizedkey engineID 128:0:0:9:3:192:98:107:175:154:128
+snmp-server host 10.130.222.7 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.20 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.94.60 traps version 2c Df5-b0rd3rR! 
+snmp-server host 10.130.222.130 traps version 2c Df5-b0rd3rR! 
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server community Df5-b0rd3rR! group vdc-operator
+snmp-server community C1D3C03xt group vdc-operator
+snmp-server community O10S4uDiT group vdc-operator
+snmp-server community Df5-b0rd3rR! use-acl 20
+snmp-server community C1D3C03xt use-acl 22
+snmp-server community O10S4uDiT use-acl 23
+aaa authentication login default group GSC-TACACS 
+aaa accounting default group GSC-TACACS 
+aaa authentication login error-enable 
+
+vrf context VPC-KEEPALIVE
+vrf context management
+vlan 1
+vlan 5
+  name IN-ESX-HOSTS-30-0-26
+vlan 13
+  name IN-ILO-SERVERS-30-64-26
+vlan 26
+  name IN-DC02-DEVICES-88-0-25
+vlan 27
+  name IN-OICT-EXCHANGE-14-0-26
+vlan 48
+  name PRE-UMOJA-HANA-MGMT
+vlan 53
+  name PRD-UMOJA-SAP-MGMT
+vlan 54
+  name PRD-UMOJA-HANA-MGMT
+vlan 55
+  name PRE-UMOJA-SAP-MGMT
+vlan 57
+  name PRD-UMOJA-EXT-MGMT
+vlan 59
+  name OICT-ACC-VIP-2
+vlan 61
+  name VSPHERE_REP_SRVC
+vlan 62
+  name VSPHERE_REP_NFC
+vlan 63
+  name OICT-ACC-SRV
+vlan 70
+  name PRE-UMOJA-HANA-DB
+vlan 71
+  name PRE-UMOJA-HANA-APP
+vlan 72
+  name PRD-UMOJA-HANA-DB
+vlan 73
+  name PRD-UMOJA-HANA-APP
+vlan 77
+  name PRE-UMOJA-SAP-DB
+vlan 78
+  name PRE-UMOJA-SAP-APP
+vlan 79
+  name PRD-UMOJA-SAP-DB
+vlan 80
+  name PRD-UMOJA-SAP-APP
+vlan 87
+  name EDC-PUBLIC-IPS-157-150-241-0-24
+vlan 101
+  name IN-DC1-OICT-INT-FE-1-0-24
+vlan 102
+  name IN-DC1-OICT-INT-FE-2-0-24
+vlan 103
+  name IN-DC1-OICT-INT-APPS-3-0-24
+vlan 104
+  name IN-DC1-OICT-INT-BE-4-0-24
+vlan 105
+  name IN-DC1-OICT-INT-SUPP-SERV-5-0-24
+vlan 106
+  name IN-DC1-OICT-INT-CITRIX-6-0-24
+vlan 107
+  name IN-DC1-OICT-INT-CITRIX-7-0-24
+vlan 108
+  name IN-DC1-OICT-FW-MGMT-8-0-24
+vlan 109
+  name IN-DC1-OICT-SERVER-MGMT-9-0-24
+vlan 111
+  name IN-DC1-OICT-VMOTION-11-0-24
+vlan 112
+  name IN-DC1-OICT-INT-XenApp-12-0-24
+vlan 113
+  name IN-DC1-OICT-BAM
+vlan 114
+  name IN-DC1-OICT-NET-MONITOR-10-0-24
+vlan 117
+  name IN-DC1-OICT-SAN-MGMT-17-0-25
+vlan 120
+  name EDC-PUBLIC-IPS-85-159-207-96-27
+vlan 128
+  name OICT_INT-CITRIX
+vlan 142
+  name OICT_ADFS_PROXY
+vlan 143
+  name OICT_ADFS_FARM-14-128-27
+vlan 144
+  name IN-DC1-OICT-RPA-16-0-28
+vlan 145
+  name IN-DC1-DFS-SAN-MGMT-17-128-27
+vlan 150
+  name DC01-OICT-GRT-27-192-28
+vlan 158
+  name IN-ILO-SERVERS-31-0-24
+vlan 161
+  name IN-NONPROD-OICT-APP
+vlan 162
+  name IN-NONPROD-OICT-DB
+vlan 163
+  name IN-NONPROD-OICT-ACC
+vlan 165
+  name IN-OICT-SEC-APP
+vlan 166
+  name IN-OICT-SAN-MGMT
+vlan 171
+  name DEVELOPMENT-BACKEND
+vlan 173
+  name DEVELOPMENT-ACCESS
+vlan 177
+  name OICT_FILETRANSFER
+vlan 190
+vlan 191
+  name EDC-FW-NET-0-0-29
+vlan 192
+  name EDC-FW-NET-0-8-29
+vlan 193
+  name EDC-FW-NET-0-16-29
+vlan 194
+  name EDC-FW-NET-0-24-29
+vlan 350
+  name DC01-OICT-VRF-27-192-28
+vlan 600
+  name IN-DC1-OICT-RPA_EXT-VLAN600
+vlan 633
+  name OUT-SPT-FE-17-192-29
+vlan 634
+  name OUT-OICT-SERVICES
+vlan 635
+  name OUT-ESX-17-168-29
+vlan 636
+  name OUT-UMOJA-DFS-17-176-29
+vlan 637
+  name OUT-UMOJA-SAP-17-184-29
+vlan 671
+  name DRUPAL-Backend
+vlan 686
+  name OUT-OICT-PREPRODUCTION
+vlan 687
+  name OUT-OICT-ACCESS
+vlan 688
+  name OUT-OICT-APP
+vlan 689
+  name OUT-OICT-BACKEND
+vlan 690
+  name OUT-INFRASTRUCTURE
+vlan 691
+  name OUT-SAN
+vlan 710
+  name IN-DC01-DEV01-40-0-28
+vlan 711
+  name IN-DC01-DEV01-40-16-28
+vlan 712
+  name IN-DC01-DEV01-40-32-29
+vlan 713
+  name IN-DC01-DEV01-40-40-29
+vlan 714
+  name IN-DC01-DEV01-40-48-29
+vlan 715
+  name IN-DC01-DEV01-40-56-29
+vlan 716
+  name IN-DC01-DEV01-40-64-29
+vlan 718
+  name IN-DC01-DEV01-98-240-28
+vlan 719
+  name IN-DC01-DEV01-VLAN719
+vlan 720
+  name IN-DC01-DEV01-40-96-27
+vlan 721
+  name IN-DC01-DEV01-40-128-27
+vlan 722
+  name IN-DC01-DEV01-41-0-25
+vlan 723
+  name IN-DC01-DEV01-41-128-25
+vlan 790
+  name OUT-DC1-DEVELOPMENT
+vlan 959
+  name OICT_Mail_Backend_E4
+vlan 971
+  name internal-heartbeat
+vlan 974,976
+vlan 2005
+  name IN-UMOJA-UNIFIED-19-128-25
+vlan 2006
+  name IN-UMOJA-VBLOCK-25-128-27
+vlan 2011
+  name IN-UMOJA-DFS-22-0-26
+vlan 2012
+  name PRD-UMOJA-V2012-FE
+vlan 2013
+  name PRE-UMOJA-V2013-FE
+vlan 2014
+  name PRD-UMOJA-V2014-BE
+vlan 2015
+  name PRE-UMOJA-V2015-BE
+vlan 2020
+  name IN-UMOJA-MGMT-22-64-26
+vlan 2021
+  name IN-UMOJA-HEARTBEAT-22-128-26
+vlan 2023
+  name IN-UMOJA-BU-28-0-23
+vlan 2024
+  name IN-UMOJA-PROD-24-0-24
+vlan 2025
+  name IN-UMOJA-PRESENT-22-192-26
+vlan 2026
+  name IN-UMOJA-NO-PROD-26-0-24
+vlan 2027
+  name IN-UMOJA-Pre-Prod-25-160-27
+vlan 2028
+  name IN-SAP-HANA-25-192-28
+vlan 2029
+  name IN-SAP-HANA-25-208-28
+vlan 2239
+  name VLOUD_DEV_UNITEAWARE
+vlan 2241
+  name IN-DC01-DEV01-122-32-27
+vlan 2242
+  name IN-DC01-DEV01-122-64-27
+vlan 2246
+  name IN-DC01-DEV01-122-192-27
+vlan 2249
+  name IN-DC01-DEV01-123-0-27
+vlan 2367
+  name IN-SPT-FE-17-208-29
+vlan 2368
+  name IN-SPT-BE-17-216-29
+spanning-tree vlan 1-4,6-12,14-26,28-32,34-44,46-47,49-50,56,60,64-69,75-76,89-91,95,110,124-128,139,141,171,173,180-182,188,202,228-231,289,312,332,364-366,384-386,404-406,429-430,438,440,460-466,472-477,480-488,490,591,598-599,601-629,631-633,641-659,666,670,672,674,676,701-708,724,730-737,744-745,801-803,805,811-814,820-822,831-833,888,999,1060-1063,1498-1504,2000,2008,2016-2017,2030,2036 priority 8192
+spanning-tree vlan 5,13,27,48,53-55,57,59,61-63,70-73,77-80,87,101-109,111-114,117,120,142-145,150,158,165-166,177,191-194,350,600,634-637,671,686-691,710-716,718-723,790,959,971,974,976,2005-2006,2011-2015,2020-2021,2023-2029,2239,2241-2242,2246,2249,2367-2368 priority 0
+spanning-tree vlan 2037-2046,2050-2054,2070-2071,2090,2200-2236,2240,2243-2245,2247-2248,2251,2364-2366,2369-2373,2500-2502,2700,2801,3007,3016,3030 priority 8192
+vpc domain 1
+  role priority 110
+  peer-keepalive destination 10.130.46.86 source 10.130.46.85 vrf VPC-KEEPALIVE
+  peer-gateway
+
+
+interface Vlan1
+
+interface Vlan26
+  no shutdown
+  description DC02-DEVICES-88-0-25
+  ip address 10.130.88.44/25
+
+interface Vlan100
+  no shutdown
+  no ip redirects
+  ip address 10.10.10.1/24
+
+interface port-channel203
+  description DFS_ASA and OICT_CP OUT VLANs L2 to L3
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 108,128,192-194,633-634,686-691
+  switchport trunk allowed vlan add 790,2006
+
+interface port-channel502
+  description VLC-EDGE-OOB-B
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,2039,2044-2046,2090,2369-2373
+  switchport trunk allowed vlan add 3016
+  spanning-tree guard loop
+  vpc 502
+
+interface port-channel505
+  description SPARE-VLC-EDGE-OOB-B (old D1E02-N5K-01)
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,2039,2044-2046,2090,2369-2373
+  switchport trunk allowed vlan add 3016
+  spanning-tree guard loop
+  vpc 505
+
+interface port-channel506
+  description VLC-DC1-FWA-E07 (vPC: Te0/6, Te0/7)
+  switchport
+  switchport mode trunk
+  spanning-tree guard root
+  vpc 506
+
+interface port-channel507
+  description VLC-DC1-FWB-E08 (vPC: Te0/6, Te0/7)
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 1-3967,4048-4093
+  spanning-tree guard root
+  vpc 507
+
+interface port-channel508
+  description ACC-E_D1E01 & ACC-F_D1E02
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2023,2028
+  spanning-tree port type network
+  spanning-tree guard loop
+  vpc 508
+
+interface port-channel509
+  description VLC-DC01-ACC-A & VLC-DC01-ACC-B
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2020,2023-2024
+  switchport trunk allowed vlan add 2026,2028-2029
+  spanning-tree port type network
+  spanning-tree guard loop
+  vpc 509
+
+interface port-channel601
+  description N5K-A-UMOJA-Vblock
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 2005,2020-2026
+  spanning-tree port type normal
+  vpc 601
+
+interface port-channel1001
+  description VPC-PEER-LINK-to-DC02-A-L2-AGG-VDC
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  vpc peer-link
+
+interface port-channel1002
+  description VPC-KEEPALIVE-to-DC02-A-L2-AGG-VDC
+  vrf member VPC-KEEPALIVE
+  ip address 10.130.46.85/30
+
+interface Ethernet1/1
+  description VLC-DC01-ACC-A&B
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2020,2023-2024
+  switchport trunk allowed vlan add 2026,2028-2029
+  channel-group 509 mode active
+  no shutdown
+
+interface Ethernet1/2
+  description VLC-DC1-FWA-E07#Te0/6
+  switchport mode trunk
+  channel-group 506 mode active
+  no shutdown
+
+interface Ethernet1/3
+  description VLC-DC01-ACC-A&B
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2020,2023-2024
+  switchport trunk allowed vlan add 2026,2028-2029
+  channel-group 509 mode active
+  no shutdown
+
+interface Ethernet1/4
+  description VLC-DC1-FWB-E08#Te0/6
+  switchport mode trunk
+  switchport trunk allowed vlan 1-3967,4048-4093
+  channel-group 507 mode active
+  no shutdown
+
+interface Ethernet1/5
+  description VLC-EDGE-OOB-B
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-599,2039,2044-2046,2090,2369-2373
+  switchport trunk allowed vlan add 3016
+  udld aggressive
+  channel-group 502 mode active
+  no shutdown
+
+interface Ethernet1/6
+  no shutdown
+
+interface Ethernet1/7
+  description DFS_ASA and OICT_CP OUT VLANs L2 to L3
+  switchport mode trunk
+  switchport trunk allowed vlan 108,128,192-194,633-634,686-691
+  switchport trunk allowed vlan add 790,2006
+  channel-group 203 mode active
+  no shutdown
+
+interface Ethernet1/8
+  description DFS_ASA and OICT_CP OUT VLANs L2 to L3
+  switchport mode trunk
+  switchport trunk allowed vlan 108,128,192-194,633-634,686-691
+  switchport trunk allowed vlan add 790,2006
+  channel-group 203 mode active
+  no shutdown
+
+interface Ethernet1/9
+  description NOT-IN-USE
+  switchport trunk allowed vlan none
+
+interface Ethernet1/10
+  description DC1A10-SAP-HANA-MGMT
+  switchport access vlan 5
+  spanning-tree guard loop
+  udld aggressive
+  no shutdown
+
+interface Ethernet1/11
+  description NOT-IN-USE
+  switchport trunk allowed vlan none
+
+interface Ethernet1/12
+  description D1E01-N5K-02-Eth1/25
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2023,2028
+  channel-group 508 mode active
+  no shutdown
+
+interface Ethernet1/13
+  description DC1A10-SAP-HANA-DATA
+  switchport mode trunk
+  switchport trunk allowed vlan 2028-2029
+  spanning-tree guard loop
+  udld aggressive
+  no shutdown
+
+interface Ethernet1/14
+  description To N5K-A-UMOJA-Vblock E1/25
+  switchport mode trunk
+  switchport trunk allowed vlan 2005,2020-2026
+  udld aggressive
+  channel-group 601 mode active
+  no shutdown
+
+interface Ethernet1/15
+  description D1E02-N5K-02-Eth1/25
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2023,2028
+  channel-group 508 mode active
+  no shutdown
+
+interface Ethernet1/16
+  description To N5K-A-UMOJA-Vblock E1/26
+  switchport mode trunk
+  switchport trunk allowed vlan 2005,2020-2026
+  udld aggressive
+  channel-group 601 mode active
+  no shutdown
+
+interface Ethernet1/17
+  description to DC01-A-SVC-D1E07-C6K 11/1
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-665,667-700,710-723,971-974,976
+  switchport trunk allowed vlan add 2005,2011-2015,2020-2029,2241-2242
+  switchport trunk allowed vlan add 2246,2249
+  no shutdown
+
+interface Ethernet1/18
+
+interface Ethernet1/19
+  description to DC01-B-SVC-D1E07-C6K 11/1
+  switchport mode trunk
+  switchport trunk native vlan 26
+  switchport trunk allowed vlan 2-665,667-700,710-723,971-979,2005
+  switchport trunk allowed vlan add 2011-2015,2020-2029,2241-2242,2246
+  switchport trunk allowed vlan add 2249
+  no shutdown
+
+interface Ethernet1/20
+  description D1F05-UMOJA_BOBI
+  switchport access vlan 2011
+  switchport trunk allowed vlan none
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet1/21
+  description OICT-OPENSYS-IDS-SPAN
+  switchport monitor
+  no shutdown
+
+interface Ethernet1/22
+  description D1F05-UMOJA_BOBI
+  switchport access vlan 2011
+  switchport trunk allowed vlan none
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet1/23
+  description D1F03-VIRTUALCONNECT-A-5
+  switchport mode trunk
+  switchport trunk allowed vlan 710-716,718-723,2239,2241-2242,2246
+  switchport trunk allowed vlan add 2249,2367-2368
+  spanning-tree guard root
+  no shutdown
+
+interface Ethernet1/24
+  description SPAN-APM:ARX
+  switchport monitor
+  switchport trunk allowed vlan 2,14,26,101-105,108-112,141,150
+  switchport trunk allowed vlan add 177
+
+interface Ethernet1/25
+  no shutdown
+
+interface Ethernet1/26
+  description To N5K-A-UMOJA-Vblock E1/27
+  switchport mode trunk
+  switchport trunk allowed vlan 2005,2020-2026
+  spanning-tree port type network
+  udld aggressive
+  channel-group 601 mode active
+  no shutdown
+
+interface Ethernet1/27
+  no shutdown
+
+interface Ethernet1/28
+  description To N5K-A-UMOJA-Vblock E1/28
+  switchport mode trunk
+  switchport trunk allowed vlan 2005,2020-2026
+  udld aggressive
+  channel-group 601 mode active
+  no shutdown
+
+interface Ethernet1/29
+
+interface Ethernet1/30
+
+interface Ethernet1/31
+  description VPC-PEER-LINK-to-DC02-A-L2-AGG-VDC
+  spanning-tree port type network
+
+interface Ethernet1/32
+  description VPC-PEER-LINK-to-DC02-A-L2-AGG-VDC
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  udld aggressive
+  channel-group 1001
+  no shutdown
+
+interface Ethernet2/1
+  description VLC-DC01-ACC-A&B
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2020,2023-2024
+  switchport trunk allowed vlan add 2026,2028-2029
+  channel-group 509 mode active
+  no shutdown
+
+interface Ethernet2/2
+  description VLC-DC1-FWA-E07#Te0/7
+  switchport mode trunk
+  channel-group 506 mode active
+  no shutdown
+
+interface Ethernet2/3
+  description VLC-DC01-ACC-A&B
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2020,2023-2024
+  switchport trunk allowed vlan add 2026,2028-2029
+  channel-group 509 mode active
+  no shutdown
+
+interface Ethernet2/4
+  description VLC-DC1-FWB-E08#Te0/7
+  switchport mode trunk
+  switchport trunk allowed vlan 1-3967,4048-4093
+  channel-group 507 mode active
+  no shutdown
+
+interface Ethernet2/5
+
+interface Ethernet2/6
+  no shutdown
+
+interface Ethernet2/7
+
+interface Ethernet2/8
+
+interface Ethernet2/9
+  description NOT-IN-USE
+  switchport trunk allowed vlan none
+  udld aggressive
+
+interface Ethernet2/10
+  description SPAN-APM:ARX-Gi2
+  switchport monitor
+  switchport trunk allowed vlan 53-54,57,72-73,79-80,101-105,108-109
+  switchport trunk allowed vlan add 111-112,150,177,636-637,959,2005-2006
+  switchport trunk allowed vlan add 2011-2012,2014,2023-2025
+  no shutdown
+
+interface Ethernet2/11
+  description D1E02-N5K-01
+  switchport mode trunk
+  switchport trunk allowed vlan 2-599,2039,2044-2046,2090,2369-2373
+  switchport trunk allowed vlan add 3016
+  udld aggressive
+  channel-group 505 mode active
+  no shutdown
+
+interface Ethernet2/12
+
+interface Ethernet2/13
+  description D1E01-N5K-02-Eth1/26
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2023,2028
+  channel-group 508 mode active
+  no shutdown
+
+interface Ethernet2/14
+  description To N5K-A-UMOJA-Vblock E1/29
+  switchport mode trunk
+  switchport trunk allowed vlan 2005,2020-2026
+  udld aggressive
+  channel-group 601 mode active
+  no shutdown
+
+interface Ethernet2/15
+  description D1E02-N5K-02-Eth1/26
+  switchport mode trunk
+  switchport trunk allowed vlan 2-600,910-913,920-923,930-933,940-943
+  switchport trunk allowed vlan add 952,959,962,971,2011-2015,2023,2028
+  channel-group 508 mode active
+  no shutdown
+
+interface Ethernet2/16
+  description To N5K-A-UMOJA-Vblock E1/30
+  switchport mode trunk
+  switchport trunk allowed vlan 2005,2020-2026
+  udld aggressive
+  channel-group 601 mode active
+  no shutdown
+
+interface Ethernet2/25
+
+interface Ethernet2/26
+  description To N5K-A-UMOJA-Vblock E1/31
+  switchport mode trunk
+  switchport trunk allowed vlan 2005,2020-2026
+  udld aggressive
+  channel-group 601 mode active
+  no shutdown
+
+interface Ethernet2/27
+
+interface Ethernet2/28
+  description To N5K-A-UMOJA-Vblock E1/32
+  switchport mode trunk
+  switchport trunk allowed vlan 2005,2020-2026
+  udld aggressive
+  channel-group 601 mode active
+  no shutdown
+
+interface Ethernet2/29
+  description To_Vlan_23_BackUp 
+
+interface Ethernet2/30
+
+interface Ethernet2/31
+  description VPC-PEER-LINK-to-DC02-A-L2-AGG-VDC
+  spanning-tree port type network
+
+interface Ethernet2/32
+  description VPC-PEER-LINK-to-DC02-A-L2-AGG-VDC
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  udld aggressive
+  channel-group 1001
+  no shutdown
+
+interface Ethernet6/1
+  description VCP-keepaliave
+
+interface Ethernet6/2
+  switchport
+  switchport access vlan 719
+
+interface Ethernet6/3
+  description RPA-OICT-REPLICATION
+  switchport
+  switchport access vlan 144
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/4
+  description RPA-OICT-REPLICATION
+  switchport
+  switchport access vlan 144
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/5
+  description RPA-OICT-REPLICATION_Mgmt
+  switchport
+  switchport access vlan 600
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/6
+  description RPA-OICT-REPLICATION_Mgmt
+  switchport
+  switchport access vlan 600
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/7
+  description RPA-REPLICATION - 10.130.16.8
+  switchport
+  switchport access vlan 144
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/8
+  description RPA-REPLICATION - 10.130.16.9
+  switchport
+  switchport access vlan 144
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/9
+  description RPA-REPLICATION
+  switchport
+  switchport access vlan 144
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/10
+  description RPA-REPLICATION
+  switchport
+  switchport access vlan 144
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/11
+  description RPA-REPLICATION
+  switchport
+  switchport access vlan 144
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/12
+  description RPA-REPLICATION
+  switchport
+  switchport access vlan 144
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/13
+  description RPA-MGMT
+  switchport
+  switchport access vlan 145
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/14
+  description RPA-MGMT
+  switchport
+  switchport access vlan 145
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/15
+  description RPA-MGMT
+  switchport
+  switchport access vlan 145
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/16
+  description RPA-MGMT
+  switchport
+  switchport access vlan 145
+  spanning-tree port type edge
+  spanning-tree bpduguard enable
+  no shutdown
+
+interface Ethernet6/17
+  description UMOJA-VBLOCK
+  switchport
+  switchport access vlan 2006
+  spanning-tree guard root
+  no shutdown
+
+interface Ethernet6/18
+
+interface Ethernet6/19
+
+interface Ethernet6/20
+
+interface Ethernet6/21
+
+interface Ethernet6/22
+
+interface Ethernet6/23
+  description NOT-IN-USE
+
+interface Ethernet6/24
+  description NOT-IN-USE
+
+interface Ethernet8/26
+
+interface Ethernet8/28
+
+interface Ethernet8/30
+
+interface Ethernet8/32
+  description VCP-keepaliave
+  channel-group 1002
+  no shutdown
+
+interface mgmt0
+logging server 10.130.94.60
+cli alias name wr copy run start
+line vty
+ip route 0.0.0.0/0 10.130.88.1
+monitor session 1 
+  description OICT-OPENSYS-IDS
+  source interface port-channel506 both
+  source interface port-channel507 both
+  rate-limit auto
+  destination interface Ethernet1/21
+  no shut
+monitor session 4 
+  description SPAN-APM:ARX
+  source vlan 53-54,57,72-73,79-80,101-105,108-109,111-112,150,177,636-637,959 both
+  source vlan 2005-2006,2011-2012,2014,2023-2025 both
+  rate-limit auto
+  destination interface Ethernet2/10
+  no shut

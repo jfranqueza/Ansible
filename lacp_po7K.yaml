@@ -1,0 +1,68 @@
+---
+- name: ENABLE LACP
+  hosts: VLC-DC02-AGG-A.dpko.un.org
+  gather_facts: no
+
+
+  tasks:
+ 
+  - name: REMOVE FROM PORT-CHANNELS 524
+    nxos_config:
+      lines: no channel-group 524
+      parents: "{{item}}"
+    loop: "{{portchannel524}}"
+
+  - name: REMOVE FROM PORT-CHANNELS 525
+    nxos_config:
+      lines: no channel-group 525
+      parents: "{{item}}"
+    loop: "{{portchannel525}}"
+
+  - name: REMOVE FROM PORT-CHANNELS 526
+    nxos_config:
+      lines: no channel-group 526
+      parents: "{{item}}"
+    loop: "{{portchannel526}}"
+
+  - name: REMOVE FROM PORT-CHANNELS 527
+    nxos_config:
+      lines: no channel-group 527
+      parents: "{{item}}"
+    loop: "{{portchannel527}}"        
+
+
+################  ADDING THE LACP ############
+
+  - name: ADD LACP TO PORT-CHANNELS 524
+    nxos_config:
+      lines: channel-group 524 mode active
+      parents: "{{item}}"
+    loop: "{{portchannel524}}"
+
+  - name: ADD LACP TO PORT-CHANNELS 525
+    nxos_config:
+      lines: channel-group 525 mode active
+      parents: "{{item}}"
+    loop: "{{portchannel525}}"
+
+  - name: ADD LACP TO PORT-CHANNELS 526
+    nxos_config:
+      lines: channel-group 526 mode active
+      parents: "{{item}}"
+    loop: "{{portchannel526}}"
+
+
+  - name: ADD LACP TO PORT-CHANNELS 527
+    nxos_config:
+      lines: channel-group 527 mode active
+      parents: "{{item}}"
+    loop: "{{portchannel527}}"
+        
+  
+  - name: COMPROBANDO
+    nxos_command:
+      commands:
+        - sh port-channel summary 
+        - sh interface po524-527
+        - sh vpc 
+      

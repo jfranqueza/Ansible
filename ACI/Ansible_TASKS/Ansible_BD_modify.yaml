@@ -1,0 +1,59 @@
+---
+- name: MODIFY BD PROPERTIES
+  hosts: bds
+  connection: local
+  gather_facts: no
+  vars:
+    BDs:
+#      - DC_PRE_v2090_10_130_107_0_24_BD
+#      - DC_PRE_v228_10_130_103_64_27_BD
+#      - DC_PRE_v230_10_130_105_128_25_BD
+#      - DC_PRE_v2369_10_130_99_0_27_BD 
+#      - DC_PRE_v2801_nonrouted_BD
+#      - DC_PRE_v301_10_129_22_160_28_BD
+#      - DC_PRE_v30_10_130_220_0_24_BD
+#      - DC_PRE_v461_10_130_108_32_27_BD
+#      - DC_PRE_v463_10_130_108_96_27_BD
+#      - DC_PRE_v465_10_130_108_160_27_BD
+#      - DC_PRE_v466_10_130_103_160_27_BD
+#      - DC_PRE_v49_10_130_93_200_29_BD 
+#      - DC_PRE_v591_nonrouted_BD
+#      - DC_DEV_v310_10_129_22_176_28_BD
+#      - DC_DEV_v731_10_130_43_32_27_BD
+#      - DC_DEV_v732_10_130_43_64_27_BD
+#      - DC_DEV_v733_10_130_43_96_27_BD
+#      - DC_DEV_v735_10_130_43_176_28_BD
+#      - DC_DEV_v737_10_130_44_224_27_BD
+#      - DC_DEV_v173_10_130_122_16_29_BD
+#      - DC_DEV_v744_10_130_38_0_24_BD 
+#      - DC_DEV_v745_192_168_10_0_24_BD
+#BDS      
+      - DC_PRE_v15_10_130_205_0_24_BD
+      - DC_PRE_v20_10_130_210_0_24_BD 
+      - DC_PRE_v228_10_130_228_96_27_BD
+      - DC_PRE_v2801_nonrouted_BD
+      - DC_PRE_v289_10_130_255_0_28_BD
+      - DC_PRE_v30_10_130_220_0_24_BD 
+      - DC_PRE_v35_10_130_225_0_25_BD 
+      - DC_PRE_v366_nonrouted_BD
+      - DC_PRE_v39_10_130_229_0_24_BD 
+      - DC_PRE_v45_10_130_225_128_25_BD
+      - DC_PRE_v666_non_routed_BD
+      - DC_PRE_v89_non_routed_BD
+
+  tasks:
+
+    - name: Modify a Bridge Domain
+      aci_bd:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: "UNGSC_BDS_DC"
+        bd: "{{ item }}"
+        arp_flooding: yes
+        l2_unknown_unicast: flood
+        state: present
+      loop: "{{ BDs }}"
+      delegate_to: localhost
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <title>INTERFACES ERRORS REPORT</title>
+</head>  
+
+<body>
+  <header>
+     <h1>INTERFACES ERRORS REPORT</h1> 
+  </header>   
+  {% for device in parsing_devices %}
+       {% for name in device -%}
+          <h2><b>Device: {{ name }}</b></h2>
+             <ul>
+               {% for  val in device.values() %}
+                  {% for ints in val %}                            
+                     {% for k, v in ints.items() %}
+                        {% if k == 'int_name' %}
+                          <b>Interface: {{ v }}</b>
+                        {% else %}  
+                          <li>{{ k }} : {{ v }}</li>
+                        {% endif %}  
+                     {% endfor %}
+                  {% endfor %}
+               {% endfor %}
+             </ul>
+       {% endfor %}          
+  {% endfor %}
+</body>
+</html>          

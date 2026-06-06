@@ -1,0 +1,35 @@
+---
+- name: MODIFY BD PROPERTIES
+  hosts: sandbox
+  connection: local
+  gather_facts: no
+  vars:
+    BDs:
+     - DC_DEV_v731_10_130_43_32_27_BD
+     - DC_DEV_v733_10_130_43_96_27_BD
+     - DC_DEV_v735_10_130_43_176_28_BD
+     - DC_DEV_v737_10_130_44_224_27_BD
+     - DC_DEV_v173_10_130_122_16_29_BD
+     - DC_DEV_v744_10_130_38_0_24_BD 
+     - DC_DEV_v745_192_168_10_0_24_BD
+     - DC_DEV_v173_10_130_122_16_29_BD
+     - DC_DEV_v732_10_130_43_64_27_BD
+     - DC_DEV_v310_10_129_22_176_28_BD
+      
+
+  tasks:
+
+    - name: Modify a Bridge Domain
+      aci_bd:
+        host: "{{ ansible_host }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: no
+        tenant: "UNGSC_BDS_DC"
+        bd: "{{ item }}"
+        arp_flooding: yes
+        l2_unknown_unicast: flood
+        state: present
+      loop: "{{ BDs }}"
+      delegate_to: localhost
+

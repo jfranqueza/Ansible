@@ -1,0 +1,50 @@
+- hosts:  N5KDC02_VLC #, N5KDC01_VLC, N5KDC01_BDS, N5KDC02_BDS
+  connection: network_cli
+  gather_facts: no
+  roles:
+    - ansible-pyats
+
+  tasks:
+
+  # First we run the pyats parsing command of the   
+    # - name: PARSE COMMAND DC02 N5K
+    #   pyats_parse_command:
+    #     command: show interface port-channel3
+    #   register: command_d25k
+    #   when: "'N5KDC02_VLC' in group_names"
+
+    # - name: SAVE SNACKSHOP DC02 TO FILE
+    #   copy:
+    #     content: "{{ command_d25k.structured | to_json }}"
+    #     dest: "{{ inventory_hostname }}_interfaces.json" 
+
+    # - name: PARSE COMMAND DC01 N5K
+    #   pyats_parse_command:
+    #     command: show interface port-channel1
+    #   register: command_d15k 
+    #   when: "'N5KDC01_VLC' in group_names"       
+    
+    # - name: SAVE SNACKSHOP DC01 TO FILE
+    #   copy:
+    #     content: "{{ command_d15k.structured | to_nice_json }}"
+    #     dest: "{{ inventory_hostname }}_interfaces.json" 
+
+
+  # 2on Method
+  # - name: TEMPLATING THE COMMAND
+  #   template:
+  #     src: ./templates/show_interface.j2
+  #     dest: ./templates/{{ inventory_hostname}}_show_interface.txt
+
+
+  - name: PARSE COMMAND DC02 N5K
+    pyats_parse_command:
+      command: show interface {{port_uplink}}
+    register: command_d25k
+    #when: "'N5KDC02_VLC' in group_names"
+    
+
+  - name: SAVE SNACKSHOP DC02 TO FILE
+    copy:
+      content: "{{ command_d25k.structured | to_json }}"
+      dest: "{{ inventory_hostname }}_interfaces.json" 

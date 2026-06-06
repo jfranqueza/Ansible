@@ -1,0 +1,11 @@
+- name: CHECK APPLIED CONFIG
+  hosts: vlc-dc02-acc-b
+  gather_facts: no
+
+  tasks:
+
+    - name: DIFFERENCES IN CONFIG
+      nxos_config:
+        diff_against: running
+        #intended_config: ./backup/DC02-A-L2-AGG-VDC.dpko.un.org_config.2019-12-02@11:58:20.txt
+     
