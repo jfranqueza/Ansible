@@ -1,3 +1,15 @@
 TERRAFROM/.terraform/
 *.tfstate*
 .terraform.lock.hcl
+TERRAFROM/.terraform/
+*.tfstate*
+.terraform.lock.hcl
+__pycache__/
+*.pyc
+.venv/
+env/
+.DS_Store
+crontab_logs/
+NSXT/
+TERRAFORM/
+TERRAFROM/
