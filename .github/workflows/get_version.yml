@@ -1,0 +1,22 @@
+name: get_version
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkou@v6
+        
+      - name: setup python 3.10
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+          
+      - name: runs python script to check fexes
+        run: python PYTHON/Fexes/netmiko_show_fex.py
+      
